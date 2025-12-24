@@ -1,0 +1,8 @@
+<script>
+  fetch("https://asiagold-api.qalandar65.workers.dev/health")
+    .then(res => res.json())
+    .then(data => {
+      console.log("API response:", data);
+    })
+    .catch(err => console.error(err));
+</script>
