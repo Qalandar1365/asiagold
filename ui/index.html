@@ -85,7 +85,12 @@
       async function run() {
         statusEl.textContent = "در حال خواندن initData...";
         const tg = window.Telegram?.WebApp;
-        const initData = tg?.initData;
+        const initData =
+  tg?.initData ||
+  (tg?.initDataUnsafe
+    ? new URLSearchParams(tg.initDataUnsafe).toString()
+    : null);
+
 
         if (!initData) {
           statusEl.textContent =
