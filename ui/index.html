@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AsiaGold</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -11,7 +11,7 @@
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
-  background: #ffffff;
+  background: #fff;
   color: #020617;
 }
 .wrapper {
@@ -28,9 +28,9 @@ body {
   padding: 22px;
 }
 h1 {
-  font-size: 20px;
-  margin-bottom: 16px;
   text-align: center;
+  font-size: 20px;
+  margin-bottom: 14px;
 }
 input {
   width: 100%;
@@ -40,9 +40,12 @@ input {
   border: 1px solid #d1d5db;
   font-size: 14px;
 }
+input[readonly] {
+  background: #f9fafb;
+}
 button {
   width: 100%;
-  margin-top: 16px;
+  margin-top: 14px;
   padding: 13px;
   border-radius: 14px;
   font-size: 15px;
@@ -56,15 +59,16 @@ button:disabled {
   opacity: .5;
   cursor: not-allowed;
 }
-.text {
+.rules {
   font-size: 13px;
-  line-height: 1.7;
   color: #374151;
+  margin-top: 14px;
+  line-height: 1.7;
 }
 .checkbox {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 10px;
   font-size: 13px;
 }
 </style>
@@ -91,95 +95,111 @@ let state = {
   accepted: false
 };
 
-async function auth() {
+async function start() {
   const r = await fetch(WORKER, {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify({ initData: tg.initData })
   });
   const j = await r.json();
+
   if (j.ok && j.registered) {
-    renderLoggedIn();
+    renderOTP();
   } else {
-    renderForm();
+    renderRegister();
   }
 }
 
-function renderForm() {
+function renderRegister() {
   app.innerHTML = `
     <h1>ثبت‌نام</h1>
+
     <input id="first" placeholder="نام">
     <input id="last" placeholder="نام خانوادگی">
-    <button id="phone">📱 دریافت شماره موبایل</button>
+    <input id="phone" placeholder="شماره موبایل" readonly>
 
-    <div class="checkbox">
-      <input type="checkbox" id="rules">
-      <label>قوانین را می‌پذیرم</label>
+    <button id="getPhone">📱 دریافت شماره موبایل</button>
+
+    <div class="rules">
+      1. ثبت سفارش فقط پس از تأیید مدیر معتبر است.<br>
+      2. مسئولیت صحت اطلاعات بر عهده کاربر است.<br>
+      3. اطلاعات شما محرمانه باقی می‌ماند.<br>
+      4. هر حساب فقط متعلق به یک شخص است.
     </div>
 
-    <button id="submit" disabled>تأیید نهایی</button>
+    <div class="checkbox">
+      <input type="checkbox" id="rulesCheck">
+      <label>قوانین را مطالعه کردم و می‌پذیرم</label>
+    </div>
+
+    <button id="submit" disabled>دریافت کد فعال‌سازی</button>
   `;
 
-  ["first","last"].forEach(id=>{
-    document.getElementById(id).oninput = e=>{
-      state[id]=e.target.value.trim();
-      check();
-    };
-  });
+  const first = document.getElementById("first");
+  const last = document.getElementById("last");
+  const phone = document.getElementById("phone");
+  const submit = document.getElementById("submit");
 
-  document.getElementById("rules").onchange = e=>{
-    state.accepted=e.target.checked;
+  function check() {
+    submit.disabled = !(
+      state.first &&
+      state.last &&
+      state.phone &&
+      state.accepted
+    );
+  }
+
+  first.oninput = e => { state.first = e.target.value.trim(); check(); };
+  last.oninput  = e => { state.last  = e.target.value.trim(); check(); };
+
+  document.getElementById("rulesCheck").onchange = e => {
+    state.accepted = e.target.checked;
     check();
   };
 
-  document.getElementById("phone").onclick = ()=>{
+  document.getElementById("getPhone").onclick = () => {
     tg.requestContact((ok,res)=>{
       if(ok){
-        state.phone=res.phone_number;
+        state.phone = res.phone_number;
+        phone.value = res.phone_number;
         check();
-        alert("شماره ثبت شد ✅");
       }
     });
   };
 
-  document.getElementById("submit").onclick = submit;
+  submit.onclick = async () => {
+    await fetch(WORKER,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        initData: tg.initData,
+        profile: state,
+        action: "send_otp"
+      })
+    });
+    renderOTPSent();
+  };
 }
 
-function check() {
-  document.getElementById("submit").disabled = !(
-    state.first && state.last && state.phone && state.accepted
-  );
-}
-
-async function submit() {
-  await fetch(WORKER, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      initData: tg.initData,
-      profile: state
-    })
-  });
-  renderPending();
-}
-
-function renderPending() {
+function renderOTPSent() {
   app.innerHTML = `
-    <h1>در انتظار تأیید</h1>
-    <p class="text">
-      پس از تأیید مدیر، کد ورود برای شما ارسال می‌شود.
+    <h1>کد ارسال شد</h1>
+    <p style="font-size:14px;text-align:center">
+      کد فعال‌سازی برای شما ارسال شد.<br>
+      اعتبار کد: ۳۰ دقیقه
     </p>
   `;
 }
 
-function renderLoggedIn() {
+function renderOTP() {
   app.innerHTML = `
-    <h1>خوش آمدید</h1>
-    <p class="text">وارد سامانه شدید ✅</p>
+    <h1>ورود</h1>
+    <input placeholder="کد فعال‌سازی">
+    <button>تأیید</button>
   `;
 }
 
-auth();
+start();
 })();
 </script>
 </body>
