@@ -1,14 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AsiaGold Mini App</title>
+    <style>
+      :root {
+        font-family: "Segoe UI", sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      body {
+        margin: 0;
+        padding: 20px;
+      }
+      .card {
+        background: #111827;
+        border: 1px solid #1f2937;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 20px;
+      }
+      .label {
+        color: #94a3b8;
+        margin-top: 6px;
+        font-size: 14px;
+      }
+      .value {
+        font-family: Consolas, monospace;
+        word-break: break-all;
+        margin-top: 4px;
+        font-size: 13px;
+      }
+      .status {
+        margin-top: 12px;
+        padding: 10px;
+        border-radius: 8px;
+        background: #0b1220;
+        border: 1px solid #1f2a44;
+        font-size: 13px;
+      }
+      button {
+        margin-top: 14px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 0;
+        background: #2563eb;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
   <body>
-    <h1>AsiaGold</h1>
+    <div class="card">
+      <h1>خروجی مینی‌اپ AsiaGold</h1>
+
+      <div class="label">initData (از تلگرام)</div>
+      <div id="initData" class="value">—</div>
+
+      <div class="label">توکن جلسه (از ورکر)</div>
+      <div id="sessionToken" class="value">—</div>
+
+      <div id="status" class="status">در انتظار...</div>
+      <button id="retry">دریافت دوباره</button>
+    </div>
 
     <script>
-      fetch("https://asiagold-api.qalandar65.workers.dev")
-        .then(res => res.text())
-        .then(data => {
-          console.log("FROM WORKER:", data);
+      const query = new URLSearchParams(window.location.search);
+
+      const WORKER_URL =
+        query.get("worker_url") ||
+        "https://asiagold-api.qalandar65.workers.dev";
+
+      const initDataEl = document.getElementById("initData");
+      const sessionEl = document.getElementById("sessionToken");
+      const statusEl = document.getElementById("status");
+      const retryBtn = document.getElementById("retry");
+
+      async function run() {
+        statusEl.textContent = "در حال خواندن initData...";
+        const tg = window.Telegram?.WebApp;
+        const initData = tg?.initData;
+
+        if (!initData) {
+          statusEl.textContent =
+            "❌ initData یافت نشد. حتماً باید داخل تلگرام باز شود.";
+          return;
+        }
+
+        try {
+          tg.ready();
+          tg.expand();
+        } catch {}
+
+        initDataEl.textContent = initData;
+        statusEl.textContent = "در حال فراخوانی ورکر...";
+
+        // ✅ درست: POST به /verify
+        const workerRes = await fetch(`${WORKER_URL}/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ initData }),
         });
+
+        const workerJson = await workerRes.json();
+
+        if (!workerRes.ok || !workerJson.ok) {
+          statusEl.textContent =
+            "❌ خطا از ورکر: " +
+            (workerJson.error || workerRes.status);
+          return;
+        }
+
+        // ✅ نام درست فیلد
+        const sessionToken = workerJson.session_token;
+        sessionEl.textContent = sessionToken;
+
+        statusEl.textContent =
+          "✅ Auth OK | Telegram ID: " + workerJson.telegram_id;
+      }
+
+      retryBtn.addEventListener("click", () => run());
+
+      run();
     </script>
   </body>
 </html>
