@@ -40,24 +40,8 @@ input {
   border: 1px solid #d1d5db;
   font-size: 14px;
 }
-input[readonly] {
-  background: #f3f4f6;
-}
-.phone-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-.phone-row input {
-  flex: 1;
-  margin-top: 0;
-}
-.phone-row button {
-  width: 90px;
-  padding: 0;
-  font-size: 12px;
-}
 button {
+  width: 100%;
   margin-top: 14px;
   padding: 13px;
   border-radius: 14px;
@@ -104,7 +88,6 @@ tg.expand();
 let state = {
   first: "",
   last: "",
-  phone: "",
   accepted: false
 };
 
@@ -112,7 +95,6 @@ function check() {
   document.getElementById("submit").disabled = !(
     state.first &&
     state.last &&
-    state.phone &&
     state.accepted
   );
 }
@@ -126,7 +108,7 @@ async function start() {
   const j = await r.json();
 
   if (j.ok && j.registered) {
-    renderOTP();
+    renderPassed();
   } else {
     renderRegister();
   }
@@ -138,11 +120,6 @@ function renderRegister() {
 
     <input id="first" placeholder="نام">
     <input id="last" placeholder="نام خانوادگی">
-
-    <div class="phone-row">
-      <input id="phone" placeholder="شماره موبایل" readonly>
-      <button id="getPhone">📱</button>
-    </div>
 
     <div class="rules">
       1. ثبت سفارش فقط پس از تأیید مدیر معتبر است.<br>
@@ -156,7 +133,7 @@ function renderRegister() {
       <label>قوانین را می‌پذیرم</label>
     </div>
 
-    <button id="submit" disabled>دریافت کد فعال‌سازی</button>
+    <button id="submit" disabled>ادامه</button>
   `;
 
   document.getElementById("first").oninput = e => {
@@ -169,21 +146,6 @@ function renderRegister() {
     state.accepted = e.target.checked; check();
   };
 
-  document.getElementById("getPhone").onclick = async () => {
-    try {
-      const result = await tg.requestContact();
-      if (result?.contact?.phone_number) {
-        state.phone = result.contact.phone_number;
-        document.getElementById("phone").value = state.phone;
-        check();
-      } else {
-        alert("شماره دریافت نشد");
-      }
-    } catch {
-      alert("دسترسی به شماره رد شد");
-    }
-  };
-
   document.getElementById("submit").onclick = async () => {
     await fetch(WORKER,{
       method:"POST",
@@ -191,28 +153,29 @@ function renderRegister() {
       body: JSON.stringify({
         initData: tg.initData,
         profile: state,
-        action: "send_otp"
+        action: "temp_register"
       })
     });
-    renderOTPSent();
+    renderPending();
   };
 }
 
-function renderOTPSent() {
+function renderPending() {
   app.innerHTML = `
-    <h1>کد ارسال شد</h1>
+    <h1>ثبت شد</h1>
     <p style="text-align:center;font-size:14px">
-      کد فعال‌سازی ارسال شد<br>
-      اعتبار: ۳۰ دقیقه
+      ثبت‌نام شما انجام شد ✅<br>
+      به مرحله بعد منتقل می‌شوید.
     </p>
   `;
 }
 
-function renderOTP() {
+function renderPassed() {
   app.innerHTML = `
-    <h1>ورود</h1>
-    <input placeholder="کد فعال‌سازی">
-    <button>تأیید</button>
+    <h1>خوش آمدید</h1>
+    <p style="text-align:center;font-size:14px">
+      وارد سامانه شدید ✅
+    </p>
   `;
 }
 
