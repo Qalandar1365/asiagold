@@ -1,3 +1,104 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AsiaGold</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #ffffff;
+      color: #020617;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      border-radius: 18px;
+      padding: 24px;
+      border: 2px solid #d4af37;
+      background: #ffffff;
+      box-shadow: 0 20px 40px rgba(0,0,0,.12);
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 14px;
+    }
+
+    .rules {
+      font-size: 13px;
+      line-height: 1.8;
+      margin-top: 14px;
+      color: #334155;
+    }
+
+    .checkbox {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 13px;
+      align-items: flex-start;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 13px;
+      border-radius: 14px;
+      border: 2px solid #b8962e;
+      background: linear-gradient(135deg, #f5d76e, #d4af37);
+      color: #020617;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(212,175,55,.45);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .text {
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.7;
+      margin-top: 12px;
+      color: #334155;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <div class="card" id="app">
+    <p class="text">در حال اتصال…</p>
+  </div>
+</div>
+
 <script>
 (function () {
 
@@ -12,12 +113,6 @@
 
   tg.ready();
   tg.expand();
-
-  let USER = {
-    first: "",
-    last: "",
-    phone: ""
-  };
 
   async function start() {
     app.innerHTML = "<p class='text'>در حال احراز هویت…</p>";
@@ -34,107 +129,57 @@
       return;
     }
 
-    renderRegister();
+    renderForm();
   }
 
-  function renderRegister() {
+  function renderForm() {
     app.innerHTML = `
-      <h1>ثبت‌نام</h1>
+      <h1>ثبت‌نام کاربر</h1>
+
       <input id="first" placeholder="نام" />
       <input id="last" placeholder="نام خانوادگی" />
-      <button id="next">ادامه</button>
+
+      <div class="rules">
+        • ثبت سفارش فقط پس از تأیید مدیر فروش معتبر است.<br>
+        • مسئولیت صحت سفارش بر عهده ثبت‌کننده است.<br>
+        • اطلاعات شما محرمانه باقی می‌ماند.
+      </div>
+
+      <div class="checkbox">
+        <input type="checkbox" id="accept" />
+        <label for="accept">قوانین و مقررات را می‌پذیرم</label>
+      </div>
+
+      <button id="submit">ثبت‌نام نهایی</button>
     `;
 
-    document.getElementById("next").onclick = () => {
-      const f = document.getElementById("first").value.trim();
-      const l = document.getElementById("last").value.trim();
-      if (!f || !l) {
+    document.getElementById("submit").onclick = async () => {
+      const first = document.getElementById("first").value.trim();
+      const last = document.getElementById("last").value.trim();
+      const ok = document.getElementById("accept").checked;
+
+      if (!first || !last) {
         alert("نام و نام خانوادگی را وارد کنید");
         return;
       }
-      USER.first = f;
-      USER.last = l;
-      renderTerms();
-    };
-  }
-
-  function renderTerms() {
-    app.innerHTML = `
-      <h1>قوانین و مقررات</h1>
-      <div class="text">
-        • ثبت سفارش فقط پس از تأیید مدیر فروش معتبر است.<br>
-        • مسئولیت صحت سفارش بر عهده ثبت‌کننده است.<br>
-        • اطلاعات شما محرمانه باقی می‌ماند.<br>
-      </div>
-      <div class="checkbox">
-        <input type="checkbox" id="accept" />
-        <label for="accept">قوانین را مطالعه کردم و می‌پذیرم</label>
-      </div>
-      <button id="confirm">تأیید و ادامه</button>
-    `;
-
-    document.getElementById("confirm").onclick = () => {
-      if (!document.getElementById("accept").checked) {
+      if (!ok) {
         alert("باید قوانین را بپذیرید");
         return;
       }
-      requestPhone();
+
+      app.innerHTML = `
+        <h1>ثبت شد ✅</h1>
+        <p class="text">
+          اطلاعات شما با موفقیت ثبت شد.<br>
+          پس از تأیید مدیر فروش، دسترسی فعال می‌شود.
+        </p>
+      `;
     };
-  }
-
-  function requestPhone() {
-    app.innerHTML = `
-      <h1>تأیید شماره موبایل</h1>
-      <p class="text">برای ادامه، شماره موبایل خود را تأیید کنید</p>
-      <button id="phone">📱 تأیید شماره</button>
-    `;
-
-    document.getElementById("phone").onclick = () => {
-      tg.requestContact((ok, data) => {
-        if (!ok) {
-          alert("دسترسی به شماره تلفن رد شد");
-          return;
-        }
-
-        USER.phone = data.phone_number;
-        submitRegister();
-      });
-    };
-  }
-
-  async function submitRegister() {
-    app.innerHTML = "<p class='text'>در حال ثبت اطلاعات…</p>";
-
-    const res = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        initData: tg.initData,
-        profile: USER
-      })
-    });
-
-    const json = await res.json();
-    if (!json.ok) {
-      app.innerHTML = "<p class='text'>خطا در ثبت اطلاعات</p>";
-      return;
-    }
-
-    localStorage.setItem("token", json.token);
-    renderPending();
-  }
-
-  function renderPending() {
-    app.innerHTML = `
-      <h1>ثبت‌نام انجام شد</h1>
-      <p class="text">
-        اطلاعات شما ثبت شد ✅<br>
-        پس از تأیید مدیر فروش، امکان ثبت سفارش فعال می‌شود.
-      </p>
-    `;
   }
 
   start();
 
 })();
 </script>
+</body>
+</html>
