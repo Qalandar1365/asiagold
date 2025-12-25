@@ -1,184 +1,185 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AsiaGold</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AsiaGold</title>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: #ffffff;
-      color: #020617;
-    }
-
-    .container {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 420px;
-      border-radius: 18px;
-      padding: 24px;
-      border: 2px solid #d4af37;
-      background: #ffffff;
-      box-shadow: 0 20px 40px rgba(0,0,0,.12);
-    }
-
-    h1 {
-      margin: 0 0 16px;
-      font-size: 20px;
-      text-align: center;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 12px;
-      border-radius: 12px;
-      border: 1.5px solid #cbd5e1;
-      background: #ffffff;
-      font-size: 14px;
-    }
-
-    .rules {
-      font-size: 13px;
-      line-height: 1.8;
-      margin-top: 14px;
-      color: #334155;
-    }
-
-    .checkbox {
-      display: flex;
-      gap: 8px;
-      margin-top: 16px;
-      font-size: 13px;
-      align-items: flex-start;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 18px;
-      padding: 13px;
-      border-radius: 14px;
-      border: 2px solid #b8962e;
-      background: linear-gradient(135deg, #f5d76e, #d4af37);
-      color: #020617;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 8px 18px rgba(212,175,55,.45);
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    .text {
-      font-size: 13px;
-      text-align: center;
-      line-height: 1.7;
-      margin-top: 12px;
-      color: #334155;
-    }
-  </style>
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #ffffff;
+  color: #020617;
+}
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+.card {
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 22px;
+}
+h1 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 13px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid #b5942f;
+  background: linear-gradient(135deg,#f5d76e,#d4af37);
+  color: #020617;
+}
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+.text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #374151;
+}
+.checkbox {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+</style>
 </head>
 
 <body>
-<div class="container">
-  <div class="card" id="app">
-    <p class="text">در حال اتصال…</p>
-  </div>
+<div class="wrapper">
+  <div class="card" id="app">در حال اتصال…</div>
 </div>
 
 <script>
-(function () {
+(() => {
+const tg = Telegram.WebApp;
+const WORKER = "https://asiagold-api.qalandar65.workers.dev";
+const app = document.getElementById("app");
 
-  const tg = window.Telegram?.WebApp;
-  const WORKER_URL = "https://asiagold-api.qalandar65.workers.dev";
-  const app = document.getElementById("app");
+tg.ready();
+tg.expand();
 
-  if (!tg || !tg.initData) {
-    app.innerHTML = "<p class='text'>❌ فقط داخل تلگرام قابل استفاده است</p>";
-    return;
-  }
+let state = {
+  first: "",
+  last: "",
+  phone: "",
+  accepted: false
+};
 
-  tg.ready();
-  tg.expand();
-
-  async function start() {
-    app.innerHTML = "<p class='text'>در حال احراز هویت…</p>";
-
-    const res = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ initData: tg.initData })
-    });
-
-    const json = await res.json();
-    if (!json.ok) {
-      app.innerHTML = "<p class='text'>خطا در اتصال</p>";
-      return;
-    }
-
+async function auth() {
+  const r = await fetch(WORKER, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ initData: tg.initData })
+  });
+  const j = await r.json();
+  if (j.ok && j.registered) {
+    renderLoggedIn();
+  } else {
     renderForm();
   }
+}
 
-  function renderForm() {
-    app.innerHTML = `
-      <h1>ثبت‌نام کاربر</h1>
+function renderForm() {
+  app.innerHTML = `
+    <h1>ثبت‌نام</h1>
+    <input id="first" placeholder="نام">
+    <input id="last" placeholder="نام خانوادگی">
+    <button id="phone">📱 دریافت شماره موبایل</button>
 
-      <input id="first" placeholder="نام" />
-      <input id="last" placeholder="نام خانوادگی" />
+    <div class="checkbox">
+      <input type="checkbox" id="rules">
+      <label>قوانین را می‌پذیرم</label>
+    </div>
 
-      <div class="rules">
-        • ثبت سفارش فقط پس از تأیید مدیر فروش معتبر است.<br>
-        • مسئولیت صحت سفارش بر عهده ثبت‌کننده است.<br>
-        • اطلاعات شما محرمانه باقی می‌ماند.
-      </div>
+    <button id="submit" disabled>تأیید نهایی</button>
+  `;
 
-      <div class="checkbox">
-        <input type="checkbox" id="accept" />
-        <label for="accept">قوانین و مقررات را می‌پذیرم</label>
-      </div>
-
-      <button id="submit">ثبت‌نام نهایی</button>
-    `;
-
-    document.getElementById("submit").onclick = async () => {
-      const first = document.getElementById("first").value.trim();
-      const last = document.getElementById("last").value.trim();
-      const ok = document.getElementById("accept").checked;
-
-      if (!first || !last) {
-        alert("نام و نام خانوادگی را وارد کنید");
-        return;
-      }
-      if (!ok) {
-        alert("باید قوانین را بپذیرید");
-        return;
-      }
-
-      app.innerHTML = `
-        <h1>ثبت شد ✅</h1>
-        <p class="text">
-          اطلاعات شما با موفقیت ثبت شد.<br>
-          پس از تأیید مدیر فروش، دسترسی فعال می‌شود.
-        </p>
-      `;
+  ["first","last"].forEach(id=>{
+    document.getElementById(id).oninput = e=>{
+      state[id]=e.target.value.trim();
+      check();
     };
-  }
+  });
 
-  start();
+  document.getElementById("rules").onchange = e=>{
+    state.accepted=e.target.checked;
+    check();
+  };
 
+  document.getElementById("phone").onclick = ()=>{
+    tg.requestContact((ok,res)=>{
+      if(ok){
+        state.phone=res.phone_number;
+        check();
+        alert("شماره ثبت شد ✅");
+      }
+    });
+  };
+
+  document.getElementById("submit").onclick = submit;
+}
+
+function check() {
+  document.getElementById("submit").disabled = !(
+    state.first && state.last && state.phone && state.accepted
+  );
+}
+
+async function submit() {
+  await fetch(WORKER, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      initData: tg.initData,
+      profile: state
+    })
+  });
+  renderPending();
+}
+
+function renderPending() {
+  app.innerHTML = `
+    <h1>در انتظار تأیید</h1>
+    <p class="text">
+      پس از تأیید مدیر، کد ورود برای شما ارسال می‌شود.
+    </p>
+  `;
+}
+
+function renderLoggedIn() {
+  app.innerHTML = `
+    <h1>خوش آمدید</h1>
+    <p class="text">وارد سامانه شدید ✅</p>
+  `;
+}
+
+auth();
 })();
 </script>
 </body>
