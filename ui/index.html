@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AsiaGold Mini App</title>
+
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <style>
       :root {
         font-family: "Segoe UI", sans-serif;
@@ -56,6 +60,7 @@
       }
     </style>
   </head>
+
   <body>
     <div class="card">
       <h1>خروجی مینی‌اپ AsiaGold</h1>
@@ -66,73 +71,76 @@
       <div class="label">توکن جلسه (از ورکر)</div>
       <div id="sessionToken" class="value">—</div>
 
-      <div id="status" class="status">در انتظار...</div>
-      <button id="retry">دریافت دوباره</button>
+      <div id="status" class="status">در حال بررسی…</div>
+      <button id="retry">تلاش مجدد</button>
     </div>
 
     <script>
-      const query = new URLSearchParams(window.location.search);
-
-      const WORKER_URL =
-        query.get("worker_url") ||
-        "https://asiagold-api.qalandar65.workers.dev";
-
-      const initDataEl = document.getElementById("initData");
-      const sessionEl = document.getElementById("sessionToken");
-      const statusEl = document.getElementById("status");
-      const retryBtn = document.getElementById("retry");
-
-      async function run() {
-        statusEl.textContent = "در حال خواندن initData...";
+      (function () {
         const tg = window.Telegram?.WebApp;
-        const initData =
-  tg?.initData ||
-  (tg?.initDataUnsafe
-    ? new URLSearchParams(tg.initDataUnsafe).toString()
-    : null);
 
-
-        if (!initData) {
-          statusEl.textContent =
-            "❌ initData یافت نشد. حتماً باید داخل تلگرام باز شود.";
-          return;
+        // ❌ خارج از تلگرام = توقف کامل
+        if (!tg || !tg.initData) {
+          document.body.innerHTML = `
+            <div style="
+              background:#0f172a;
+              color:white;
+              height:100vh;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              font-family:sans-serif;
+              text-align:center;
+            ">
+              ❌ این سامانه فقط از داخل تلگرام قابل استفاده است
+            </div>
+          `;
+          throw new Error("Telegram WebApp context not found");
         }
 
-        try {
-          tg.ready();
-          tg.expand();
-        } catch {}
+        tg.ready();
+        tg.expand();
 
-        initDataEl.textContent = initData;
-        statusEl.textContent = "در حال فراخوانی ورکر...";
+        const WORKER_URL = "https://asiagold-api.qalandar65.workers.dev";
 
-        // ✅ درست: POST به /verify
-        const workerRes = await fetch(`${WORKER_URL}/verify`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ initData }),
-        });
+        const initDataEl = document.getElementById("initData");
+        const sessionEl = document.getElementById("sessionToken");
+        const statusEl = document.getElementById("status");
+        const retryBtn = document.getElementById("retry");
 
-        const workerJson = await workerRes.json();
+        async function run() {
+          try {
+            statusEl.textContent = "در حال ارسال initData به ورکر…";
 
-        if (!workerRes.ok || !workerJson.ok) {
-          statusEl.textContent =
-            "❌ خطا از ورکر: " +
-            (workerJson.error || workerRes.status);
-          return;
+            const initData = tg.initData; // ✅ فقط منبع معتبر
+            initDataEl.textContent = initData;
+
+            const res = await fetch(`${WORKER_URL}/verify`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ initData }),
+            });
+
+            const json = await res.json();
+
+            if (!res.ok || !json.ok) {
+              statusEl.textContent =
+                "❌ خطا از ورکر: " + (json.error || res.status);
+              return;
+            }
+
+            sessionEl.textContent = json.session_token;
+            statusEl.textContent =
+              "✅ Auth OK | Telegram ID: " + json.telegram_id;
+          } catch (err) {
+            console.error(err);
+            statusEl.textContent = "❌ خطای غیرمنتظره";
+          }
         }
 
-        // ✅ نام درست فیلد
-        const sessionToken = workerJson.session_token;
-        sessionEl.textContent = sessionToken;
-
-        statusEl.textContent =
-          "✅ Auth OK | Telegram ID: " + workerJson.telegram_id;
-      }
-
-      retryBtn.addEventListener("click", () => run());
-
-      run();
+        retryBtn.addEventListener("click", run);
+        run();
+      })();
     </script>
   </body>
 </html>
