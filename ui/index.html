@@ -22,7 +22,7 @@ body {
 }
 .card {
   width: 100%;
-  max-width: 420px;
+  max-width: 399px;
   border: 1px solid #e5e7eb;
   border-radius: 18px;
   padding: 22px;
@@ -41,10 +41,23 @@ input {
   font-size: 14px;
 }
 input[readonly] {
-  background: #f9fafb;
+  background: #f3f4f6;
+}
+.phone-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.phone-row input {
+  flex: 1;
+  margin-top: 0;
+}
+.phone-row button {
+  width: 90px;
+  padding: 0;
+  font-size: 12px;
 }
 button {
-  width: 100%;
   margin-top: 14px;
   padding: 13px;
   border-radius: 14px;
@@ -95,10 +108,19 @@ let state = {
   accepted: false
 };
 
+function check() {
+  document.getElementById("submit").disabled = !(
+    state.first &&
+    state.last &&
+    state.phone &&
+    state.accepted
+  );
+}
+
 async function start() {
-  const r = await fetch(WORKER, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
+  const r = await fetch(WORKER,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({ initData: tg.initData })
   });
   const j = await r.json();
@@ -116,62 +138,57 @@ function renderRegister() {
 
     <input id="first" placeholder="نام">
     <input id="last" placeholder="نام خانوادگی">
-    <input id="phone" placeholder="شماره موبایل" readonly>
 
-    <button id="getPhone">📱 دریافت شماره موبایل</button>
+    <div class="phone-row">
+      <input id="phone" placeholder="شماره موبایل" readonly>
+      <button id="getPhone">📱</button>
+    </div>
 
     <div class="rules">
       1. ثبت سفارش فقط پس از تأیید مدیر معتبر است.<br>
-      2. مسئولیت صحت اطلاعات بر عهده کاربر است.<br>
-      3. اطلاعات شما محرمانه باقی می‌ماند.<br>
-      4. هر حساب فقط متعلق به یک شخص است.
+      2. مسئولیت صحت اطلاعات با کاربر است.<br>
+      3. اطلاعات محرمانه نگهداری می‌شود.<br>
+      4. هر حساب فقط برای یک شخص است.
     </div>
 
     <div class="checkbox">
       <input type="checkbox" id="rulesCheck">
-      <label>قوانین را مطالعه کردم و می‌پذیرم</label>
+      <label>قوانین را می‌پذیرم</label>
     </div>
 
     <button id="submit" disabled>دریافت کد فعال‌سازی</button>
   `;
 
-  const first = document.getElementById("first");
-  const last = document.getElementById("last");
-  const phone = document.getElementById("phone");
-  const submit = document.getElementById("submit");
-
-  function check() {
-    submit.disabled = !(
-      state.first &&
-      state.last &&
-      state.phone &&
-      state.accepted
-    );
-  }
-
-  first.oninput = e => { state.first = e.target.value.trim(); check(); };
-  last.oninput  = e => { state.last  = e.target.value.trim(); check(); };
-
+  document.getElementById("first").oninput = e => {
+    state.first = e.target.value.trim(); check();
+  };
+  document.getElementById("last").oninput = e => {
+    state.last = e.target.value.trim(); check();
+  };
   document.getElementById("rulesCheck").onchange = e => {
-    state.accepted = e.target.checked;
-    check();
+    state.accepted = e.target.checked; check();
   };
 
-  document.getElementById("getPhone").onclick = () => {
-    tg.requestContact((ok,res)=>{
-      if(ok){
-        state.phone = res.phone_number;
-        phone.value = res.phone_number;
+  document.getElementById("getPhone").onclick = async () => {
+    try {
+      const result = await tg.requestContact();
+      if (result?.contact?.phone_number) {
+        state.phone = result.contact.phone_number;
+        document.getElementById("phone").value = state.phone;
         check();
+      } else {
+        alert("شماره دریافت نشد");
       }
-    });
+    } catch {
+      alert("دسترسی به شماره رد شد");
+    }
   };
 
-  submit.onclick = async () => {
+  document.getElementById("submit").onclick = async () => {
     await fetch(WORKER,{
       method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
         initData: tg.initData,
         profile: state,
         action: "send_otp"
@@ -184,9 +201,9 @@ function renderRegister() {
 function renderOTPSent() {
   app.innerHTML = `
     <h1>کد ارسال شد</h1>
-    <p style="font-size:14px;text-align:center">
-      کد فعال‌سازی برای شما ارسال شد.<br>
-      اعتبار کد: ۳۰ دقیقه
+    <p style="text-align:center;font-size:14px">
+      کد فعال‌سازی ارسال شد<br>
+      اعتبار: ۳۰ دقیقه
     </p>
   `;
 }
