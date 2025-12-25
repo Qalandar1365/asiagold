@@ -14,7 +14,7 @@ async def start_handler(message: types.Message):
     kb = types.InlineKeyboardMarkup()
     kb.add(
         types.InlineKeyboardButton(
-            text="🔐 ورود به سامانه AsiaGold",
+            text="Open",
             web_app=types.WebAppInfo(
                 url="https://asiagold.pages.dev"
             )

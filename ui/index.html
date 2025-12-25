@@ -1,140 +1,167 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AsiaGold Mini App</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AsiaGold</title>
 
-    <!-- Telegram WebApp SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <style>
-      :root {
-        font-family: "Segoe UI", sans-serif;
-        background: #0f172a;
-        color: #e2e8f0;
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    .container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 380px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    }
+    h1 {
+      margin: 0 0 16px;
+      font-size: 20px;
+      text-align: center;
+    }
+    p {
+      font-size: 14px;
+      color: #cbd5f5;
+      text-align: center;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #fff;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 0;
+      background: #2563eb;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #020617;
+      border: 1px solid #1e293b;
+      font-size: 13px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <div class="card" id="app">
+    <div class="status">در حال اتصال…</div>
+  </div>
+</div>
+
+<script>
+(function () {
+
+  const tg = window.Telegram?.WebApp;
+  const WORKER_URL = "https://asiagold-api.qalandar65.workers.dev";
+
+  const app = document.getElementById("app");
+
+  // فقط داخل تلگرام
+  if (!tg || !tg.initData) {
+    app.innerHTML = "<p>❌ فقط داخل تلگرام قابل استفاده است</p>";
+    return;
+  }
+
+  tg.ready();
+  tg.expand();
+
+  // --- مرحله ۱: احراز هویت ---
+  async function auth() {
+    app.innerHTML = "<div class='status'>در حال احراز هویت…</div>";
+
+    const res = await fetch(WORKER_URL + "/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ initData: tg.initData })
+    });
+
+    const json = await res.json();
+
+    if (!res.ok || !json.ok) {
+      app.innerHTML = "<p>❌ خطا در احراز هویت</p>";
+      return;
+    }
+
+    // فعلاً همیشه کاربر جدید فرض می‌شود
+    renderRegister();
+  }
+
+  // --- صفحه ثبت‌نام ---
+  function renderRegister() {
+    app.innerHTML = `
+      <h1>ثبت‌نام در AsiaGold</h1>
+
+      <input id="name" placeholder="نام و نام خانوادگی" />
+
+      <select id="office">
+        <option value="">انتخاب دفتر فروش</option>
+        <option value="tehran">دفتر تهران</option>
+        <option value="isfahan">دفتر اصفهان</option>
+        <option value="bandar">دفتر بندرعباس</option>
+      </select>
+
+      <button id="submit">ثبت‌نام</button>
+    `;
+
+    document.getElementById("submit").onclick = () => {
+      const name = document.getElementById("name").value.trim();
+      const office = document.getElementById("office").value;
+
+      if (!name || !office) {
+        alert("اطلاعات را کامل وارد کنید");
+        return;
       }
-      body {
-        margin: 0;
-        padding: 20px;
-      }
-      .card {
-        background: #111827;
-        border: 1px solid #1f2937;
-        border-radius: 12px;
-        padding: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      }
-      h1 {
-        margin: 0 0 12px;
-        font-size: 20px;
-      }
-      .label {
-        color: #94a3b8;
-        margin-top: 6px;
-        font-size: 14px;
-      }
-      .value {
-        font-family: Consolas, monospace;
-        word-break: break-all;
-        margin-top: 4px;
-        font-size: 13px;
-      }
-      .status {
-        margin-top: 12px;
-        padding: 10px;
-        border-radius: 8px;
-        background: #0b1220;
-        border: 1px solid #1f2a44;
-        font-size: 13px;
-      }
-      button {
-        margin-top: 14px;
-        padding: 10px 14px;
-        border-radius: 8px;
-        border: 0;
-        background: #2563eb;
-        color: #fff;
-        font-size: 14px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
 
-  <body>
-    <div class="card">
-      <h1>ورود به سامانه AsiaGold</h1>
+      renderPending();
+    };
+  }
 
-      <div class="label">وضعیت احراز هویت</div>
-      <div id="status" class="status">در حال بررسی…</div>
+  // --- صفحه انتظار تأیید ---
+  function renderPending() {
+    app.innerHTML = `
+      <h1>در انتظار تأیید</h1>
+      <p>
+        ثبت‌نام شما انجام شد ✅<br>
+        پس از تأیید مدیر فروش، امکان ثبت سفارش فعال می‌شود.
+      </p>
+    `;
+  }
 
-      <button id="retry" style="display:none;">تلاش مجدد</button>
-    </div>
+  auth();
 
-    <script>
-      (function () {
-        const tg = window.Telegram?.WebApp;
-
-        // فقط داخل تلگرام
-        if (!tg || !tg.initData) {
-          document.body.innerHTML = `
-            <div style="
-              background:#0f172a;
-              color:white;
-              height:100vh;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              font-family:sans-serif;
-              text-align:center;
-            ">
-              ❌ این سامانه فقط از داخل تلگرام قابل استفاده است
-            </div>
-          `;
-          return;
-        }
-
-        tg.ready();
-        tg.expand();
-
-        const WORKER_URL = "https://asiagold-api.qalandar65.workers.dev";
-        const statusEl = document.getElementById("status");
-        const retryBtn = document.getElementById("retry");
-
-        async function run() {
-          try {
-            retryBtn.style.display = "none";
-            statusEl.textContent = "در حال احراز هویت…";
-
-            const res = await fetch(`${WORKER_URL}/verify`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ initData: tg.initData }),
-            });
-
-            const json = await res.json();
-
-            if (!res.ok || !json.ok) {
-              statusEl.textContent =
-                "❌ خطا در احراز هویت. دوباره تلاش کنید.";
-              retryBtn.style.display = "block";
-              return;
-            }
-
-            statusEl.textContent = "✅ ورود موفق. در حال انتقال…";
-
-            // اینجا بعداً می‌توانی ریدایرکت کنی
-            // location.href = "/dashboard.html";
-
-          } catch (e) {
-            statusEl.textContent = "❌ خطای غیرمنتظره";
-            retryBtn.style.display = "block";
-          }
-        }
-
-        retryBtn.addEventListener("click", run);
-        run();
-      })();
-    </script>
-  </body>
+})();
+</script>
+</body>
 </html>
