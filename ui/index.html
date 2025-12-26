@@ -3,55 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AsiaGold</title>
+<title>Asia Gold</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-/* ===== Page Background ===== */
+/* ===== Base ===== */
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(180deg,#ffffff 0%, #f7e7b5 100%);
-  color: #020617;
+  background: linear-gradient(180deg,#ffffff 0%, #f5dc9e 100%);
+  color: #ffffff;
 }
 
-/* ===== Center Wrapper ===== */
 .wrapper {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
 }
 
 /* ===== Card ===== */
 .card {
   width: 100%;
-  max-width: 420px;
-  background: linear-gradient(180deg,#0b1f44,#071733);
-  border-radius: 28px;
-  padding: 28px 22px 32px;
-  box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  max-width: 430px;
+  background: linear-gradient(180deg,#061a3a,#04142f);
+  border-radius: 26px;
+  padding: 26px 22px 30px;
+  box-shadow: 0 30px 70px rgba(0,0,0,.45);
 }
 
-/* ===== Logo Placeholder ===== */
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
 .logo {
-  width: 110px;
-  height: 110px;
-  margin: 0 auto 18px;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 12px;
   border-radius: 50%;
-  background: linear-gradient(135deg,#1e90ff,#00c6ff);
+  background: radial-gradient(circle at top,#4fc3ff,#0b5cff);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 20px;
+  letter-spacing: .5px;
+  color: #ffffff;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
 }
 
 /* ===== Inputs ===== */
-input {
+.input {
   width: 100%;
   padding: 16px;
   margin-top: 14px;
@@ -60,160 +70,131 @@ input {
   font-size: 15px;
   outline: none;
   background: #ffffff;
+  color: #020617;
+}
+
+/* ===== Phone Row ===== */
+.phone-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.phone-row .input {
+  flex: 1;
+  margin-top: 0;
+}
+
+.tg-btn {
+  width: 140px;
+  border-radius: 18px;
+  border: none;
+  background: linear-gradient(135deg,#4fd1ff,#2bb0ff);
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: not-allowed;
+  opacity: .85;
+}
+
+/* ===== Select ===== */
+.select {
+  width: 100%;
+  padding: 16px;
+  margin-top: 14px;
+  border-radius: 18px;
+  border: none;
+  font-size: 15px;
+  background: #ffffff;
+  color: #9ca3af;
 }
 
 /* ===== Rules ===== */
 .rules {
   margin-top: 18px;
+  background: rgba(255,255,255,.06);
+  border-radius: 18px;
+  padding: 14px;
   font-size: 14px;
-  color: #e5e7eb;
   line-height: 1.9;
 }
 
-/* ===== Checkbox ===== */
-.checkbox {
+.rule-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 18px;
-  font-size: 14px;
-  color: #ffffff;
+  margin-top: 12px;
 }
 
-/* ===== Button ===== */
-button {
+.rule-item input {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===== Submit ===== */
+.submit {
   width: 100%;
   margin-top: 26px;
   padding: 16px;
   border-radius: 22px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
   border: none;
-  background: linear-gradient(135deg,#3bb3ff,#1e88ff);
+  background: linear-gradient(135deg,#2c7be5,#1f5fd1);
   color: #ffffff;
-  box-shadow: 0 10px 25px rgba(30,136,255,.45);
+  font-size: 17px;
+  font-weight: bold;
+  cursor: not-allowed;
+  opacity: .75;
 }
 
-button:disabled {
-  opacity: .5;
-  box-shadow: none;
-  cursor: not-allowed;
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  margin-top: 26px;
+  font-size: 13px;
+  color: #c7d2fe;
 }
 </style>
 </head>
 
 <body>
 <div class="wrapper">
-  <div class="card" id="app">در حال اتصال…</div>
-</div>
+  <div class="card">
 
-<script>
-(() => {
-const tg = Telegram.WebApp;
-const WORKER = "https://asiagold-api.qalandar65.workers.dev";
-const app = document.getElementById("app");
+    <div class="header">
+      <div class="logo">Asia<br>Gold</div>
+      <div class="title">Asia Gold Exchange</div>
+    </div>
 
-tg.ready();
-tg.expand();
+    <input class="input" placeholder="نام">
+    <input class="input" placeholder="نام خانوادگی">
 
-let state = {
-  first: "",
-  last: "",
-  accepted: false
-};
+    <div class="phone-row">
+      <input class="input" placeholder="شماره موبایل" readonly>
+      <button class="tg-btn">دریافت از تلگرام</button>
+    </div>
 
-function check() {
-  document.getElementById("submit").disabled = !(
-    state.first &&
-    state.last &&
-    state.accepted
-  );
-}
-
-async function start() {
-  const r = await fetch(WORKER,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ initData: tg.initData })
-  });
-  const j = await r.json();
-
-  if (j.ok && j.registered) {
-    renderPassed();
-  } else {
-    renderRegister();
-  }
-}
-
-function renderRegister() {
-  app.innerHTML = `
-    <div class="logo">ASIA<br>GOLD</div>
-
-    <input id="first" placeholder="نام">
-    <input id="last" placeholder="نام خانوادگی">
+    <select class="select">
+      <option>کشور محل سکونت</option>
+    </select>
 
     <div class="rules">
-      • ثبت سفارش فقط پس از تأیید مدیر فروش معتبر است.<br>
-      • مسئولیت صحت اطلاعات بر عهده کاربر است.<br>
-      • اطلاعات شما محرمانه باقی می‌ماند.<br>
-      • هر حساب فقط متعلق به یک شخص است.
+      <div class="rule-item">
+        <input type="checkbox">
+        <label>شرایط و قوانین را می‌پذیرم.</label>
+      </div>
+      <div class="rule-item">
+        <input type="checkbox">
+        <label>اطلاعات مطابق با مدارک هویتی من است.</label>
+      </div>
     </div>
 
-    <div class="checkbox">
-      <input type="checkbox" id="rulesCheck">
-      <label>شرایط و قوانین را می‌پذیرم</label>
+    <button class="submit">ثبت نام</button>
+
+    <div class="footer">
+      چهل سال بر قله النگوی ایران
     </div>
 
-    <button id="submit" disabled>ثبت نام</button>
-  `;
-
-  document.getElementById("first").oninput = e => {
-    state.first = e.target.value.trim(); check();
-  };
-  document.getElementById("last").oninput = e => {
-    state.last = e.target.value.trim(); check();
-  };
-  document.getElementById("rulesCheck").onchange = e => {
-    state.accepted = e.target.checked; check();
-  };
-
-  document.getElementById("submit").onclick = async () => {
-    await fetch(WORKER,{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        initData: tg.initData,
-        profile: state,
-        action: "temp_register"
-      })
-    });
-    renderPending();
-  };
-}
-
-function renderPending() {
-  app.innerHTML = `
-    <div class="logo">✓</div>
-    <div class="rules" style="text-align:center">
-      ثبت‌نام شما با موفقیت انجام شد.<br>
-      به مرحله بعد منتقل می‌شوید.
-    </div>
-  `;
-}
-
-function renderPassed() {
-  app.innerHTML = `
-    <div class="logo">✓</div>
-    <div class="rules" style="text-align:center">
-      خوش آمدید 🌟<br>
-      وارد سامانه شدید.
-    </div>
-  `;
-}
-
-start();
-})();
-</script>
+  </div>
+</div>
 </body>
 </html>
