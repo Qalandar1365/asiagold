@@ -8,65 +8,97 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
+/* ===== Page Background ===== */
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
-  background: #fff;
+  background: linear-gradient(180deg,#ffffff 0%, #f7e7b5 100%);
   color: #020617;
 }
+
+/* ===== Center Wrapper ===== */
 .wrapper {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 24px;
+  align-items: center;
+  padding: 20px;
 }
+
+/* ===== Card ===== */
 .card {
   width: 100%;
-  max-width: 399px;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 22px;
+  max-width: 420px;
+  background: linear-gradient(180deg,#0b1f44,#071733);
+  border-radius: 28px;
+  padding: 28px 22px 32px;
+  box-shadow: 0 30px 60px rgba(0,0,0,.35);
 }
-h1 {
-  text-align: center;
-  font-size: 20px;
-  margin-bottom: 14px;
-}
-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 12px;
-  border: 1px solid #d1d5db;
+
+/* ===== Logo Placeholder ===== */
+.logo {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#1e90ff,#00c6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
   font-size: 14px;
 }
-button {
+
+/* ===== Inputs ===== */
+input {
   width: 100%;
+  padding: 16px;
   margin-top: 14px;
-  padding: 13px;
-  border-radius: 14px;
+  border-radius: 18px;
+  border: none;
   font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  border: 2px solid #b5942f;
-  background: linear-gradient(135deg,#f5d76e,#d4af37);
-  color: #020617;
+  outline: none;
+  background: #ffffff;
 }
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
+
+/* ===== Rules ===== */
 .rules {
-  font-size: 13px;
-  color: #374151;
-  margin-top: 14px;
-  line-height: 1.7;
+  margin-top: 18px;
+  font-size: 14px;
+  color: #e5e7eb;
+  line-height: 1.9;
 }
+
+/* ===== Checkbox ===== */
 .checkbox {
   display: flex;
-  gap: 8px;
-  margin-top: 10px;
-  font-size: 13px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+/* ===== Button ===== */
+button {
+  width: 100%;
+  margin-top: 26px;
+  padding: 16px;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg,#3bb3ff,#1e88ff);
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(30,136,255,.45);
+}
+
+button:disabled {
+  opacity: .5;
+  box-shadow: none;
+  cursor: not-allowed;
 }
 </style>
 </head>
@@ -116,24 +148,24 @@ async function start() {
 
 function renderRegister() {
   app.innerHTML = `
-    <h1>ثبت‌نام</h1>
+    <div class="logo">ASIA<br>GOLD</div>
 
     <input id="first" placeholder="نام">
     <input id="last" placeholder="نام خانوادگی">
 
     <div class="rules">
-      1. ثبت سفارش فقط پس از تأیید مدیر معتبر است.<br>
-      2. مسئولیت صحت اطلاعات با کاربر است.<br>
-      3. اطلاعات محرمانه نگهداری می‌شود.<br>
-      4. هر حساب فقط برای یک شخص است.
+      • ثبت سفارش فقط پس از تأیید مدیر فروش معتبر است.<br>
+      • مسئولیت صحت اطلاعات بر عهده کاربر است.<br>
+      • اطلاعات شما محرمانه باقی می‌ماند.<br>
+      • هر حساب فقط متعلق به یک شخص است.
     </div>
 
     <div class="checkbox">
       <input type="checkbox" id="rulesCheck">
-      <label>قوانین را می‌پذیرم</label>
+      <label>شرایط و قوانین را می‌پذیرم</label>
     </div>
 
-    <button id="submit" disabled>ادامه</button>
+    <button id="submit" disabled>ثبت نام</button>
   `;
 
   document.getElementById("first").oninput = e => {
@@ -162,20 +194,21 @@ function renderRegister() {
 
 function renderPending() {
   app.innerHTML = `
-    <h1>ثبت شد</h1>
-    <p style="text-align:center;font-size:14px">
-      ثبت‌نام شما انجام شد ✅<br>
+    <div class="logo">✓</div>
+    <div class="rules" style="text-align:center">
+      ثبت‌نام شما با موفقیت انجام شد.<br>
       به مرحله بعد منتقل می‌شوید.
-    </p>
+    </div>
   `;
 }
 
 function renderPassed() {
   app.innerHTML = `
-    <h1>خوش آمدید</h1>
-    <p style="text-align:center;font-size:14px">
-      وارد سامانه شدید ✅
-    </p>
+    <div class="logo">✓</div>
+    <div class="rules" style="text-align:center">
+      خوش آمدید 🌟<br>
+      وارد سامانه شدید.
+    </div>
   `;
 }
 
