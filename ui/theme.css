@@ -1,0 +1,50 @@
+:root{
+  --bg1:#ffffff;
+  --bg2:#f2e6b8;
+  --bg3:#e8d79a;
+
+  --panel1:#2b2500;
+  --panel2:#0f0d00;
+
+  --gold1:#f6edc7;
+  --gold2:#c9a23a;
+  --gold3:#7a6408;
+  --gold4:#f1d27a;
+  --gold5:#d6b44a;
+  --gold6:#caa13a;
+  --gold7:#9f7f14;
+
+  --text1:#ffffff;
+  --text2:#f5f1dc;
+  --text3:#e7dfb5;
+  --text4:#f3ebc9;
+  --text5:#f1ebc8;
+
+  --ink1:#1a1400;
+  --ink2:#3a2f00;
+  --ink3:#5c4a00;
+  --ink4:#2b2200;
+  --ink5:#2a2100;
+
+  --surface1:#f7f2df;
+  --surface2:#eee3bd;
+  --surface3:#e8ddb0;
+  --surface4:#cbb97a;
+
+  --success:#d6ffb2;
+  --accent-light:#fff7d6;
+  --ok:#9be27d;
+  --pending:#d6c56f;
+  --bad:#e58a7a;
+  --danger1:#b8573f;
+  --danger2:#7a2d1b;
+
+  --shadow:0 30px 70px rgba(0,0,0,.55);
+  --shadow-soft:0 12px 30px rgba(202,161,58,.35);
+  --glass-strong:rgba(255,255,255,.08);
+  --glass-soft:rgba(255,255,255,.02);
+
+  --r26:26px;
+  --r18:18px;
+  --r16:16px;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asia Gold | Admin</title>
+<link rel="stylesheet" href="./theme.css">
+<style>
+body{margin:0;font-family:"Segoe UI",sans-serif;background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);}
+.wrapper{min-height:100vh;display:flex;justify-content:center;padding:16px;}
+.card{
+  width:100%;max-width:480px;margin-top:14px;
+  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
+  border-radius:var(--r26);padding:22px;
+  box-shadow:var(--shadow);
+  color:var(--text1);
+}
+.header{text-align:center;margin-bottom:16px;}
+.logo{
+  width:72px;height:72px;margin:0 auto 8px;border-radius:50%;
+  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:bold;font-size:13px;color:var(--ink1);
+}
+.title{font-size:16px;font-weight:bold;color:var(--text2);}
+.filter{
+  margin-top:12px;border-radius:var(--r18);padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  display:flex;gap:10px;
+}
+select{
+  flex:1;border:none;outline:none;border-radius:14px;padding:10px;
+  background:linear-gradient(180deg,var(--surface1),var(--surface2));
+  color:var(--ink3);font-size:13px;
+}
+.list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
+.order{
+  border-radius:var(--r18);padding:14px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--text4);margin-top:8px;}
+.row strong{color:var(--text1);font-weight:700;}
+.badge{
+  display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold;
+  background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);
+}
+.badge.pending{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
+.badge.rejected{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
+.footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text5);}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card">
+    <div class="header">
+      <div class="logo">Asia<br>Gold</div>
+      <div class="title">Admin Orders</div>
+    </div>
+
+    <div class="filter">
+      <select>
+        <option>â?ä?â?á?á? â?á?á?ä?á?</option>
+        <option>á?á? á?â?á?á?á?á?</option>
+        <option>á?áœä?ä?á? á?á?â?</option>
+        <option>á?á? á?á?â?</option>
+      </select>
+      <select>
+        <option>â?á?á?á?ƒ??á?á?áýä?</option>
+        <option>á?á?ä?á?á?á?ä?â?</option>
+        <option>â?á?ä?â?ä?ƒ??á?á?ä?â?</option>
+      </select>
+    </div>
+
+    <div class="list">
+      <div class="order">
+        <div class="row"><strong>#2044</strong><span class="badge pending">á?á? á?â?á?á?á?á?</span></div>
+        <div class="row"><span>â?á?áæâ?â?</span><span>á?â?â?ã?â?</span></div>
+        <div class="row"><span>á?á?á?á?á?</span><span>4</span></div>
+        <div class="row"><span>á?á?á?ä?á?</span><span>ä?ä?äøä?/ä?äø/äøäæ</span></div>
+      </div>
+
+      <div class="order">
+        <div class="row"><strong>#2038</strong><span class="badge">á?áœä?ä?á? á?á?â?</span></div>
+        <div class="row"><span>â?á?áæâ?â?</span><span>á?á?á?á?â?á?</span></div>
+        <div class="row"><span>á?á?á?á?á?</span><span>2</span></div>
+        <div class="row"><span>á?á?á?ä?á?</span><span>ä?ä?äøä?/ä?äø/äøä?</span></div>
+      </div>
+
+      <div class="order">
+        <div class="row"><strong>#2030</strong><span class="badge rejected">á?á? á?á?â?</span></div>
+        <div class="row"><span>â?á?áæâ?â?</span><span>ã?á?á?â?á?â?á?</span></div>
+        <div class="row"><span>á?á?á?á?á?</span><span>1</span></div>
+        <div class="row"><span>á?á?á?ä?á?</span><span>ä?ä?äøä?/äøä?/äýä?</span></div>
+      </div>
+    </div>
+
+    <div class="footer">ã?â?â? á?á?â? á?á? â?â?â? á?â?â?ã?â?ä? á?ä?á?á?â?</div>
+  </div>
+</div>
+</body>
+</html>

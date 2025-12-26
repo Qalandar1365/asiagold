@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asia Gold | á?á?ä?ä?á?/á?á?</title>
+<link rel="stylesheet" href="./theme.css">
+<style>
+body{
+  margin:0;font-family:"Segoe UI",sans-serif;
+  background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
+}
+.wrapper{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px;}
+.panel{
+  width:100%;max-width:480px;
+  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
+  border-radius:var(--r26);padding:22px;
+  box-shadow:var(--shadow);
+  color:var(--text1);
+}
+.header{text-align:center;margin-bottom:14px;}
+.logo{
+  width:78px;height:78px;margin:0 auto 8px;border-radius:50%;
+  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:bold;font-size:14px;color:var(--ink1);
+}
+.title{font-size:16px;font-weight:bold;color:var(--text2);}
+.sub{font-size:13px;color:var(--text3);margin-top:4px;}
+.box{
+  margin-top:14px;border-radius:var(--r18);padding:14px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+}
+.row{display:flex;justify-content:space-between;font-size:14px;color:var(--text4);margin-top:8px;}
+.row span:last-child{color:var(--text1);font-weight:600;}
+.label{margin-top:14px;font-size:13px;color:var(--text5);}
+textarea{
+  width:100%;margin-top:10px;min-height:110px;
+  border:none;outline:none;border-radius:var(--r16);
+  padding:12px;font-size:14px;
+  background:linear-gradient(180deg,var(--surface1),var(--surface2));
+  color:var(--ink2);resize:none;
+}
+.actions{display:flex;gap:10px;margin-top:16px;}
+.btn{
+  flex:1;padding:12px;border-radius:var(--r16);border:none;
+  font-size:14px;font-weight:bold;cursor:pointer;
+}
+.btn-approve{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
+.btn-reject{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
+.btn-cancel{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
+.footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text5);}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="panel">
+    <div class="header">
+      <div class="logo">Asia<br>Gold</div>
+      <div class="title">á?áæâ?ä?â?ƒ??ã?ä?á?ä? â?â?á?ä?ä?</div>
+      <div class="sub">á?áœä?ä?á? ä?á? á?á? á®á?á?ƒ??â?á?â?</div>
+    </div>
+
+    <div class="box">
+      <div class="row"><span>ã?á?á?á?á?</span><span>á?â?ä? â?á?â?á?ä?</span></div>
+      <div class="row"><span>â?á?á?ä?á? â?á?â?ä?</span><span>á?á? á?â?á?á?á?á? á?áœä?ä?á?</span></div>
+      <div class="row"><span>á?â?á?á? â?á?â?á?</span><span>á?â?á?á? â?á?ã?áýä? á?â?á?á?â?</span></div>
+    </div>
+
+    <div class="label">á?á? áæâ?á?á? á?á?á? á?â?ä?â? á?á? á?â?â?ä?á?ä?á? (á?á?á?ä?á?á?ä?)</div>
+    <textarea placeholder="â?á®á?â?: â?á?á?ä?á?á? á?áúâ?á?á?á?á? â?â?ä?á?ä? / â?á?â?áæ á?â?á?â? â?á?á?á?ã? ..."></textarea>
+
+    <div class="actions">
+      <button class="btn btn-approve">á?áœä?ä?á?</button>
+      <button class="btn btn-reject">á?á?</button>
+    </div>
+    <div class="actions">
+      <button class="btn btn-cancel">á?â?áæá?á?â?</button>
+    </div>
+
+    <div class="footer">â?â?â? â?á?ä?á?ä?á? Asia Gold</div>
+  </div>
+</div>
+</body>
+</html>
