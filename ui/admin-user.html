@@ -31,6 +31,21 @@ body{margin:0;background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
   color:var(--success);font-size:13px;
 }
 .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:18px;}
+.list{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+.order{
+  border-radius:var(--r18);padding:14px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  text-decoration:none;color:inherit;
+}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--text4);margin-top:8px;}
+.row strong{color:var(--text1);font-weight:700;}
+.badge{
+  display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold;
+  background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);
+  border:none;text-decoration:none;
+}
+.badge.review{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
+.badge.approved{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
 .item{
   border-radius:var(--r18);padding:14px;
   background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
@@ -54,20 +69,33 @@ body{margin:0;background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
       <div class="logo-ring">
         <div class="logo">Asia<br>Gold</div>
       </div>
-      <div class="title">پروفایل کاربر</div>
-      <div class="sub">نمای کلی کاربر، محدودیت‌ها و اقدامات</div>
+      <div class="title">پنل مدیر فروش</div>
+      <div class="sub">فقط سفارش‌های مشتریان لیست شما نمایش داده می‌شود</div>
     </div>
 
-    <div class="status">کاربر فعال است و سقف برداشت در وضعیت مجاز قرار دارد</div>
+    <div class="status">سفارش‌های تأیید شده در نوبت ارسال بعدی به کارخانه قرار می‌گیرند</div>
 
     <div class="grid">
-      <div class="item"><span>تأیید هویت</span><a href="./admin-modal.html" class="btn btn-approve">تأیید</a></div>
-      <div class="item"><span>رد درخواست</span><a href="./admin-modal.html" class="btn btn-reject">رد</a></div>
-      <div class="item"><span>تنظیم محدودیت برداشت</span><button>ویرایش</button></div>
-      <div class="item"><span>مشاهده سوابق سفارش</span><button>مشاهده</button></div>
+      <div class="item"><span>بررسی سفارش‌های جدید</span><a href="./admin-modal.html" class="btn btn-approve">بررسی</a></div>
+      <div class="item"><span>تأیید سفارش</span><a href="./admin-modal.html" class="btn btn-reject">تأیید</a></div>
+      <div class="item"><span>لیست سفارش‌های تأیید شده</span><a href="./admin.html">مشاهده</a></div>
+      <div class="item"><span>راهنمای چرخه ارسال</span><button>مشاهده</button></div>
     </div>
 
-    <div class="footer">تمام حقوق برای Asia Gold محفوظ است</div>
+    <div class="list">
+      <a href="./admin-modal.html" class="order">
+        <div class="row"><strong>#2044</strong><span class="badge review">در انتظار بررسی</span></div>
+        <div class="row"><span>مشتری</span><span>محمد رضایی</span></div>
+        <div class="row"><span>محصول</span><span>النگو • ۲ عدد</span></div>
+      </a>
+      <a href="./admin-modal.html" class="order">
+        <div class="row"><strong>#2038</strong><span class="badge approved">تأیید شده</span></div>
+        <div class="row"><span>مشتری</span><span>الهام کریمی</span></div>
+        <div class="row"><span>محصول</span><span>گردنبند • ۱ عدد</span></div>
+      </a>
+    </div>
+
+    <div class="footer">ASIAGOLD فقط واسطه است • هیچ پرداختی در این پلتفرم دریافت نمی‌شود</div>
   </div>
 </div>
 </body>

@@ -59,7 +59,7 @@ html,body{
 }
 
 body{
-  font-family:"Vazirmatn",sans-serif;
+  font-family:"Vazirmatn";
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
@@ -80,7 +80,7 @@ label,
 a,
 span,
 div{
-  font-family:"Vazirmatn",sans-serif;
+  font-family:"Vazirmatn";
   font-weight:400;
   line-height:inherit;
 }

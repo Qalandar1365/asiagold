@@ -45,9 +45,40 @@ select{
   display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold;
   background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);
   text-decoration:none;
+  border:none;
 }
-.badge.pending{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
+.badge.review{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
+.badge.approved{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
+.badge.sent{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
+.badge.delivered{background:linear-gradient(135deg,var(--ok),var(--success));color:var(--ink1);}
 .badge.rejected{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
+.notice{
+  margin-top:12px;border-radius:var(--r18);padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  font-size:13px;color:var(--text4);
+}
+.notice strong{color:var(--text1);font-weight:700;}
+.form{
+  margin-top:12px;border-radius:var(--r18);padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+}
+.form-title{font-size:14px;font-weight:700;color:var(--text2);}
+.form-sub{margin-top:6px;font-size:12px;color:var(--text5);line-height:1.7;}
+.field{margin-top:10px;}
+.field label{display:block;font-size:12px;color:var(--text5);margin-bottom:6px;}
+input{
+  width:100%;
+  border:none;outline:none;border-radius:14px;padding:10px;
+  background:linear-gradient(180deg,var(--surface1),var(--surface2));
+  color:var(--ink3);font-size:13px;
+}
+textarea{
+  width:100%;
+  border:none;outline:none;border-radius:14px;padding:10px;
+  background:linear-gradient(180deg,var(--surface1),var(--surface2));
+  color:var(--ink3);font-size:13px;
+  resize:none;
+}
 .footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text5);}
 </style>
 </head>
@@ -61,46 +92,94 @@ select{
       <div class="title">سفارش‌های من</div>
     </div>
 
+    <div class="notice">
+      <strong>اطمینان خاطر:</strong> هیچ پرداختی در این پلتفرم انجام نمی‌شود. درخواست‌ها پس از بررسی مدیر فروش و در نوبت‌های مشخص به کارخانه ارسال می‌شوند.
+    </div>
+
+    <div id="new-order" class="form">
+      <div class="form-title">ثبت درخواست سفارش</div>
+      <div class="form-sub">ASIAGOLD فقط واسطه است و سفارش‌ها از طریق کانال‌های رسمی فروش پیگیری می‌شوند.</div>
+      <form action="./user-orders.html" method="GET">
+        <div class="field">
+          <label>نوع محصول</label>
+          <select name="product">
+            <option>النگو</option>
+            <option>گردنبند</option>
+            <option>دستبند</option>
+            <option>سکه</option>
+            <option>طلای آب‌شده</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>تعداد</label>
+          <input name="qty" type="number" min="1" placeholder="مثال: 2">
+        </div>
+        <div class="field">
+          <label>یادداشت (اختیاری)</label>
+          <textarea name="note" rows="3" placeholder="مثال: سایز، مدل، رنگ یا توضیح تکمیلی"></textarea>
+        </div>
+        <div class="field">
+          <button class="badge" type="submit">ثبت درخواست</button>
+        </div>
+      </form>
+    </div>
+
     <div class="filter">
       <select>
-        <option>همه سفارش‌ها</option>
-        <option>پرداخت شده</option>
-        <option>در انتظار تایید</option>
-        <option>رد شده</option>
+        <option>همه وضعیت‌ها</option>
+        <option>ثبت سفارش</option>
+        <option>در انتظار بررسی مدیر فروش</option>
+        <option>تأیید شده</option>
+        <option>ارسال به کارخانه</option>
+        <option>تحویل به مشتری</option>
       </select>
       <select>
-        <option>مرتب‌سازی: جدیدترین</option>
-        <option>مرتب‌سازی: قدیمی‌تر</option>
-        <option>مرتب‌سازی: مبلغ بیشتر</option>
+        <option>چرخه: جاری</option>
+        <option>چرخه: بعدی</option>
+        <option>چرخه: تکمیل‌شده</option>
       </select>
     </div>
 
-    <div class="list">
+    <div class="list" id="orders">
       <div class="order">
-        <div class="row"><strong>#1024</strong><span class="badge pending">در انتظار تایید</span></div>
-        <div class="row"><span>نام مشتری</span><span>تهران</span></div>
-        <div class="row"><span>وزن (گرم)</span><span>3</span></div>
-        <div class="row"><span>روش پرداخت</span><span>کارت/نقد/آنلاین</span></div>
+        <div class="row"><strong>#1024</strong><span class="badge">ثبت سفارش</span></div>
+        <div class="row"><span>نوع محصول</span><span>النگو</span></div>
+        <div class="row"><span>تعداد</span><span>2</span></div>
+        <div class="row"><span>یادداشت</span><span>ثبت شده و در صف بررسی</span></div>
       </div>
 
       <div class="order">
-        <div class="row"><strong>#1021</strong><span class="badge">پرداخت شده</span></div>
-        <div class="row"><span>نام مشتری</span><span>اصفهان</span></div>
-        <div class="row"><span>وزن (گرم)</span><span>1</span></div>
-        <div class="row"><span>روش پرداخت</span><span>کارت/نقد/آنلاین</span></div>
+        <div class="row"><strong>#1023</strong><span class="badge review">در انتظار بررسی مدیر فروش</span></div>
+        <div class="row"><span>نوع محصول</span><span>سکه</span></div>
+        <div class="row"><span>تعداد</span><span>1</span></div>
+        <div class="row"><span>یادداشت</span><span>بدون یادداشت</span></div>
       </div>
 
       <div class="order">
-        <div class="row"><strong>#1019</strong><span class="badge rejected">رد شده</span></div>
-        <div class="row"><span>نام مشتری</span><span>مشهد</span></div>
-        <div class="row"><span>وزن (گرم)</span><span>2</span></div>
-        <div class="row"><span>روش پرداخت</span><span>کارت/حضوری/آنلاین</span></div>
+        <div class="row"><strong>#1021</strong><span class="badge approved">تأیید شده</span></div>
+        <div class="row"><span>نوع محصول</span><span>گردنبند</span></div>
+        <div class="row"><span>تعداد</span><span>1</span></div>
+        <div class="row"><span>یادداشت</span><span>بدون یادداشت</span></div>
+      </div>
+
+      <div class="order">
+        <div class="row"><strong>#1019</strong><span class="badge sent">ارسال به کارخانه</span></div>
+        <div class="row"><span>نوع محصول</span><span>طلای آب‌شده</span></div>
+        <div class="row"><span>تعداد</span><span>1</span></div>
+        <div class="row"><span>یادداشت</span><span>ارسال در چرخه جاری</span></div>
+      </div>
+
+      <div class="order">
+        <div class="row"><strong>#1012</strong><span class="badge delivered">تحویل به مشتری</span></div>
+        <div class="row"><span>نوع محصول</span><span>دستبند</span></div>
+        <div class="row"><span>تعداد</span><span>1</span></div>
+        <div class="row"><span>یادداشت</span><span>تحویل از طریق کانال رسمی فروش</span></div>
       </div>
 
       <a href="./user-dashboard.html" class="badge">بازگشت به داشبورد</a>
     </div>
 
-    <div class="footer">تمام حقوق برای Asia Gold محفوظ است</div>
+    <div class="footer">پرداختی در این پلتفرم دریافت نمی‌شود • ASIAGOLD فقط تسهیل‌گر ارتباط با کارخانه است</div>
   </div>
 </div>
 </body>

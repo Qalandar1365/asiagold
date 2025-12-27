@@ -47,9 +47,18 @@ select{
 .badge{
   display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold;
   background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);
+  border:none;
 }
-.badge.pending{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
+.badge.review{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
+.badge.approved{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
+.badge.sent{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
 .badge.rejected{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
+.notice{
+  margin-top:12px;border-radius:var(--r18);padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  font-size:13px;color:var(--text4);
+}
+.notice strong{color:var(--text1);font-weight:700;}
 .footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text5);}
 </style>
 </head>
@@ -60,47 +69,49 @@ select{
       <div class="logo-ring">
         <div class="logo">Asia<br>Gold</div>
       </div>
-      <div class="title">سفارش‌های مدیریت</div>
+      <div class="title">دفتر مرکزی فروش</div>
+    </div>
+
+    <div class="notice">
+      <strong>یادآوری:</strong> ASIAGOLD فروشنده نیست و هیچ پرداختی در این پلتفرم دریافت نمی‌شود. سفارش‌های تأیید شده یکبار در هر چرخه به کارخانه ارسال می‌شوند.
     </div>
 
     <div class="filter">
       <select>
-        <option>همه سفارش‌ها</option>
-        <option>پرداخت شده</option>
-        <option>در انتظار تایید</option>
-        <option>رد شده</option>
+        <option>نمایش: سفارش‌های تأیید شده</option>
+        <option>نمایش: همه وضعیت‌ها</option>
+        <option>نمایش: در انتظار بررسی مدیر فروش</option>
       </select>
       <select>
-        <option>مرتب‌سازی: جدیدترین</option>
-        <option>مرتب‌سازی: قدیمی‌تر</option>
-        <option>مرتب‌سازی: مبلغ بیشتر</option>
+        <option>ارسال به کارخانه: چرخه جاری (۱۸:۰۰)</option>
+        <option>ارسال به کارخانه: چرخه بعدی</option>
       </select>
     </div>
 
     <div class="list">
       <a href="./admin-user.html" class="order">
-        <div class="row"><strong>#2044</strong><span class="badge pending">در انتظار تایید</span></div>
-        <div class="row"><span>نام مشتری</span><span>تهران</span></div>
-        <div class="row"><span>وزن (گرم)</span><span>4</span></div>
-        <div class="row"><span>روش پرداخت</span><span>کارت/نقد/آنلاین</span></div>
+        <div class="row"><strong>#2044</strong><span class="badge approved">تأیید شده</span></div>
+        <div class="row"><span>مشتری</span><span>محمد رضایی</span></div>
+        <div class="row"><span>محصول</span><span>النگو • ۲ عدد</span></div>
+        <div class="row"><span>چرخه ارسال</span><span>چرخه جاری</span></div>
       </a>
 
       <a href="./admin-user.html" class="order">
-        <div class="row"><strong>#2038</strong><span class="badge">پرداخت شده</span></div>
-        <div class="row"><span>نام مشتری</span><span>اصفهان</span></div>
-        <div class="row"><span>وزن (گرم)</span><span>2</span></div>
-        <div class="row"><span>روش پرداخت</span><span>کارت/نقد/آنلاین</span></div>
+        <div class="row"><strong>#2038</strong><span class="badge approved">تأیید شده</span></div>
+        <div class="row"><span>مشتری</span><span>الهام کریمی</span></div>
+        <div class="row"><span>محصول</span><span>گردنبند • ۱ عدد</span></div>
+        <div class="row"><span>چرخه ارسال</span><span>چرخه جاری</span></div>
       </a>
 
       <a href="./admin-user.html" class="order">
-        <div class="row"><strong>#2030</strong><span class="badge rejected">رد شده</span></div>
-        <div class="row"><span>نام مشتری</span><span>مشهد</span></div>
-        <div class="row"><span>وزن (گرم)</span><span>1</span></div>
-        <div class="row"><span>روش پرداخت</span><span>کارت/حضوری/آنلاین</span></div>
+        <div class="row"><strong>#2030</strong><span class="badge sent">ارسال به کارخانه</span></div>
+        <div class="row"><span>مشتری</span><span>حسین موسوی</span></div>
+        <div class="row"><span>محصول</span><span>طلای آب‌شده • ۱ عدد</span></div>
+        <div class="row"><span>چرخه ارسال</span><span>ارسال شده</span></div>
       </a>
     </div>
 
-    <div class="footer">تمام حقوق برای Asia Gold محفوظ است</div>
+    <div class="footer">سفارش‌های تأیید شده در لیست نهایی چرخه بعدی به کارخانه ارسال می‌شوند</div>
   </div>
 </div>
 </body>
