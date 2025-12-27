@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap");
+
 :root{
   --bg1:#ffffff;
   --bg2:#f2e6b8;
@@ -48,8 +50,6 @@
   --r18:18px;
   --r16:16px;
 }
-
-@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap");
 
 *{box-sizing:border-box;}
 
