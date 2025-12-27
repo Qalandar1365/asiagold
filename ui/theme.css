@@ -49,6 +49,8 @@
   --r16:16px;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap");
+
 *{box-sizing:border-box;}
 
 html,body{
@@ -57,11 +59,30 @@ html,body{
 }
 
 body{
-  font-family:"Vazirmatn",Tahoma,Arial,sans-serif;
+  font-family:"Vazirmatn",sans-serif;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
   animation:pageFade .2s ease;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+option,
+table,
+th,
+td,
+label,
+a,
+span,
+div{
+  font-family:"Vazirmatn",sans-serif;
+  font-weight:400;
+  line-height:inherit;
 }
 
 button,
@@ -140,6 +161,11 @@ textarea:focus-visible{
 
 .cart-action svg{
   flex-shrink:0;
+}
+
+::placeholder{
+  font-family:inherit;
+  font-weight:400;
 }
 
 .order,
