@@ -8,18 +8,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;}
-html,body{direction:rtl;unicode-bidi:isolate;}
 body{
   margin:0;font-family:"Vazirmatn",Tahoma,Arial,sans-serif;
   background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
 }
-.wrapper{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px;}
+.wrapper{position:relative;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px;}
+.wrapper::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(4px);
+  z-index:0;
+}
 .panel{
   width:100%;max-width:480px;
   background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
   border-radius:var(--r26);padding:22px;
   box-shadow:var(--shadow);
   color:var(--text1);
+  position:relative;
+  z-index:1;
+  animation:modalPop .18s ease;
 }
 .header{text-align:center;margin-bottom:14px;}
 .logo{
@@ -54,13 +64,19 @@ textarea{
 .btn-reject{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
 .btn-cancel{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
 .footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text5);}
+@keyframes modalPop{
+  from{opacity:0;transform:translateY(8px) scale(.98);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
 </style>
 </head>
 <body>
 <div class="wrapper">
   <div class="panel">
     <div class="header">
-      <div class="logo">Asia<br>Gold</div>
+      <div class="logo-ring">
+        <div class="logo">Asia<br>Gold</div>
+      </div>
       <div class="title">á?áæâ?ä?â?ƒ??ã?ä?á?ä? â?â?á?ä?ä?</div>
       <div class="sub">á?áœä?ä?á? ä?á? á?á? á®á?á?ƒ??â?á?â?</div>
     </div>

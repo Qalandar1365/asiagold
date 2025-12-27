@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;}
-html,body{direction:rtl;unicode-bidi:isolate;}
 body{margin:0;font-family:"Vazirmatn",Tahoma,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);}
 .wrapper{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px;}
 .card{
@@ -46,6 +45,7 @@ body{margin:0;font-family:"Vazirmatn",Tahoma,Arial,sans-serif;background:linear-
   color:var(--ink4);font-weight:bold;font-size:13px;cursor:pointer;
   text-decoration:none;display:inline-block;text-align:center;
 }
+.item a.cart-action{display:inline-flex;align-items:center;gap:6px;}
 .footer{text-align:center;margin-top:18px;font-size:12px;color:var(--text5);}
 </style>
 </head>
@@ -53,7 +53,9 @@ body{margin:0;font-family:"Vazirmatn",Tahoma,Arial,sans-serif;background:linear-
 <div class="wrapper">
   <div class="card">
     <div class="header">
-      <div class="logo">Asia<br>Gold</div>
+      <div class="logo-ring">
+        <div class="logo">Asia<br>Gold</div>
+      </div>
       <div class="title">А?А?А?А?Б?А?А? Ц?А?А?А?А?Д?</div>
       <div class="sub">АўА?А? Б? Б?Д?Ц?Д?А?Д? А?Б?А?А?А?А?А?</div>
     </div>
@@ -62,7 +64,22 @@ body{margin:0;font-family:"Vazirmatn",Tahoma,Arial,sans-serif;background:linear-
 
     <div class="grid">
       <div class="item"><span>????? ?????</span><button>?????</button></div>
-      <div class="item"><span>????????? ??</span><a href="./user-orders.html">??????</a></div>
+      <div class="item"><span>????????? ??</span><a href="./user-orders.html" class="cart-action">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 6H22L20 14H8L6 6Z" stroke="url(#gold)" stroke-width="1.8" fill="none"/>
+          <circle cx="9" cy="20" r="1.5" fill="url(#gold)"/>
+          <circle cx="18" cy="20" r="1.5" fill="url(#gold)"/>
+          <defs>
+            <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f6edc7"/>
+              <stop offset="50%" stop-color="#c9a23a"/>
+              <stop offset="100%" stop-color="#7a6408"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        ??????
+      </a></div>
       <div class="item"><span>??? ??????</span><button>?????</button></div>
       <div class="item"><span>??????? ?????</span><button>??????</button></div>
     </div>

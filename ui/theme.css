@@ -48,3 +48,164 @@
   --r18:18px;
   --r16:16px;
 }
+
+*{box-sizing:border-box;}
+
+html,body{
+  direction:rtl;
+  unicode-bidi:isolate;
+}
+
+body{
+  font-family:"Vazirmatn",Tahoma,Arial,sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  animation:pageFade .2s ease;
+}
+
+button,
+input,
+select,
+textarea,
+option,
+a{
+  font-family:inherit;
+}
+
+input,
+select,
+textarea{
+  line-height:1.5;
+  min-height:44px;
+  border:none;
+  outline:none;
+  transition:box-shadow .18s ease,transform .18s ease;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  box-shadow:0 0 0 2px var(--glass-strong),0 0 0 4px var(--gold4);
+}
+
+.title{
+  font-weight:700;
+  line-height:1.35;
+}
+
+.sub,
+.status,
+.footer,
+.row,
+.label{
+  line-height:1.5;
+  font-weight:400;
+}
+
+.logo{
+  line-height:1.2;
+}
+
+.logo-ring{
+  position:relative;
+  width:fit-content;
+  margin:0 auto;
+}
+
+.logo-ring::before{
+  content:"";
+  position:absolute;
+  inset:-6px;
+  border-radius:50%;
+  border:2px solid transparent;
+  background:conic-gradient(from 0deg,#f6edc7,#c9a23a,#7a6408,#f6edc7);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 0);
+  mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 0);
+  animation:spin 8s linear infinite;
+  opacity:.85;
+}
+
+@keyframes spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+.cart-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+
+.cart-action svg{
+  flex-shrink:0;
+}
+
+.order,
+.item,
+.btn,
+.submit,
+.badge,
+button,
+.cart-action,
+.list select,
+input,
+select,
+textarea{
+  transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease;
+}
+
+.order:hover,
+.item:hover,
+.btn:hover,
+.submit:hover,
+.badge:hover,
+button:hover,
+.cart-action:hover{
+  transform:translateY(-1px);
+  box-shadow:var(--shadow-soft);
+}
+
+.order:active,
+.item:active,
+.btn:active,
+.submit:active,
+.badge:active,
+button:active,
+.cart-action:active{
+  transform:translateY(0);
+  box-shadow:none;
+}
+
+button:disabled,
+.btn:disabled,
+.submit:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+
+.list .order{
+  position:relative;
+}
+
+.list .order:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height:1px;
+  background:var(--glass-strong);
+  opacity:.65;
+}
+
+@keyframes pageFade{
+  from{opacity:0;transform:translateY(6px);}
+  to{opacity:1;transform:translateY(0);}
+}
