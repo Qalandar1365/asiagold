@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.4 | Stage 2a: Bangle product detail -->
+<!-- ASIAGOLD UI v0.4.5 | Stage 2b: khorderiz row-based detail -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -291,7 +291,10 @@
     const group = state.groupId ? findGroup(category, state.groupId) : null;
     const models = (group?.models || []).map((m) => ({ id: m.id, name: m.name, desc: m.desc }));
     renderList(models, (model) => {
-      if (state.categoryId === "cat-bangle") {
+      if (state.categoryId === "cat-bangle" || state.categoryId === "cat-khorderiz") {
+        try {
+          history.replaceState(null, "", `#cat=${state.categoryId}&level=group`);
+        } catch (e) {}
         const params = new URLSearchParams();
         params.set("cat", state.categoryId);
         if (state.groupId) params.set("group", state.groupId);

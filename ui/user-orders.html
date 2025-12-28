@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.4 | Stage 2a: Bangle product detail -->
+<!-- ASIAGOLD UI v0.4.5 | Stage 2b: khorderiz row-based detail -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -171,6 +171,84 @@ textarea{
   cursor:pointer;
 }
 .pd-cta:disabled{opacity:.65;cursor:not-allowed;}
+
+.kr{margin-top:12px;border-radius:var(--r18);padding:12px;background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));}
+.kr-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.kr-back{
+  border:none;border-radius:14px;padding:10px 12px;
+  background:linear-gradient(135deg,var(--surface3),var(--surface4));
+  color:var(--ink2);font-weight:700;font-size:13px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.kr-back span{transform:scaleX(-1);display:inline-block;}
+.kr-name{margin-top:10px;font-size:14px;font-weight:800;color:var(--text2);line-height:1.6;}
+.kr-image{
+  --g:min(30vh, 240px);
+  margin:10px auto 0;
+  width:min(100%, var(--g));
+  height:var(--g);
+  border-radius:var(--r18);
+  overflow:hidden;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.kr-image img{width:100%;height:100%;object-fit:cover;display:block;}
+.kr-actions{margin-top:12px;display:flex;gap:10px;}
+.kr-add-row{
+  flex:1;
+  border:none;border-radius:14px;padding:12px;
+  background:linear-gradient(135deg,var(--gold4),var(--gold6));
+  color:var(--ink4);font-weight:900;font-size:13px;cursor:pointer;
+}
+.kr-rows{margin-top:12px;display:flex;flex-direction:column;gap:10px;}
+.kr-row{
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+}
+.kr-row.invalid{box-shadow:0 0 0 2px var(--danger1);}
+.kr-row-top{display:flex;gap:10px;align-items:center;}
+.kr-row-top select{flex:1;}
+.kr-row-top input{flex:1;}
+.kr-hint{margin-top:8px;font-size:12px;color:var(--text5);line-height:1.7;}
+.kr-note{margin-top:8px;}
+.kr-remove{
+  margin-top:10px;
+  width:100%;
+  border:none;border-radius:14px;padding:10px 12px;
+  background:linear-gradient(135deg,var(--danger1),var(--danger2));
+  color:var(--text1);
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+}
+.kr-row-error{margin-top:8px;font-size:12px;color:var(--bad);line-height:1.7;}
+.kr-sticky{
+  position:sticky;
+  bottom:0;
+  margin-top:12px;
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
+  box-shadow:var(--shadow-soft);
+}
+.kr-summary{color:var(--text2);font-weight:900;font-size:14px;}
+.kr-error{margin-top:8px;font-size:12px;color:var(--bad);line-height:1.7;}
+.kr-cta{
+  margin-top:10px;
+  width:100%;
+  border:none;
+  border-radius:18px;
+  padding:14px 12px;
+  background:linear-gradient(135deg,var(--gold4),var(--gold6));
+  color:var(--ink4);
+  font-weight:900;
+  font-size:14px;
+  cursor:pointer;
+}
+.kr-cta:disabled{opacity:.65;cursor:not-allowed;}
 .footer{margin-top:16px;}
 </style>
 </head>
@@ -226,6 +304,32 @@ textarea{
         <div class="pd-summary" id="pd-summary">۰ عدد | حدود ۰٫۰۰ گرم</div>
         <div class="pd-error" id="pd-error" hidden></div>
         <button class="pd-cta" type="button" id="pd-add" disabled>افزودن به سبد</button>
+      </div>
+    </div>
+
+    <div id="khorderiz-detail" class="kr" hidden>
+      <div class="kr-top">
+        <button class="kr-back" type="button" id="kr-back" aria-label="بازگشت به لیست گروه‌ها">
+          <span aria-hidden="true">←</span>
+          بازگشت به گروه‌ها
+        </button>
+        <div class="badge" id="kr-model-badge" style="cursor:default;">خرده‌ریز</div>
+      </div>
+      <div class="kr-name" id="kr-name"></div>
+      <div class="kr-image" aria-label="تصویر محصول">
+        <img id="kr-image" alt="تصویر محصول">
+      </div>
+
+      <div class="kr-actions">
+        <button class="kr-add-row" type="button" id="kr-add-row">افزودن ردیف جدید</button>
+      </div>
+
+      <div class="kr-rows" id="kr-rows"></div>
+
+      <div class="kr-sticky">
+        <div class="kr-summary" id="kr-summary">۰ ردیف سفارش ثبت شده</div>
+        <div class="kr-error" id="kr-error" hidden></div>
+        <button class="kr-cta" type="button" id="kr-add" disabled>افزودن به سبد</button>
       </div>
     </div>
 
@@ -334,6 +438,319 @@ textarea{
   const cat = params.get("cat");
   const modelId = params.get("model");
   const groupId = params.get("group") || "grp-bangle-asia";
+
+  // Stage 2b: خرده‌ریز (row-based)
+  if (cat === "cat-khorderiz" && modelId) {
+    const kh = document.getElementById("khorderiz-detail");
+    if (!kh) return;
+
+    const MODELS = {
+      "mdl-earring-yellow-fantasy": { name: "گوشواره زرد فانتزی", groupName: "گوشواره" },
+      "mdl-earring-white-simple": { name: "گوشواره سفید ساده", groupName: "گوشواره" },
+    };
+    const model = MODELS[modelId];
+    if (!model) return;
+
+    const BASKET_KEY = "asiagold_basket_v1";
+    const DAY_MS = 24 * 60 * 60 * 1000;
+    const BASKET_TTL_MS = 4 * DAY_MS;
+    const isAdmin = localStorage.getItem("asiagold_role_v1") === "admin";
+    void isAdmin;
+
+    const avgWeightMin = 3;
+    const avgWeightMax = 5;
+    const avgUnit = (avgWeightMin + avgWeightMax) / 2;
+
+    const nfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
+    const nfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const el = {
+      notice: document.querySelector(".notice"),
+      newOrder: document.getElementById("new-order"),
+      filter: document.querySelector(".filter"),
+      orders: document.getElementById("orders"),
+      bangle: document.getElementById("bangle-detail"),
+
+      back: document.getElementById("kr-back"),
+      badge: document.getElementById("kr-model-badge"),
+      name: document.getElementById("kr-name"),
+      image: document.getElementById("kr-image"),
+      addRow: document.getElementById("kr-add-row"),
+      rows: document.getElementById("kr-rows"),
+      summary: document.getElementById("kr-summary"),
+      error: document.getElementById("kr-error"),
+      add: document.getElementById("kr-add"),
+    };
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function svgDataUri(text) {
+      const safe = String(text || "").slice(0, 48);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">` +
+        `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
+        `<stop offset="0%" stop-color="#f6edc7"/><stop offset="100%" stop-color="#2b2500"/></linearGradient></defs>` +
+        `<rect width="100%" height="100%" fill="url(#g)"/>` +
+        `<circle cx="520" cy="260" r="220" fill="rgba(255,255,255,.08)"/>` +
+        `<circle cx="320" cy="520" r="260" fill="rgba(255,255,255,.05)"/>` +
+        `<text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="44" fill="rgba(255,255,255,.85)">` +
+        `${escapeHtml(safe)}` +
+        `</text>` +
+        `</svg>`;
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    }
+
+    function toLatinDigits(value) {
+      const s = String(value ?? "");
+      const fa = "۰۱۲۳۴۵۶۷۸۹";
+      const ar = "٠١٢٣٤٥٦٧٨٩";
+      return s
+        .replace(/[۰-۹]/g, (d) => String(fa.indexOf(d)))
+        .replace(/[٠-٩]/g, (d) => String(ar.indexOf(d)))
+        .replaceAll("٫", ".");
+    }
+
+    function parsePositiveInt(value) {
+      const raw = toLatinDigits(value).replaceAll(",", "").replaceAll("٬", "").trim();
+      if (!raw) return null;
+      if (!/^\d+$/.test(raw)) return null;
+      const n = Number(raw);
+      if (!Number.isSafeInteger(n) || n <= 0) return null;
+      return n;
+    }
+
+    function parsePositiveNumber(value) {
+      const raw = toLatinDigits(value).replaceAll(",", "").replaceAll("٬", "").trim();
+      if (!raw) return null;
+      if (!/^\d+(\.\d+)?$/.test(raw)) return null;
+      const n = Number(raw);
+      if (!Number.isFinite(n) || n <= 0) return null;
+      return n;
+    }
+
+    function basketEnsureValid() {
+      const now = Date.now();
+      const raw = localStorage.getItem(BASKET_KEY);
+      if (!raw) {
+        const t = new Date().toISOString();
+        return { v: 1, createdAt: t, updatedAt: t, items: [] };
+      }
+      try {
+        const data = JSON.parse(raw);
+        if (!data || typeof data !== "object" || !Array.isArray(data.items)) throw new Error("bad");
+        const createdAt = Date.parse(data.createdAt);
+        if (!Number.isFinite(createdAt) || now - createdAt > BASKET_TTL_MS) {
+          const t = new Date().toISOString();
+          return { v: 1, createdAt: t, updatedAt: t, items: [] };
+        }
+        return data;
+      } catch {
+        const t = new Date().toISOString();
+        return { v: 1, createdAt: t, updatedAt: t, items: [] };
+      }
+    }
+
+    function basketSave(basket) {
+      localStorage.setItem(BASKET_KEY, JSON.stringify(basket));
+    }
+
+    const stateRows = [];
+    function newRow() {
+      return {
+        id: `kr_${Date.now().toString(16)}_${Math.random().toString(16).slice(2)}`,
+        type: "count", // count | weight
+        value: "",
+        note: "",
+      };
+    }
+
+    function setError(message) {
+      if (!el.error) return;
+      if (!message) {
+        el.error.hidden = true;
+        el.error.textContent = "";
+        return;
+      }
+      el.error.hidden = false;
+      el.error.textContent = message;
+    }
+
+    function computeSummary(validRows) {
+      const count = validRows.length;
+      let totalWeight = 0;
+      for (const r of validRows) {
+        if (r.type === "weight") totalWeight += Number(r._parsed || 0);
+        if (r.type === "count") totalWeight += Number(r._parsed || 0) * avgUnit;
+      }
+      return { count, totalWeight };
+    }
+
+    function validateRow(row) {
+      row._valid = false;
+      row._parsed = null;
+      if (row.type === "count") {
+        const n = parsePositiveInt(row.value);
+        if (n !== null) {
+          row._valid = true;
+          row._parsed = n;
+        }
+        return row._valid ? "" : "برای «تعدادی» فقط عدد صحیح بزرگتر از ۰ مجاز است.";
+      }
+      const g = parsePositiveNumber(row.value);
+      if (g !== null) {
+        row._valid = true;
+        row._parsed = Number(g.toFixed(2));
+      }
+      return row._valid ? "" : "برای «وزنی» مقدار گرم را وارد کنید (بزرگتر از ۰).";
+    }
+
+    function render() {
+      if (!el.rows) return;
+      el.rows.innerHTML = "";
+
+      const validRows = [];
+      for (const r of stateRows) {
+        const error = validateRow(r);
+        if (r._valid) validRows.push(r);
+
+        const box = document.createElement("div");
+        box.className = `kr-row${r._valid ? "" : " invalid"}`;
+        box.dataset.rowId = r.id;
+
+        const hint = r.type === "weight" ? `میانگین وزن حدودی ${avgWeightMin} تا ${avgWeightMax} گرم` : "";
+        const valuePh = r.type === "weight" ? "مثال: ۱۲٫۵" : "مثال: ۳";
+        const valueLabel = r.type === "weight" ? "مقدار (گرم)" : "تعداد";
+
+        box.innerHTML =
+          `<div class="kr-row-top">` +
+          `<select aria-label="نوع سفارش">` +
+          `<option value="count">تعدادی</option>` +
+          `<option value="weight">وزنی</option>` +
+          `</select>` +
+          `<input aria-label="${escapeHtml(valueLabel)}" placeholder="${escapeHtml(valuePh)}" inputmode="decimal" autocomplete="off">` +
+          `</div>` +
+          `<div class="kr-hint" ${hint ? "" : "hidden"}>${escapeHtml(hint)}</div>` +
+          `<div class="kr-note"><textarea rows="2" placeholder="توضیحات (اختیاری)"></textarea></div>` +
+          `<button class="kr-remove" type="button">حذف این ردیف</button>` +
+          `<div class="kr-row-error" ${error ? "" : "hidden"}>${escapeHtml(error)}</div>`;
+
+        const select = box.querySelector("select");
+        const input = box.querySelector("input");
+        const textarea = box.querySelector("textarea");
+        const removeBtn = box.querySelector("button.kr-remove");
+
+        if (select) {
+          select.value = r.type === "weight" ? "weight" : "count";
+          select.addEventListener("change", () => {
+            r.type = select.value === "weight" ? "weight" : "count";
+            render();
+          });
+        }
+        if (input) {
+          input.value = r.value;
+          input.addEventListener("input", () => {
+            r.value = input.value;
+            render();
+          });
+        }
+        if (textarea) {
+          textarea.value = r.note;
+          textarea.addEventListener("input", () => {
+            r.note = textarea.value;
+          });
+        }
+        if (removeBtn) {
+          removeBtn.addEventListener("click", () => {
+            const idx = stateRows.findIndex((x) => x.id === r.id);
+            if (idx >= 0) stateRows.splice(idx, 1);
+            render();
+          });
+        }
+
+        el.rows.appendChild(box);
+      }
+
+      const { count, totalWeight } = computeSummary(validRows);
+      if (el.summary) {
+        el.summary.textContent = count
+          ? `${nfInt.format(count)} ردیف سفارش ثبت شده | حدود ${nfWeight.format(totalWeight)} گرم`
+          : "۰ ردیف سفارش ثبت شده";
+      }
+      setError(count ? "" : "حداقل یک ردیف سفارش معتبر لازم است.");
+      if (el.add) el.add.disabled = count === 0;
+    }
+
+    function addToBasket() {
+      const valid = stateRows.filter((r) => (validateRow(r), r._valid));
+      if (!valid.length) return false;
+
+      const basket = basketEnsureValid();
+      const t = new Date().toISOString();
+      basket.updatedAt = t;
+
+      for (const r of valid) {
+        const approxWeight = r.type === "weight" ? Number(r._parsed) : Number(r._parsed) * avgUnit;
+        basket.items.push({
+          itemId: r.id,
+          categoryId: "cat-khorderiz",
+          categoryName: "خرده‌ریز",
+          groupId,
+          groupName: model.groupName,
+          modelId,
+          modelName: model.name,
+          orderType: r.type === "weight" ? "وزنی" : "تعدادی",
+          value: r._parsed,
+          note: String(r.note || "").trim(),
+          approxWeight: Number(approxWeight.toFixed(2)),
+          createdAt: t,
+        });
+      }
+
+      basketSave(basket);
+      return true;
+    }
+
+    // Activate detail mode
+    kh.hidden = false;
+    if (el.bangle) el.bangle.hidden = true;
+    if (el.notice) el.notice.hidden = true;
+    if (el.newOrder) el.newOrder.hidden = true;
+    if (el.filter) el.filter.hidden = true;
+    if (el.orders) el.orders.hidden = true;
+
+    if (titleEl) titleEl.textContent = model.name;
+    if (el.name) el.name.textContent = model.name;
+    if (el.badge) el.badge.textContent = "خرده‌ریز";
+    if (el.image) el.image.src = svgDataUri(model.name);
+
+    if (el.back) el.back.addEventListener("click", () => {
+      window.location.href = "./user-dashboard.html#cat=cat-khorderiz&level=group";
+    });
+
+    if (el.addRow) el.addRow.addEventListener("click", () => {
+      stateRows.push(newRow());
+      render();
+    });
+
+    if (el.add) el.add.addEventListener("click", () => {
+      if (!addToBasket()) {
+        render();
+        return;
+      }
+      window.location.href = "./user-dashboard.html#cat=cat-khorderiz&level=group";
+    });
+
+    stateRows.push(newRow());
+    render();
+    return;
+  }
 
   const detail = document.getElementById("bangle-detail");
   if (!detail || cat !== "cat-bangle" || !modelId) return;
