@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.2 | Stage 0: Header + Back + CSS cleanup -->
+<!-- ASIAGOLD UI v0.4.3 | Stage 1: Catalog navigation -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -39,6 +39,48 @@
   text-decoration:none;display:inline-block;text-align:center;
 }
 .item a.cart-action{display:inline-flex;align-items:center;gap:6px;}
+.catalog{
+  margin-top:16px;
+  border-radius:var(--r18);
+  padding:14px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+}
+.catalog-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.catalog-title{color:var(--accent-light);font-weight:700;font-size:14px;}
+.catalog-breadcrumb{margin-top:6px;color:var(--text5);font-size:12px;line-height:1.7;}
+.catalog-back{
+  border:none;border-radius:14px;padding:10px 14px;
+  background:linear-gradient(135deg,var(--gold4),var(--gold6));
+  color:var(--ink4);font-weight:bold;font-size:13px;cursor:pointer;
+  white-space:nowrap;
+}
+.catalog-list{
+  margin-top:12px;
+  display:flex;flex-direction:column;gap:10px;
+  max-height:320px;overflow:auto;padding:2px;
+}
+.catalog-item{
+  width:100%;
+  border:none;
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  direction:ltr;
+  text-align:right;
+}
+.catalog-thumb{
+  width:52px;height:52px;border-radius:14px;
+  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink1);font-weight:800;flex-shrink:0;
+}
+.catalog-text{flex:1;direction:rtl;text-align:right;}
+.catalog-name{color:var(--text2);font-weight:800;font-size:14px;line-height:1.5;}
+.catalog-desc{margin-top:4px;color:var(--text5);font-size:12px;line-height:1.7;}
 .footer{margin-top:18px;}
 </style>
 </head>
@@ -61,6 +103,17 @@
     </div>
 
     <div class="status">پرداختی لازم نیست؛ این پلتفرم فقط واسطه بین کارخانه و مشتری است</div>
+
+    <div class="catalog" id="catalog">
+      <div class="catalog-head">
+        <div>
+          <div class="catalog-title">کاتالوگ محصولات</div>
+          <div class="catalog-breadcrumb" id="catalog-breadcrumb">برای شروع، یک «دسته‌بندی» را انتخاب کنید.</div>
+        </div>
+        <button class="catalog-back" type="button" id="catalog-back" hidden>بازگشت</button>
+      </div>
+      <div class="catalog-list" id="catalog-list" aria-live="polite"></div>
+    </div>
 
     <div class="grid">
       <div class="item"><span>ثبت درخواست سفارش</span><a href="./user-orders.html#new-order">شروع</a></div>
@@ -95,12 +148,167 @@
   if (titleEl) titleEl.textContent = (source?.textContent || "").trim() || document.title.split("|").pop().trim();
 
   const backBtn = document.querySelector(".ag-back");
-  if (!backBtn) return;
-  const fallback = backBtn.getAttribute("data-fallback") || "./user-dashboard.html";
-  backBtn.addEventListener("click", () => {
-    if (window.history.length >= 2) window.history.back();
-    else window.location.href = fallback;
+  if (backBtn) {
+    const fallback = backBtn.getAttribute("data-fallback") || "./user-dashboard.html";
+    backBtn.addEventListener("click", () => {
+      if (window.history.length >= 2) window.history.back();
+      else window.location.href = fallback;
+    });
+  }
+
+  const catalogList = document.getElementById("catalog-list");
+  const catalogBreadcrumb = document.getElementById("catalog-breadcrumb");
+  const catalogBack = document.getElementById("catalog-back");
+  if (!catalogList || !catalogBreadcrumb || !catalogBack) return;
+
+  const CATALOG = [
+    {
+      id: "cat-bangle",
+      name: "النگو",
+      desc: "مشاهده گروه‌های این دسته‌بندی",
+      groups: [
+        {
+          id: "grp-bangle-asia",
+          name: "النگو آسیا",
+          desc: "مشاهده مدل‌های این گروه",
+          models: [
+            { id: "mdl-bangle-asia-120-yellow", name: "النگو آسیا 120 زرد", desc: "جزئیات در مرحله بعد فعال می‌شود" },
+            { id: "mdl-bangle-asia-155-yellow", name: "النگو آسیا 155 زرد", desc: "جزئیات در مرحله بعد فعال می‌شود" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "cat-khorderiz",
+      name: "خرده ریز",
+      desc: "مشاهده گروه‌های این دسته‌بندی",
+      groups: [
+        {
+          id: "grp-khorderiz-earring",
+          name: "گوشواره",
+          desc: "مشاهده مدل‌های این گروه",
+          models: [
+            { id: "mdl-earring-yellow-fantasy", name: "گوشواره زرد فانتزی", desc: "جزئیات در مرحله بعد فعال می‌شود" },
+            { id: "mdl-earring-white-simple", name: "گوشواره سفید ساده", desc: "جزئیات در مرحله بعد فعال می‌شود" },
+          ],
+        },
+      ],
+    },
+  ];
+
+  const state = {
+    level: "category", // category | group | model
+    categoryId: null,
+    groupId: null,
+  };
+
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function thumbFor(name) {
+    const t = String(name || "").trim();
+    return t ? t.slice(0, 1) : "•";
+  }
+
+  function renderList(items, onClick) {
+    catalogList.innerHTML = "";
+    for (const it of items) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "catalog-item";
+      btn.innerHTML =
+        `<div class="catalog-thumb" aria-hidden="true">${escapeHtml(thumbFor(it.name))}</div>` +
+        `<div class="catalog-text">` +
+        `<div class="catalog-name">${escapeHtml(it.name)}</div>` +
+        `<div class="catalog-desc">${escapeHtml(it.desc || "")}</div>` +
+        `</div>`;
+      btn.addEventListener("click", () => onClick(it));
+      catalogList.appendChild(btn);
+    }
+  }
+
+  function findCategory(id) {
+    return CATALOG.find((c) => c.id === id) || null;
+  }
+
+  function findGroup(category, id) {
+    if (!category) return null;
+    return (category.groups || []).find((g) => g.id === id) || null;
+  }
+
+  function renderBreadcrumb() {
+    if (state.level === "category") {
+      catalogBreadcrumb.textContent = "برای شروع، یک «دسته‌بندی» را انتخاب کنید.";
+      catalogBack.hidden = true;
+      return;
+    }
+
+    const cat = state.categoryId ? findCategory(state.categoryId) : null;
+    if (state.level === "group") {
+      catalogBreadcrumb.textContent = `دسته‌بندی: ${cat?.name || "—"} / انتخاب «گروه»`;
+      catalogBack.hidden = false;
+      return;
+    }
+
+    const grp = state.groupId ? findGroup(cat, state.groupId) : null;
+    catalogBreadcrumb.textContent = `دسته‌بندی: ${cat?.name || "—"} / گروه: ${grp?.name || "—"} / انتخاب «مدل»`;
+    catalogBack.hidden = false;
+  }
+
+  function renderCatalog() {
+    renderBreadcrumb();
+    if (state.level === "category") {
+      renderList(
+        CATALOG.map((c) => ({ id: c.id, name: c.name, desc: c.desc })),
+        (cat) => {
+          state.level = "group";
+          state.categoryId = cat.id;
+          state.groupId = null;
+          renderCatalog();
+        }
+      );
+      return;
+    }
+
+    if (state.level === "group") {
+      const category = state.categoryId ? findCategory(state.categoryId) : null;
+      const groups = (category?.groups || []).map((g) => ({ id: g.id, name: g.name, desc: g.desc }));
+      renderList(groups, (grp) => {
+        state.level = "model";
+        state.groupId = grp.id;
+        renderCatalog();
+      });
+      return;
+    }
+
+    const category = state.categoryId ? findCategory(state.categoryId) : null;
+    const group = state.groupId ? findGroup(category, state.groupId) : null;
+    const models = (group?.models || []).map((m) => ({ id: m.id, name: m.name, desc: m.desc }));
+    renderList(models, () => {
+      window.alert("جزئیات محصول در مرحله بعد فعال می‌شود");
+    });
+  }
+
+  catalogBack.addEventListener("click", () => {
+    if (state.level === "model") {
+      state.level = "group";
+      state.groupId = null;
+      renderCatalog();
+      return;
+    }
+    state.level = "category";
+    state.categoryId = null;
+    state.groupId = null;
+    renderCatalog();
   });
+
+  renderCatalog();
 })();
 </script>
 </body>
