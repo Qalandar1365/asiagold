@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.2 | Stage 0: Header + Back + CSS cleanup -->
+<!-- ASIAGOLD UI v0.4.4 | Stage 2a: Bangle product detail -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -72,6 +72,105 @@ textarea{
   color:var(--ink3);font-size:13px;
   resize:none;
 }
+.pd{margin-top:12px;border-radius:var(--r18);padding:12px;background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));}
+.pd-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.pd-back{
+  border:none;border-radius:14px;padding:10px 12px;
+  background:linear-gradient(135deg,var(--surface3),var(--surface4));
+  color:var(--ink2);font-weight:700;font-size:13px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.pd-back span{transform:scaleX(-1);display:inline-block;}
+.pd-name{margin-top:10px;font-size:14px;font-weight:800;color:var(--text2);line-height:1.6;}
+.pd-gallery{
+  --g:min(30vh, 240px);
+  margin:10px auto 0;
+  position:relative;
+  width:min(100%, var(--g));
+  height:var(--g);
+  border-radius:var(--r18);
+  overflow:hidden;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.pd-gallery img{width:100%;height:100%;object-fit:cover;display:block;}
+.pd-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  border:none;border-radius:14px;
+  width:44px;height:44px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  color:var(--text2);
+  cursor:pointer;
+}
+.pd-prev{left:10px;}
+.pd-next{right:10px;}
+.pd-dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:6px;}
+.pd-dot{width:8px;height:8px;border-radius:999px;background:var(--glass-strong);opacity:.7;}
+.pd-dot.active{background:var(--gold4);opacity:1;}
+.pd-section{margin-top:12px;}
+.pd-section-title{font-size:13px;font-weight:800;color:var(--text2);}
+.pd-row{
+  margin-top:10px;
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  display:flex;
+  gap:12px;
+  align-items:center;
+  direction:ltr;
+}
+.pd-thumb{
+  width:52px;height:52px;border-radius:14px;
+  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink1);font-weight:900;
+  flex-shrink:0;
+}
+.pd-info{flex:1;direction:rtl;text-align:right;}
+.pd-size-name{font-size:13px;font-weight:900;color:var(--text2);}
+.pd-size-meta{margin-top:4px;font-size:12px;color:var(--text5);line-height:1.7;}
+.pd-qty{direction:rtl;display:flex;align-items:center;gap:10px;}
+.pd-qty-group{display:flex;flex-direction:column;gap:6px;}
+.pd-qty-btn{
+  border:none;border-radius:12px;
+  padding:8px 10px;
+  background:linear-gradient(135deg,var(--gold4),var(--gold6));
+  color:var(--ink4);
+  font-weight:900;
+  font-size:12px;
+  cursor:pointer;
+  min-width:54px;
+}
+.pd-qty-btn.secondary{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
+.pd-qty-value{min-width:44px;text-align:center;font-weight:900;color:var(--text1);font-size:14px;}
+.pd-custom-note{margin-top:10px;}
+.pd-custom-note label{display:block;font-size:12px;color:var(--text5);margin-bottom:6px;}
+.pd-error{margin-top:8px;font-size:12px;color:var(--bad);line-height:1.7;}
+.pd-sticky{
+  position:sticky;
+  bottom:0;
+  margin-top:12px;
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
+  box-shadow:var(--shadow-soft);
+}
+.pd-summary{color:var(--text2);font-weight:900;font-size:14px;}
+.pd-cta{
+  margin-top:10px;
+  width:100%;
+  border:none;
+  border-radius:18px;
+  padding:14px 12px;
+  background:linear-gradient(135deg,var(--gold4),var(--gold6));
+  color:var(--ink4);
+  font-weight:900;
+  font-size:14px;
+  cursor:pointer;
+}
+.pd-cta:disabled{opacity:.65;cursor:not-allowed;}
 .footer{margin-top:16px;}
 </style>
 </head>
@@ -94,6 +193,40 @@ textarea{
 
     <div class="notice">
       <strong>اطمینان خاطر:</strong> هیچ پرداختی در این پلتفرم انجام نمی‌شود. درخواست‌ها پس از بررسی مدیر فروش و در نوبت‌های مشخص به کارخانه ارسال می‌شوند.
+    </div>
+
+    <div id="bangle-detail" class="pd" hidden>
+      <div class="pd-top">
+        <button class="pd-back" type="button" id="pd-back" aria-label="بازگشت به لیست گروه‌ها">
+          <span aria-hidden="true">←</span>
+          بازگشت به گروه‌ها
+        </button>
+        <div class="badge" id="pd-model-badge" style="cursor:default;">النگو</div>
+      </div>
+      <div class="pd-name" id="pd-name"></div>
+      <div class="pd-gallery" aria-label="گالری تصاویر">
+        <button class="pd-nav pd-prev" type="button" id="pd-prev" aria-label="تصویر قبلی">‹</button>
+        <img id="pd-image" alt="تصویر محصول">
+        <button class="pd-nav pd-next" type="button" id="pd-next" aria-label="تصویر بعدی">›</button>
+        <div class="pd-dots" id="pd-dots" aria-hidden="true"></div>
+      </div>
+
+      <div class="pd-section">
+        <div class="pd-section-title">سفارش (سایز ۱ تا ۵)</div>
+        <div id="pd-sizes"></div>
+      </div>
+
+      <div class="pd-custom-note" id="pd-custom-note-wrap" hidden>
+        <label for="pd-custom-note">سایز سفارشی (الزامی)</label>
+        <textarea id="pd-custom-note" rows="3" placeholder="توضیحات سایز سفارشی را وارد کنید (حداقل ۵ کاراکتر)"></textarea>
+        <div class="pd-error" id="pd-custom-error" hidden></div>
+      </div>
+
+      <div class="pd-sticky">
+        <div class="pd-summary" id="pd-summary">۰ عدد | حدود ۰٫۰۰ گرم</div>
+        <div class="pd-error" id="pd-error" hidden></div>
+        <button class="pd-cta" type="button" id="pd-add" disabled>افزودن به سبد</button>
+      </div>
     </div>
 
     <div id="new-order" class="form">
@@ -189,11 +322,318 @@ textarea{
   if (titleEl) titleEl.textContent = (source?.textContent || "").trim() || document.title.split("|").pop().trim();
 
   const backBtn = document.querySelector(".ag-back");
-  if (!backBtn) return;
-  const fallback = backBtn.getAttribute("data-fallback") || "./user-dashboard.html";
-  backBtn.addEventListener("click", () => {
-    if (window.history.length >= 2) window.history.back();
-    else window.location.href = fallback;
+  if (backBtn) {
+    const fallback = backBtn.getAttribute("data-fallback") || "./user-dashboard.html";
+    backBtn.addEventListener("click", () => {
+      if (window.history.length >= 2) window.history.back();
+      else window.location.href = fallback;
+    });
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get("cat");
+  const modelId = params.get("model");
+  const groupId = params.get("group") || "grp-bangle-asia";
+
+  const detail = document.getElementById("bangle-detail");
+  if (!detail || cat !== "cat-bangle" || !modelId) return;
+
+  const MODELS = {
+    "mdl-bangle-asia-120-yellow": {
+      name: "النگو آسیا 120 زرد",
+      groupName: "النگو آسیا",
+      unitWeights: { 1: 4.10, 2: 4.20, 3: 4.30, 4: 4.40, 5: 4.50 },
+    },
+    "mdl-bangle-asia-155-yellow": {
+      name: "النگو آسیا 155 زرد",
+      groupName: "النگو آسیا",
+      unitWeights: { 1: 4.40, 2: 4.55, 3: 4.70, 4: 4.85, 5: 5.00 },
+    },
+  };
+
+  const model = MODELS[modelId];
+  if (!model) return;
+
+  const isAdmin = localStorage.getItem("asiagold_role_v1") === "admin";
+  const MAX_TOTAL = 120;
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const BASKET_TTL_MS = 4 * DAY_MS;
+  const BASKET_KEY = "asiagold_basket_v1";
+
+  const nfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
+  const nfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  const el = {
+    notice: document.querySelector(".notice"),
+    newOrder: document.getElementById("new-order"),
+    filter: document.querySelector(".filter"),
+    orders: document.getElementById("orders"),
+
+    back: document.getElementById("pd-back"),
+    name: document.getElementById("pd-name"),
+    modelBadge: document.getElementById("pd-model-badge"),
+    sizes: document.getElementById("pd-sizes"),
+
+    prev: document.getElementById("pd-prev"),
+    next: document.getElementById("pd-next"),
+    image: document.getElementById("pd-image"),
+    dots: document.getElementById("pd-dots"),
+
+    customWrap: document.getElementById("pd-custom-note-wrap"),
+    customNote: document.getElementById("pd-custom-note"),
+    customError: document.getElementById("pd-custom-error"),
+
+    summary: document.getElementById("pd-summary"),
+    error: document.getElementById("pd-error"),
+    add: document.getElementById("pd-add"),
+  };
+
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function svgDataUri(text, idx) {
+    const safe = String(text || "").slice(0, 32);
+    const bgA = ["#f6edc7", "#c9a23a", "#7a6408"][idx % 3];
+    const bgB = ["#2b2500", "#0f0d00", "#2b2500"][(idx + 1) % 3];
+    const svg =
+      `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">` +
+      `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
+      `<stop offset="0%" stop-color="${bgA}"/><stop offset="100%" stop-color="${bgB}"/></linearGradient></defs>` +
+      `<rect width="100%" height="100%" fill="url(#g)"/>` +
+      `<circle cx="520" cy="260" r="220" fill="rgba(255,255,255,.08)"/>` +
+      `<circle cx="320" cy="520" r="260" fill="rgba(255,255,255,.05)"/>` +
+      `<text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="44" fill="rgba(255,255,255,.85)">` +
+      `${escapeHtml(safe)}` +
+      `</text>` +
+      `</svg>`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  }
+
+  function averageWeight(unitWeights) {
+    const values = Object.values(unitWeights).map((x) => Number(x)).filter((x) => Number.isFinite(x));
+    if (!values.length) return 0;
+    return values.reduce((a, b) => a + b, 0) / values.length;
+  }
+
+  const unitWeightCustom = averageWeight(model.unitWeights);
+
+  const qty = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, custom: 0 };
+  const images = [0, 1, 2].map((i) => svgDataUri(model.name, i));
+  let imgIdx = 0;
+
+  function setImage(index) {
+    const nextIdx = (index + images.length) % images.length;
+    imgIdx = nextIdx;
+    el.image.src = images[imgIdx];
+    el.dots.querySelectorAll(".pd-dot").forEach((d, i) => d.classList.toggle("active", i === imgIdx));
+  }
+
+  function renderDots() {
+    el.dots.innerHTML = images.map((_, i) => `<div class="pd-dot${i === imgIdx ? " active" : ""}"></div>`).join("");
+  }
+
+  function clampNonNegInt(n) {
+    const x = Number(n);
+    if (!Number.isFinite(x)) return 0;
+    return Math.max(0, Math.trunc(x));
+  }
+
+  function computeTotals() {
+    const totalCount = qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty.custom;
+    const totalWeight =
+      qty[1] * model.unitWeights[1] +
+      qty[2] * model.unitWeights[2] +
+      qty[3] * model.unitWeights[3] +
+      qty[4] * model.unitWeights[4] +
+      qty[5] * model.unitWeights[5] +
+      qty.custom * unitWeightCustom;
+    return { totalCount, totalWeight };
+  }
+
+  function setError(message) {
+    if (!message) {
+      el.error.hidden = true;
+      el.error.textContent = "";
+      return;
+    }
+    el.error.hidden = false;
+    el.error.textContent = message;
+  }
+
+  function validate() {
+    const { totalCount, totalWeight } = computeTotals();
+    el.summary.textContent = `${nfInt.format(totalCount)} عدد | حدود ${nfWeight.format(totalWeight)} گرم`;
+
+    const needsCustom = qty.custom > 0;
+    el.customWrap.hidden = !needsCustom;
+
+    let ok = true;
+    let message = "";
+
+    if (totalCount < 1) {
+      ok = false;
+      message = "حداقل سفارش برای این مدل: ۱ عدد.";
+    }
+
+    if (!isAdmin && totalCount > MAX_TOTAL) {
+      ok = false;
+      message = `حداکثر تعداد مجاز برای هر مدل ${nfInt.format(MAX_TOTAL)} عدد است. برای تعداد بیشتر، ابتدا همین مقدار را به سبد اضافه کنید و دوباره وارد همین مدل شوید.`;
+    }
+
+    if (needsCustom) {
+      const note = String(el.customNote.value || "").trim();
+      if (note.length < 5) {
+        ok = false;
+        el.customError.hidden = false;
+        el.customError.textContent = "توضیحات سایز سفارشی الزامی است (حداقل ۵ کاراکتر).";
+      } else {
+        el.customError.hidden = true;
+        el.customError.textContent = "";
+      }
+    } else {
+      el.customError.hidden = true;
+      el.customError.textContent = "";
+    }
+
+    setError(message);
+    el.add.disabled = !ok;
+    return ok;
+  }
+
+  function renderSizeRow(sizeKey, label, unitW, thumbText) {
+    const row = document.createElement("div");
+    row.className = "pd-row";
+    row.dataset.size = String(sizeKey);
+
+    row.innerHTML =
+      `<div class="pd-thumb" aria-hidden="true">${escapeHtml(thumbText)}</div>` +
+      `<div class="pd-info">` +
+      `<div class="pd-size-name">${escapeHtml(label)}</div>` +
+      `<div class="pd-size-meta">میانگین وزن هر عدد: ${nfWeight.format(unitW)} گرم</div>` +
+      `</div>` +
+      `<div class="pd-qty">` +
+      `<div class="pd-qty-group" aria-label="افزایش">` +
+      `<button class="pd-qty-btn" type="button" data-delta="1">+۱</button>` +
+      `<button class="pd-qty-btn" type="button" data-delta="6">+۶</button>` +
+      `</div>` +
+      `<div class="pd-qty-value" id="pd-q-${escapeHtml(String(sizeKey))}">${nfInt.format(0)}</div>` +
+      `<div class="pd-qty-group" aria-label="کاهش">` +
+      `<button class="pd-qty-btn secondary" type="button" data-delta="-1">−۱</button>` +
+      `<button class="pd-qty-btn secondary" type="button" data-delta="-6">−۶</button>` +
+      `</div>` +
+      `</div>`;
+
+    const valueEl = row.querySelector(`#pd-q-${CSS.escape(String(sizeKey))}`);
+    row.querySelectorAll("button[data-delta]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const delta = Number(btn.getAttribute("data-delta") || "0");
+        qty[sizeKey] = clampNonNegInt(qty[sizeKey] + delta);
+        if (valueEl) valueEl.textContent = nfInt.format(qty[sizeKey]);
+        validate();
+      });
+    });
+    return row;
+  }
+
+  function basketLoad() {
+    const raw = localStorage.getItem(BASKET_KEY);
+    if (!raw) return null;
+    try {
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== "object") return null;
+      if (!Array.isArray(data.items)) return null;
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  function basketSave(basket) {
+    localStorage.setItem(BASKET_KEY, JSON.stringify(basket));
+  }
+
+  function basketEnsureValid() {
+    const now = Date.now();
+    const basket = basketLoad();
+    if (!basket) {
+      const t = new Date().toISOString();
+      return { v: 1, createdAt: t, updatedAt: t, items: [] };
+    }
+    const createdAt = Date.parse(basket.createdAt);
+    if (!Number.isFinite(createdAt) || now - createdAt > BASKET_TTL_MS) {
+      const t = new Date().toISOString();
+      return { v: 1, createdAt: t, updatedAt: t, items: [] };
+    }
+    return basket;
+  }
+
+  function basketAddItem() {
+    const basket = basketEnsureValid();
+    const { totalCount, totalWeight } = computeTotals();
+    const t = new Date().toISOString();
+    const item = {
+      itemId: `b_${Date.now().toString(16)}_${Math.random().toString(16).slice(2)}`,
+      categoryId: "cat-bangle",
+      categoryName: "النگو",
+      groupId,
+      groupName: model.groupName,
+      modelId,
+      modelName: model.name,
+      sizes: { 1: qty[1], 2: qty[2], 3: qty[3], 4: qty[4], 5: qty[5] },
+      custom: { qty: qty.custom, note: String(el.customNote.value || "").trim() },
+      unitWeights: { ...model.unitWeights, custom: unitWeightCustom },
+      totalCount,
+      totalWeight: Number(totalWeight.toFixed(2)),
+      createdAt: t,
+    };
+    basket.items.push(item);
+    basket.updatedAt = t;
+    basketSave(basket);
+  }
+
+  // Activate detail mode
+  detail.hidden = false;
+  if (el.notice) el.notice.hidden = true;
+  if (el.newOrder) el.newOrder.hidden = true;
+  if (el.filter) el.filter.hidden = true;
+  if (el.orders) el.orders.hidden = true;
+
+  if (titleEl) titleEl.textContent = model.name;
+  if (el.name) el.name.textContent = model.name;
+  if (el.modelBadge) el.modelBadge.textContent = "النگو";
+
+  if (el.back) {
+    el.back.addEventListener("click", () => {
+      window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
+    });
+  }
+
+  el.sizes.innerHTML = "";
+  el.sizes.appendChild(renderSizeRow(1, "سایز ۱", model.unitWeights[1], "۱"));
+  el.sizes.appendChild(renderSizeRow(2, "سایز ۲", model.unitWeights[2], "۲"));
+  el.sizes.appendChild(renderSizeRow(3, "سایز ۳", model.unitWeights[3], "۳"));
+  el.sizes.appendChild(renderSizeRow(4, "سایز ۴", model.unitWeights[4], "۴"));
+  el.sizes.appendChild(renderSizeRow(5, "سایز ۵", model.unitWeights[5], "۵"));
+  el.sizes.appendChild(renderSizeRow("custom", "سایز سفارشی", unitWeightCustom, "✦"));
+
+  el.customNote.addEventListener("input", () => validate());
+  el.prev.addEventListener("click", () => setImage(imgIdx - 1));
+  el.next.addEventListener("click", () => setImage(imgIdx + 1));
+
+  renderDots();
+  setImage(0);
+  validate();
+
+  el.add.addEventListener("click", () => {
+    if (!validate()) return;
+    basketAddItem();
+    window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
   });
 })();
 </script>

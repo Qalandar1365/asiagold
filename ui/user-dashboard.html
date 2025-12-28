@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.3 | Stage 1: Catalog navigation -->
+<!-- ASIAGOLD UI v0.4.4 | Stage 2a: Bangle product detail -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -290,7 +290,15 @@
     const category = state.categoryId ? findCategory(state.categoryId) : null;
     const group = state.groupId ? findGroup(category, state.groupId) : null;
     const models = (group?.models || []).map((m) => ({ id: m.id, name: m.name, desc: m.desc }));
-    renderList(models, () => {
+    renderList(models, (model) => {
+      if (state.categoryId === "cat-bangle") {
+        const params = new URLSearchParams();
+        params.set("cat", state.categoryId);
+        if (state.groupId) params.set("group", state.groupId);
+        params.set("model", model.id);
+        window.location.href = `./user-orders.html?${params.toString()}`;
+        return;
+      }
       window.alert("جزئیات محصول در مرحله بعد فعال می‌شود");
     });
   }
@@ -307,6 +315,31 @@
     state.groupId = null;
     renderCatalog();
   });
+
+  (() => {
+    const raw = (window.location.hash || "").replace(/^#/, "");
+    if (!raw) return;
+    const params = new URLSearchParams(raw);
+    const cat = params.get("cat");
+    const level = params.get("level");
+    const grp = params.get("group");
+    const catObj = cat ? findCategory(cat) : null;
+    if (!catObj) return;
+
+    if (level === "model") {
+      const grpObj = grp ? findGroup(catObj, grp) : null;
+      state.level = grpObj ? "model" : "group";
+      state.categoryId = cat;
+      state.groupId = grpObj ? grp : null;
+      return;
+    }
+
+    if (level === "group") {
+      state.level = "group";
+      state.categoryId = cat;
+      state.groupId = null;
+    }
+  })();
 
   renderCatalog();
 })();
