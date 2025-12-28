@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.5 | Stage 2b: khorderiz row-based detail -->
+<!-- ASIAGOLD UI v0.4.6 | Stage 3: Basket finalize + order code -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -249,6 +249,59 @@ textarea{
   cursor:pointer;
 }
 .kr-cta:disabled{opacity:.65;cursor:not-allowed;}
+.basket{
+  margin-top:12px;
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+}
+.basket-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.basket-title{color:var(--accent-light);font-weight:900;font-size:14px;}
+.basket-totals{
+  margin-top:10px;
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
+  box-shadow:var(--shadow-soft);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.basket-total{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--text4);}
+.basket-total strong{color:var(--text2);font-weight:900;}
+.basket-message{margin-top:10px;font-size:12px;line-height:1.7;color:var(--pending);}
+.basket-actions{margin-top:10px;display:flex;gap:10px;}
+.basket-btn{
+  flex:1;
+  border:none;
+  border-radius:18px;
+  padding:12px 10px;
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+}
+.basket-primary{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
+.basket-ghost{background:linear-gradient(180deg,var(--surface3),var(--surface4));color:var(--ink2);}
+.basket-btn:disabled{opacity:.65;cursor:not-allowed;}
+.confirm{
+  margin-top:12px;
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+}
+.confirm-title{color:var(--accent-light);font-weight:900;font-size:14px;}
+.confirm-note{margin-top:10px;font-size:13px;line-height:1.8;color:var(--text4);}
+.confirm-error{margin-top:10px;font-size:12px;line-height:1.7;color:var(--bad);}
+.confirm-success{
+  margin-top:10px;
+  border-radius:var(--r18);
+  padding:12px;
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  color:var(--success);
+  font-size:13px;
+  line-height:1.8;
+  font-weight:700;
+}
 .footer{margin-top:16px;}
 </style>
 </head>
@@ -271,6 +324,51 @@ textarea{
 
     <div class="notice">
       <strong>اطمینان خاطر:</strong> هیچ پرداختی در این پلتفرم انجام نمی‌شود. درخواست‌ها پس از بررسی مدیر فروش و در نوبت‌های مشخص به کارخانه ارسال می‌شوند.
+    </div>
+
+    <div id="basket-panel" class="basket" aria-label="سبد سفارش">
+      <div class="basket-head">
+        <div class="basket-title">سبد سفارش</div>
+      </div>
+      <div class="basket-totals">
+        <div class="basket-total"><span>تعداد کل:</span><strong id="basket-total-count">۰</strong></div>
+        <div class="basket-total"><span>وزن حدودی کل:</span><strong id="basket-total-weight">۰٫۰۰ گرم</strong></div>
+      </div>
+      <div class="basket-message" id="basket-message" hidden></div>
+      <div class="list" id="basket-list" style="margin-top:12px;"></div>
+      <div class="basket-actions">
+        <button class="basket-btn basket-primary" type="button" id="basket-finalize">نهایی کردن سفارش</button>
+        <button class="basket-btn basket-ghost" type="button" id="basket-clear">حذف کامل سفارشات</button>
+      </div>
+    </div>
+
+    <div id="confirm-panel" class="confirm" hidden aria-label="تأیید نهایی سفارش">
+      <div class="confirm-title">تأیید نهایی سفارش</div>
+      <div class="notice" style="margin-top:10px;">
+        <strong>یادآوری:</strong> سفارش شما پس از تأیید مدیر فروش به کارخانه ارسال می‌شود.
+      </div>
+      <div class="form" style="margin-top:10px;">
+        <div class="row"><span>نام مشتری</span><strong id="confirm-customer">مشتری</strong></div>
+        <div class="row"><span>تاریخ</span><strong id="confirm-date"></strong></div>
+        <div class="field" style="margin-top:10px;">
+          <label for="confirm-phone">شماره موبایل (برای ساخت کد سفارش)</label>
+          <input id="confirm-phone" inputmode="tel" autocomplete="tel" placeholder="مثال: 09123456789">
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label for="confirm-name">نام و نام خانوادگی (اختیاری)</label>
+          <input id="confirm-name" autocomplete="name" placeholder="مثال: علی رضایی">
+        </div>
+        <div class="confirm-error" id="confirm-error" hidden></div>
+      </div>
+      <div class="pd" style="margin-top:10px;padding:12px;" aria-label="خلاصه سفارش">
+        <div class="pd-section-title">خلاصه سفارش</div>
+        <div id="confirm-summary" style="margin-top:10px;"></div>
+      </div>
+      <div class="basket-actions" style="margin-top:10px;">
+        <button class="basket-btn basket-primary" type="button" id="confirm-send">ارسال سفارش</button>
+        <button class="basket-btn basket-ghost" type="button" id="confirm-edit">ویرایش سفارش</button>
+      </div>
+      <div class="confirm-success" id="confirm-success" hidden></div>
     </div>
 
     <div id="bangle-detail" class="pd" hidden>
@@ -378,6 +476,7 @@ textarea{
     </div>
 
     <div class="list" id="orders">
+      <div id="orders-dynamic"></div>
       <div class="order">
         <div class="row"><strong>#1024</strong><span class="badge">ثبت سفارش</span></div>
         <div class="row"><span>نوع محصول</span><span>النگو</span></div>
@@ -439,6 +538,417 @@ textarea{
   const modelId = params.get("model");
   const groupId = params.get("group") || "grp-bangle-asia";
 
+  // Stage 3: Basket + finalize + order code (default mode only)
+  const AG_PROFILE_KEY = "asiagold_customer_profile_v1";
+  const AG_ORDER_CODE_COUNTER_KEY = "asiagold_order_code_counter_v1";
+  const AG_ORDERS_KEY = "asiagold_orders_v1";
+  const AG_BASKET_KEY = "asiagold_basket_v1";
+  const AG_DAY_MS = 24 * 60 * 60 * 1000;
+  const AG_BASKET_TTL_MS = 4 * AG_DAY_MS;
+  const agNfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
+  const agNfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function agEscapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function agToLatinDigits(value) {
+    const s = String(value ?? "");
+    const fa = "۰۱۲۳۴۵۶۷۸۹";
+    const ar = "٠١٢٣٤٥٦٧٨٩";
+    return s
+      .replace(/[۰-۹]/g, (d) => String(fa.indexOf(d)))
+      .replace(/[٠-٩]/g, (d) => String(ar.indexOf(d)));
+  }
+
+  function agOnlyDigits(value) {
+    return agToLatinDigits(value).replace(/[^\d]/g, "");
+  }
+
+  function agReadProfile() {
+    const raw = localStorage.getItem(AG_PROFILE_KEY);
+    if (!raw) return { name: "", phone: "" };
+    try {
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== "object") return { name: "", phone: "" };
+      return { name: String(data.name || ""), phone: String(data.phone || "") };
+    } catch {
+      return { name: "", phone: "" };
+    }
+  }
+
+  function agSaveProfile(next) {
+    const cur = agReadProfile();
+    const data = {
+      v: 1,
+      name: String(next?.name ?? cur.name ?? "").trim(),
+      phone: String(next?.phone ?? cur.phone ?? "").trim(),
+      updatedAt: new Date().toISOString(),
+    };
+    localStorage.setItem(AG_PROFILE_KEY, JSON.stringify(data));
+    return data;
+  }
+
+  function agEmptyBasket() {
+    const t = new Date().toISOString();
+    return { v: 1, createdAt: t, updatedAt: t, items: [] };
+  }
+
+  function agLoadBasketWithTtl() {
+    const now = Date.now();
+    const raw = localStorage.getItem(AG_BASKET_KEY);
+    if (!raw) return { basket: agEmptyBasket(), cleared: false };
+    try {
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== "object" || !Array.isArray(data.items)) throw new Error("bad");
+      const createdAt = Date.parse(data.createdAt);
+      if (!Number.isFinite(createdAt) || now - createdAt > AG_BASKET_TTL_MS) {
+        localStorage.removeItem(AG_BASKET_KEY);
+        return { basket: agEmptyBasket(), cleared: true };
+      }
+      return { basket: data, cleared: false };
+    } catch {
+      localStorage.removeItem(AG_BASKET_KEY);
+      return { basket: agEmptyBasket(), cleared: true };
+    }
+  }
+
+  function agComputeItemApprox(item) {
+    const count = (() => {
+      if (typeof item?.totalCount === "number" && Number.isFinite(item.totalCount)) return Math.max(0, Math.trunc(item.totalCount));
+      if (String(item?.orderType || "") === "تعدادی") {
+        const n = Number(item?.value);
+        if (Number.isFinite(n)) return Math.max(0, Math.trunc(n));
+      }
+      return 0;
+    })();
+
+    const weight = (() => {
+      if (typeof item?.totalWeight === "number" && Number.isFinite(item.totalWeight)) return Math.max(0, item.totalWeight);
+      if (typeof item?.approxWeight === "number" && Number.isFinite(item.approxWeight)) return Math.max(0, item.approxWeight);
+      return 0;
+    })();
+
+    return { count, weight };
+  }
+
+  function agComputeBasketTotals(items) {
+    let totalCount = 0;
+    let totalWeight = 0;
+    for (const it of items || []) {
+      const { count, weight } = agComputeItemApprox(it);
+      totalCount += count;
+      totalWeight += weight;
+    }
+    return { totalCount, totalWeight: Number(totalWeight.toFixed(2)) };
+  }
+
+  function agFormatItemDetails(item) {
+    if (item?.categoryId === "cat-bangle") {
+      const sizes = item?.sizes || {};
+      const parts = [];
+      for (const k of [1, 2, 3, 4, 5]) {
+        const q = Number(sizes[k] ?? 0);
+        if (Number.isFinite(q) && q > 0) parts.push(`سایز ${k}: ${agNfInt.format(Math.trunc(q))}`);
+      }
+      const customQty = Number(item?.custom?.qty ?? 0);
+      if (Number.isFinite(customQty) && customQty > 0) parts.push(`سایز سفارشی: ${agNfInt.format(Math.trunc(customQty))}`);
+      return parts.join(" • ") || "بدون جزئیات";
+    }
+    if (item?.categoryId === "cat-khorderiz") {
+      const type = String(item?.orderType || "").trim();
+      const unit = type === "وزنی" ? "گرم" : "عدد";
+      const val = Number(item?.value);
+      const safeVal =
+        Number.isFinite(val) && type === "وزنی"
+          ? agNfWeight.format(val)
+          : Number.isFinite(val)
+            ? agNfInt.format(Math.trunc(val))
+            : "-";
+      return `${type || "—"} • ${safeVal} ${unit}`;
+    }
+    return "—";
+  }
+
+  function agRenderBasketCard(item) {
+    const { count, weight } = agComputeItemApprox(item);
+    const modelName = String(item?.modelName || item?.modelId || "محصول");
+    const catName = String(item?.categoryName || "");
+    const groupName = String(item?.groupName || "");
+    const note = String(item?.note || item?.custom?.note || "").trim();
+    const details = agFormatItemDetails(item);
+    const isKh = item?.categoryId === "cat-khorderiz";
+    const orderType = String(item?.orderType || "").trim();
+    const valueNum = Number(item?.value);
+    const valueUnit = orderType === "وزنی" ? "گرم" : "عدد";
+    const valueText =
+      Number.isFinite(valueNum) && orderType === "وزنی"
+        ? agNfWeight.format(valueNum)
+        : Number.isFinite(valueNum)
+          ? agNfInt.format(Math.trunc(valueNum))
+          : "-";
+    const middleRows = isKh
+      ? `<div class="row"><span>نوع سفارش</span><span>${agEscapeHtml(orderType || "—")}</span></div>` +
+        `<div class="row"><span>مقدار</span><span>${agEscapeHtml(`${valueText} ${valueUnit}`)}</span></div>`
+      : `<div class="row"><span>جزئیات</span><span>${agEscapeHtml(details)}</span></div>` +
+        `<div class="row"><span>تعداد</span><span>${agNfInt.format(count)}</span></div>`;
+    return (
+      `<div class="order">` +
+      `<div class="row"><strong>${agEscapeHtml(modelName)}</strong><span class="badge" style="cursor:default;">${agEscapeHtml(catName || "سفارش")}</span></div>` +
+      `<div class="row"><span>گروه</span><span>${agEscapeHtml(groupName || "—")}</span></div>` +
+      middleRows +
+      `<div class="row"><span>وزن حدودی</span><span>${agNfWeight.format(weight)} گرم</span></div>` +
+      `<div class="row"><span>توضیح</span><span>${agEscapeHtml(note || "بدون توضیح")}</span></div>` +
+      `</div>`
+    );
+  }
+
+  function agReadOrders() {
+    try {
+      const raw = localStorage.getItem(AG_ORDERS_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function agWriteOrders(list) {
+    localStorage.setItem(AG_ORDERS_KEY, JSON.stringify(list));
+  }
+
+  function agNextOrderCode(phoneLast6) {
+    const last6 = String(phoneLast6 || "").replace(/[^\d]/g, "");
+    if (!/^\d{6}$/.test(last6)) throw new Error("bad_phone");
+
+    let data = { v: 1, per: {} };
+    try {
+      const raw = localStorage.getItem(AG_ORDER_CODE_COUNTER_KEY);
+      const parsed = raw ? JSON.parse(raw) : null;
+      if (parsed && typeof parsed === "object" && parsed.per && typeof parsed.per === "object") data = parsed;
+    } catch {}
+
+    const cur = Number(data.per[last6] || 0);
+    const next = cur + 1;
+    const max = 26 * 99;
+    if (next > max) throw new Error("limit");
+
+    data.per[last6] = next;
+    localStorage.setItem(AG_ORDER_CODE_COUNTER_KEY, JSON.stringify(data));
+
+    const letterIdx = Math.floor((next - 1) / 99) % 26;
+    const number = ((next - 1) % 99) + 1;
+    const letter = String.fromCharCode(65 + letterIdx);
+    const num = String(number).padStart(2, "0");
+    return `${last6}${letter}${num}`;
+  }
+
+  function agInitStage3() {
+    const basketPanel = document.getElementById("basket-panel");
+    const confirmPanel = document.getElementById("confirm-panel");
+    if (!basketPanel || !confirmPanel) return;
+
+    const msg = document.getElementById("basket-message");
+    const list = document.getElementById("basket-list");
+    const totalCountEl = document.getElementById("basket-total-count");
+    const totalWeightEl = document.getElementById("basket-total-weight");
+    const finalizeBtn = document.getElementById("basket-finalize");
+    const clearBtn = document.getElementById("basket-clear");
+
+    const customerLabel = document.getElementById("confirm-customer");
+    const dateLabel = document.getElementById("confirm-date");
+    const confirmPhone = document.getElementById("confirm-phone");
+    const confirmName = document.getElementById("confirm-name");
+    const confirmError = document.getElementById("confirm-error");
+    const summaryWrap = document.getElementById("confirm-summary");
+    const confirmSend = document.getElementById("confirm-send");
+    const confirmEdit = document.getElementById("confirm-edit");
+    const confirmSuccess = document.getElementById("confirm-success");
+
+    const dyn = document.getElementById("orders-dynamic");
+    const pageNotice = document.querySelector(".notice");
+    const newOrder = document.getElementById("new-order");
+    const filter = document.querySelector(".filter");
+    const orders = document.getElementById("orders");
+
+    function setConfirmError(text) {
+      if (!confirmError) return;
+      const t = String(text || "").trim();
+      confirmError.hidden = !t;
+      confirmError.textContent = t;
+    }
+
+    function renderOrders() {
+      if (!dyn) return;
+      const stored = agReadOrders();
+      dyn.innerHTML = stored
+        .slice()
+        .reverse()
+        .slice(0, 8)
+        .map((o) => {
+          const code = String(o?.code || "—");
+          const dt = String(o?.dateFa || "");
+          const sum = o?.summary || {};
+          const tc = Number(sum.totalCount) || 0;
+          const tw = Number(sum.totalWeight) || 0;
+          return (
+            `<div class="order">` +
+            `<div class="row"><strong>${agEscapeHtml(code)}</strong><span class="badge review">در انتظار بررسی مدیر فروش</span></div>` +
+            `<div class="row"><span>تاریخ</span><span>${agEscapeHtml(dt || "—")}</span></div>` +
+            `<div class="row"><span>تعداد کل</span><span>${agNfInt.format(tc)}</span></div>` +
+            `<div class="row"><span>وزن حدودی کل</span><span>${agNfWeight.format(tw)} گرم</span></div>` +
+            `</div>`
+          );
+        })
+        .join("");
+    }
+
+    function renderBasket() {
+      const { basket, cleared } = agLoadBasketWithTtl();
+      const items = Array.isArray(basket.items) ? basket.items : [];
+      const { totalCount, totalWeight } = agComputeBasketTotals(items);
+
+      if (totalCountEl) totalCountEl.textContent = agNfInt.format(totalCount);
+      if (totalWeightEl) totalWeightEl.textContent = `${agNfWeight.format(totalWeight)} گرم`;
+
+      if (msg) {
+        if (cleared) {
+          msg.hidden = false;
+          msg.textContent = "سبد سفارش شما به دلیل گذشت بیش از ۴ روز پاک شد.";
+        } else msg.hidden = true;
+      }
+
+      if (list) {
+        if (!items.length) {
+          list.innerHTML =
+            `<div class="order">` +
+            `<div class="row"><strong>سبد سفارش خالی است</strong><span class="badge" style="cursor:default;">—</span></div>` +
+            `<div class="row"><span>راهنما</span><span>برای افزودن محصول، از داشبورد وارد کاتالوگ شوید.</span></div>` +
+            `</div>`;
+        } else {
+          list.innerHTML = items.map(agRenderBasketCard).join("");
+        }
+      }
+
+      if (finalizeBtn) finalizeBtn.disabled = items.length === 0;
+      if (clearBtn) clearBtn.disabled = items.length === 0;
+
+      const profile = agReadProfile();
+      if (confirmPhone && !confirmPhone.value) confirmPhone.value = profile.phone || "";
+      if (confirmName && !confirmName.value) confirmName.value = profile.name || "";
+
+      renderOrders();
+      return items;
+    }
+
+    function openConfirm(items) {
+      if (!items.length) return;
+      const profile = agReadProfile();
+      const name = String((confirmName && confirmName.value) || profile.name || "").trim() || "مشتری";
+      if (customerLabel) customerLabel.textContent = name;
+      if (dateLabel) dateLabel.textContent = new Date().toLocaleDateString("fa-IR");
+      if (summaryWrap) summaryWrap.innerHTML = items.map(agRenderBasketCard).join("");
+      if (confirmSuccess) confirmSuccess.hidden = true;
+      if (confirmSend) confirmSend.disabled = false;
+      if (confirmEdit) confirmEdit.disabled = false;
+      setConfirmError("");
+      basketPanel.hidden = true;
+      confirmPanel.hidden = false;
+      if (pageNotice) pageNotice.hidden = true;
+      if (newOrder) newOrder.hidden = true;
+      if (filter) filter.hidden = true;
+      if (orders) orders.hidden = true;
+      if (titleEl) titleEl.textContent = "تأیید نهایی سفارش";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function closeConfirm() {
+      confirmPanel.hidden = true;
+      basketPanel.hidden = false;
+      if (pageNotice) pageNotice.hidden = false;
+      if (newOrder) newOrder.hidden = false;
+      if (filter) filter.hidden = false;
+      if (orders) orders.hidden = false;
+      if (titleEl) titleEl.textContent = (document.querySelector(".title")?.textContent || "").trim() || document.title;
+      if (confirmSuccess) confirmSuccess.hidden = true;
+      setConfirmError("");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function submitOrder(items) {
+      const phoneDigits = agOnlyDigits((confirmPhone && confirmPhone.value) || agReadProfile().phone || "");
+      if (phoneDigits.length < 6) {
+        setConfirmError("شماره موبایل باید حداقل ۶ رقم باشد.");
+        return;
+      }
+      const last6 = phoneDigits.slice(-6);
+      const name = String((confirmName && confirmName.value) || agReadProfile().name || "").trim();
+      agSaveProfile({ name, phone: phoneDigits });
+
+      let code = "";
+      try {
+        code = agNextOrderCode(last6);
+      } catch {
+        setConfirmError("امکان ساخت کد سفارش وجود ندارد. لطفاً بعداً دوباره تلاش کنید.");
+        return;
+      }
+
+      const t = new Date();
+      const sum = agComputeBasketTotals(items);
+      const record = {
+        code,
+        createdAt: t.toISOString(),
+        dateFa: t.toLocaleDateString("fa-IR"),
+        customer: { name: name || "مشتری", phoneLast6: last6 },
+        summary: sum,
+        items,
+        status: "pending_review",
+      };
+
+      const orders = agReadOrders();
+      orders.push(record);
+      agWriteOrders(orders);
+
+      localStorage.removeItem(AG_BASKET_KEY);
+
+      if (confirmSuccess) {
+        confirmSuccess.hidden = false;
+        confirmSuccess.textContent = `سفارش شما با کد ${code} ثبت گردید`;
+      }
+      setConfirmError("");
+      if (confirmSend) confirmSend.disabled = true;
+      if (confirmEdit) confirmEdit.disabled = true;
+
+      renderBasket();
+    }
+
+    let itemsSnapshot = renderBasket();
+
+    if (finalizeBtn) finalizeBtn.addEventListener("click", () => openConfirm(itemsSnapshot));
+    if (clearBtn) clearBtn.addEventListener("click", () => {
+      if (!window.confirm("همه سفارش‌های داخل سبد حذف شود؟")) return;
+      localStorage.removeItem(AG_BASKET_KEY);
+      itemsSnapshot = renderBasket();
+    });
+    if (confirmEdit) confirmEdit.addEventListener("click", () => {
+      itemsSnapshot = renderBasket();
+      closeConfirm();
+    });
+    if (confirmSend) confirmSend.addEventListener("click", () => submitOrder(itemsSnapshot));
+    if (confirmPhone) confirmPhone.addEventListener("input", () => setConfirmError(""));
+    if (confirmName) confirmName.addEventListener("input", () => setConfirmError(""));
+
+    window.addEventListener("focus", () => {
+      if (!confirmPanel.hidden) return;
+      itemsSnapshot = renderBasket();
+    });
+  }
+
   // Stage 2b: خرده‌ریز (row-based)
   if (cat === "cat-khorderiz" && modelId) {
     const kh = document.getElementById("khorderiz-detail");
@@ -470,6 +980,8 @@ textarea{
       filter: document.querySelector(".filter"),
       orders: document.getElementById("orders"),
       bangle: document.getElementById("bangle-detail"),
+      basket: document.getElementById("basket-panel"),
+      confirm: document.getElementById("confirm-panel"),
 
       back: document.getElementById("kr-back"),
       badge: document.getElementById("kr-model-badge"),
@@ -721,6 +1233,8 @@ textarea{
     kh.hidden = false;
     if (el.bangle) el.bangle.hidden = true;
     if (el.notice) el.notice.hidden = true;
+    if (el.basket) el.basket.hidden = true;
+    if (el.confirm) el.confirm.hidden = true;
     if (el.newOrder) el.newOrder.hidden = true;
     if (el.filter) el.filter.hidden = true;
     if (el.orders) el.orders.hidden = true;
@@ -753,7 +1267,10 @@ textarea{
   }
 
   const detail = document.getElementById("bangle-detail");
-  if (!detail || cat !== "cat-bangle" || !modelId) return;
+  if (!detail || cat !== "cat-bangle" || !modelId) {
+    if (!cat && !modelId) agInitStage3();
+    return;
+  }
 
   const MODELS = {
     "mdl-bangle-asia-120-yellow": {
@@ -785,6 +1302,8 @@ textarea{
     newOrder: document.getElementById("new-order"),
     filter: document.querySelector(".filter"),
     orders: document.getElementById("orders"),
+    basket: document.getElementById("basket-panel"),
+    confirm: document.getElementById("confirm-panel"),
 
     back: document.getElementById("pd-back"),
     name: document.getElementById("pd-name"),
@@ -1017,6 +1536,8 @@ textarea{
   // Activate detail mode
   detail.hidden = false;
   if (el.notice) el.notice.hidden = true;
+  if (el.basket) el.basket.hidden = true;
+  if (el.confirm) el.confirm.hidden = true;
   if (el.newOrder) el.newOrder.hidden = true;
   if (el.filter) el.filter.hidden = true;
   if (el.orders) el.orders.hidden = true;
