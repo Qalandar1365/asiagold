@@ -1,186 +1,288 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asia Gold | سفارش‌های کاربر</title>
-<link rel="stylesheet" href="./theme.css">
-<style>
-*{box-sizing:border-box;}
-body{margin:0;background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);}
-.wrapper{min-height:100vh;display:flex;justify-content:center;padding:16px;}
-.card{
-  width:100%;max-width:480px;margin-top:14px;
-  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
-  border-radius:var(--r26);padding:22px;
-  box-shadow:var(--shadow);
-  color:var(--text1);
-}
-.header{text-align:center;margin-bottom:16px;}
-.logo{
-  width:72px;height:72px;margin:0 auto 8px;border-radius:50%;
-  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:13px;color:var(--ink1);
-}
-.title{font-size:16px;font-weight:bold;color:var(--text2);}
-.filter{
-  margin-top:12px;border-radius:var(--r18);padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  display:flex;gap:10px;
-}
-select{
-  flex:1;border:none;outline:none;border-radius:14px;padding:10px;
-  background:linear-gradient(180deg,var(--surface1),var(--surface2));
-  color:var(--ink3);font-size:13px;
-}
-.list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
-.order{
-  border-radius:var(--r18);padding:14px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-}
-.row{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--text4);margin-top:8px;}
-.row strong{color:var(--text1);font-weight:700;}
-.badge{
-  display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold;
-  background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);
-  text-decoration:none;
-  border:none;
-}
-.badge.review{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
-.badge.approved{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
-.badge.sent{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
-.badge.delivered{background:linear-gradient(135deg,var(--ok),var(--success));color:var(--ink1);}
-.badge.rejected{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
-.notice{
-  margin-top:12px;border-radius:var(--r18);padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  font-size:13px;color:var(--text4);
-}
-.notice strong{color:var(--text1);font-weight:700;}
-.form{
-  margin-top:12px;border-radius:var(--r18);padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-}
-.form-title{font-size:14px;font-weight:700;color:var(--text2);}
-.form-sub{margin-top:6px;font-size:12px;color:var(--text5);line-height:1.7;}
-.field{margin-top:10px;}
-.field label{display:block;font-size:12px;color:var(--text5);margin-bottom:6px;}
-input{
-  width:100%;
-  border:none;outline:none;border-radius:14px;padding:10px;
-  background:linear-gradient(180deg,var(--surface1),var(--surface2));
-  color:var(--ink3);font-size:13px;
-}
-textarea{
-  width:100%;
-  border:none;outline:none;border-radius:14px;padding:10px;
-  background:linear-gradient(180deg,var(--surface1),var(--surface2));
-  color:var(--ink3);font-size:13px;
-  resize:none;
-}
-.footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text5);}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>آسیاگلد | سفارش‌های من</title>
+  <link rel="stylesheet" href="./theme.css">
+  <style>
+    *{box-sizing:border-box;}
+    body{margin:0;background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);}
+    .wrapper{min-height:100vh;display:flex;justify-content:center;padding:16px;}
+    .card{
+      width:100%;max-width:480px;margin-top:14px;
+      background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
+      border-radius:var(--r26);padding:22px;
+      box-shadow:var(--shadow);
+      color:var(--text1);
+    }
+    .header{text-align:center;margin-bottom:16px;}
+    .logo{
+      width:72px;height:72px;margin:0 auto 8px;border-radius:50%;
+      background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:13px;color:var(--ink1);
+    }
+    .title{font-size:16px;font-weight:bold;color:var(--text2);}
+    .sub{font-size:12px;color:var(--text3);margin-top:4px;line-height:1.7;}
+
+    .notice{
+      margin-top:12px;border-radius:var(--r18);padding:12px;
+      background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+      font-size:13px;color:var(--text4);
+      line-height:1.85;
+    }
+    .notice strong{color:var(--text1);font-weight:800;}
+
+    .badge{
+      display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold;
+      background:linear-gradient(135deg,var(--gold4),var(--gold6));
+      color:var(--ink4);
+      text-decoration:none;
+      border:none;
+      cursor:pointer;
+      text-align:center;
+      user-select:none;
+    }
+    .badge.review{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
+    .badge.approved{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
+    .badge.sent{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
+    .badge.delivered{background:linear-gradient(135deg,var(--ok),var(--success));color:var(--ink1);}
+    .badge.rejected{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
+    .badge.secondary{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
+    .badge.danger{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size:13px;
+      color:var(--text4);
+      margin-top:8px;
+      line-height:1.7;
+    }
+    .row strong{color:var(--text1);font-weight:800;}
+
+    .form{
+      margin-top:12px;border-radius:var(--r18);padding:12px;
+      background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+    }
+    .form-title{font-size:14px;font-weight:800;color:var(--text2);}
+    .form-sub{margin-top:6px;font-size:12px;color:var(--text5);line-height:1.8;}
+
+    .field{margin-top:10px;}
+    .field label{display:block;font-size:12px;color:var(--text5);margin-bottom:6px;}
+    input,textarea,select{
+      width:100%;
+      border:none;outline:none;border-radius:14px;padding:10px;
+      background:linear-gradient(180deg,var(--surface1),var(--surface2));
+      color:var(--ink3);font-size:13px;
+    }
+    textarea{resize:none;}
+
+    .split{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .crumb{margin-top:10px;font-size:12px;color:var(--text5);line-height:1.7;}
+    .crumb strong{color:var(--text2);font-weight:800;}
+    .muted{color:var(--text5);}
+    .error{margin-top:8px;font-size:12px;color:var(--bad);line-height:1.7;}
+    .hint{
+      margin-top:10px;border-radius:var(--r16);padding:10px;
+      background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+      font-size:12px;color:var(--text5);line-height:1.75;
+    }
+
+    .summary{
+      margin-top:12px;border-radius:var(--r18);padding:12px;
+      background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+    }
+    .summary .kpi{
+      display:flex;justify-content:space-between;gap:12px;
+      margin-top:6px;font-size:13px;color:var(--text4);
+    }
+    .summary .kpi strong{color:var(--text1);font-weight:900;}
+    .section-title{margin-top:10px;font-size:14px;color:var(--text2);font-weight:900;}
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+    .pill{
+      border:none;border-radius:14px;padding:12px 10px;
+      background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+      color:var(--text2);
+      text-align:center;
+      cursor:pointer;
+      font-weight:800;
+    }
+    .pill-sub{display:block;margin-top:4px;font-weight:400;color:var(--text5);font-size:12px;line-height:1.7;}
+
+    .actions{display:flex;gap:10px;margin-top:10px;}
+    .actions .badge{flex:1;}
+
+    .list{display:flex;flex-direction:column;gap:12px;margin-top:12px;}
+    .order{border-radius:var(--r18);padding:14px;background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));}
+
+    .divider{height:1px;background:var(--glass-strong);opacity:.65;margin-top:16px;}
+
+    .checkbox{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      margin-top:10px;
+      font-size:12px;
+      color:var(--text5);
+      line-height:1.7;
+    }
+    .checkbox input{width:18px;height:18px;min-height:18px;margin-top:2px;}
+
+    .inline-selects{display:flex;gap:10px;}
+    .footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text5);line-height:1.8;}
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <div class="card">
-    <div class="header">
-      <div class="logo-ring">
-        <div class="logo">Asia<br>Gold</div>
-      </div>
-      <div class="title">سفارش‌های من</div>
-    </div>
-
-    <div class="notice">
-      <strong>اطمینان خاطر:</strong> هیچ پرداختی در این پلتفرم انجام نمی‌شود. درخواست‌ها پس از بررسی مدیر فروش و در نوبت‌های مشخص به کارخانه ارسال می‌شوند.
-    </div>
-
-    <div id="new-order" class="form">
-      <div class="form-title">ثبت درخواست سفارش</div>
-      <div class="form-sub">ASIAGOLD فقط واسطه است و سفارش‌ها از طریق کانال‌های رسمی فروش پیگیری می‌شوند.</div>
-      <form action="./user-orders.html" method="GET">
-        <div class="field">
-          <label>نوع محصول</label>
-          <select name="product">
-            <option>النگو</option>
-            <option>گردنبند</option>
-            <option>دستبند</option>
-            <option>سکه</option>
-            <option>طلای آب‌شده</option>
-          </select>
+  <div class="wrapper">
+    <div class="card">
+      <div class="header">
+        <div class="logo-ring">
+          <div class="logo">آسیا<br>گلد</div>
         </div>
-        <div class="field">
-          <label>تعداد</label>
-          <input name="qty" type="number" min="1" placeholder="مثال: 2">
+        <div class="title">سفارش‌های من</div>
+        <div class="sub">ثبت درخواست فقط در سطح «مدل» انجام می‌شود.</div>
+      </div>
+
+      <div class="notice">
+        <strong>توضیح مهم:</strong>
+        آسیاگلد فقط واسط بین کارخانه و مشتری است. این سامانه فقط برای ثبت و پیگیری درخواست‌ها طراحی شده است.
+      </div>
+
+      <div id="flash" class="notice" hidden></div>
+
+      <div class="summary" aria-live="polite">
+        <div class="split">
+          <div>
+            <div class="section-title" style="margin-top:0;">سبد شما</div>
+            <div class="crumb muted">سبد تا <strong>۴ روز</strong> نگهداری می‌شود و سپس خودکار پاک می‌گردد.</div>
+          </div>
+          <button class="badge" type="button" id="go-basket">رفتن به سبد</button>
         </div>
-        <div class="field">
-          <label>یادداشت (اختیاری)</label>
-          <textarea name="note" rows="3" placeholder="مثال: سایز، مدل، رنگ یا توضیح تکمیلی"></textarea>
+        <div class="kpi"><span>جمع تعداد</span><strong id="basket-total-count">۰</strong></div>
+        <div class="kpi"><span>جمع وزن تقریبی (گرم)</span><strong id="basket-total-weight">۰٫۰۰</strong></div>
+      </div>
+
+      <div id="flow" class="form">
+        <div class="form-title">ثبت درخواست جدید</div>
+        <div class="form-sub">مسیر کار: <strong>دسته‌بندی → لیست → جزئیات مدل → سبد → تایید نهایی</strong></div>
+        <div class="crumb" id="breadcrumb"></div>
+
+        <div id="view-category">
+          <div class="section-title">۱) انتخاب دسته‌بندی</div>
+          <div class="grid2" id="category-grid"></div>
         </div>
-        <div class="field">
-          <button class="badge" type="submit">ثبت درخواست</button>
+
+        <div id="view-list" hidden>
+          <div class="section-title">۲) انتخاب لاین و مدل</div>
+          <div class="field">
+            <label for="line-select">لاین</label>
+            <select id="line-select"></select>
+          </div>
+          <div class="field">
+            <label>مدل‌ها</label>
+            <div class="grid2" id="model-grid"></div>
+          </div>
+          <div class="actions">
+            <button class="badge secondary" type="button" id="back-to-category">بازگشت به دسته‌بندی</button>
+            <button class="badge" type="button" id="to-basket-from-list">مشاهده سبد</button>
+          </div>
         </div>
-      </form>
+
+        <div id="view-detail" hidden>
+          <div class="section-title">۳) جزئیات مدل</div>
+          <div class="hint" id="model-meta"></div>
+          <div class="field">
+            <label for="qty">تعداد (عدد)</label>
+            <input id="qty" type="text" inputmode="numeric" autocomplete="off" placeholder="مثال: ۲" pattern="[0-9۰-۹]+">
+            <div class="error" id="qty-error" hidden></div>
+          </div>
+          <div class="field">
+            <label>وزن تقریبی کل (گرم)</label>
+            <input id="total-weight" type="text" readonly>
+          </div>
+          <div class="field">
+            <label for="note">توضیحات (اختیاری)</label>
+            <textarea id="note" rows="3" placeholder="مثال: سایز یا توضیح تکمیلی برای کارخانه"></textarea>
+          </div>
+          <div class="actions">
+            <button class="badge secondary" type="button" id="back-to-list">بازگشت به لیست</button>
+            <button class="badge" type="button" id="add-to-basket">افزودن به سبد</button>
+          </div>
+          <div class="hint" id="max-hint"></div>
+        </div>
+      </div>
+
+      <div id="basket" class="form" hidden>
+        <div class="form-title">سبد (مرحله ۴)</div>
+        <div class="form-sub">
+          هر آیتم سبد مربوط به یک «مدل» است. برای تعداد بیشتر از سقف، همان مدل را دوباره از لیست انتخاب کنید
+          و یک آیتم جدید اضافه کنید.
+        </div>
+        <div id="basket-empty" class="notice" hidden>
+          <strong>سبد خالی است.</strong> برای شروع، از بخش «ثبت درخواست جدید» یک مدل را انتخاب کنید.
+        </div>
+        <div id="basket-list" class="list"></div>
+        <div class="actions">
+          <button class="badge secondary" type="button" id="back-to-flow">بازگشت</button>
+          <button class="badge" type="button" id="to-confirm">تایید نهایی</button>
+        </div>
+        <div class="actions">
+          <button class="badge danger" type="button" id="clear-basket">پاک‌کردن سبد</button>
+        </div>
+      </div>
+
+      <div id="confirm" class="form" hidden>
+        <div class="form-title">تایید نهایی (مرحله ۵)</div>
+        <div class="form-sub">
+          پس از تایید، درخواست شما برای بررسی ثبت می‌شود و در بخش «سفارش‌های ثبت‌شده» قابل پیگیری است.
+        </div>
+        <div class="hint" id="confirm-summary"></div>
+        <label class="checkbox">
+          <input id="confirm-check" type="checkbox">
+          <span>اطلاعات مدل‌ها، تعداد و توضیحات را بررسی کرده‌ام.</span>
+        </label>
+        <div class="actions">
+          <button class="badge secondary" type="button" id="back-to-basket">بازگشت به سبد</button>
+          <button class="badge" type="button" id="submit-order" disabled>ثبت درخواست</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form" id="orders">
+        <div class="form-title">سفارش‌های ثبت‌شده</div>
+        <div class="form-sub">این بخش فقط یک شبیه‌سازی UI است و وضعیت‌ها برای نمایش به‌صورت محلی نگهداری می‌شوند.</div>
+        <div class="field">
+          <label>فیلتر / مرتب‌سازی</label>
+          <div class="inline-selects">
+            <select id="orders-filter">
+              <option value="all">همه وضعیت‌ها</option>
+              <option value="review">در حال بررسی</option>
+              <option value="approved">تایید شده</option>
+              <option value="sent">ارسال به کارخانه</option>
+              <option value="delivered">تحویل شده</option>
+              <option value="rejected">رد شده</option>
+            </select>
+            <select id="orders-sort">
+              <option value="new">جدیدترین</option>
+              <option value="old">قدیمی‌ترین</option>
+            </select>
+          </div>
+        </div>
+        <div id="orders-list" class="list"></div>
+        <div class="actions">
+          <a href="./user-dashboard.html" class="badge secondary">بازگشت به داشبورد</a>
+        </div>
+      </div>
+
+      <div class="footer">آسیاگلد صرفاً واسط ثبت و پیگیری درخواست بین کارخانه و مشتری است.</div>
     </div>
-
-    <div class="filter">
-      <select>
-        <option>همه وضعیت‌ها</option>
-        <option>ثبت سفارش</option>
-        <option>در انتظار بررسی مدیر فروش</option>
-        <option>تأیید شده</option>
-        <option>ارسال به کارخانه</option>
-        <option>تحویل به مشتری</option>
-      </select>
-      <select>
-        <option>چرخه: جاری</option>
-        <option>چرخه: بعدی</option>
-        <option>چرخه: تکمیل‌شده</option>
-      </select>
-    </div>
-
-    <div class="list" id="orders">
-      <div class="order">
-        <div class="row"><strong>#1024</strong><span class="badge">ثبت سفارش</span></div>
-        <div class="row"><span>نوع محصول</span><span>النگو</span></div>
-        <div class="row"><span>تعداد</span><span>2</span></div>
-        <div class="row"><span>یادداشت</span><span>ثبت شده و در صف بررسی</span></div>
-      </div>
-
-      <div class="order">
-        <div class="row"><strong>#1023</strong><span class="badge review">در انتظار بررسی مدیر فروش</span></div>
-        <div class="row"><span>نوع محصول</span><span>سکه</span></div>
-        <div class="row"><span>تعداد</span><span>1</span></div>
-        <div class="row"><span>یادداشت</span><span>بدون یادداشت</span></div>
-      </div>
-
-      <div class="order">
-        <div class="row"><strong>#1021</strong><span class="badge approved">تأیید شده</span></div>
-        <div class="row"><span>نوع محصول</span><span>گردنبند</span></div>
-        <div class="row"><span>تعداد</span><span>1</span></div>
-        <div class="row"><span>یادداشت</span><span>بدون یادداشت</span></div>
-      </div>
-
-      <div class="order">
-        <div class="row"><strong>#1019</strong><span class="badge sent">ارسال به کارخانه</span></div>
-        <div class="row"><span>نوع محصول</span><span>طلای آب‌شده</span></div>
-        <div class="row"><span>تعداد</span><span>1</span></div>
-        <div class="row"><span>یادداشت</span><span>ارسال در چرخه جاری</span></div>
-      </div>
-
-      <div class="order">
-        <div class="row"><strong>#1012</strong><span class="badge delivered">تحویل به مشتری</span></div>
-        <div class="row"><span>نوع محصول</span><span>دستبند</span></div>
-        <div class="row"><span>تعداد</span><span>1</span></div>
-        <div class="row"><span>یادداشت</span><span>تحویل از طریق کانال رسمی فروش</span></div>
-      </div>
-
-      <a href="./user-dashboard.html" class="badge">بازگشت به داشبورد</a>
-    </div>
-
-    <div class="footer">پرداختی در این پلتفرم دریافت نمی‌شود • ASIAGOLD فقط تسهیل‌گر ارتباط با کارخانه است</div>
   </div>
-</div>
+
+  <script src="./user-orders.js"></script>
 </body>
 </html>
