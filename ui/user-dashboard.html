@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.5 | Stage 2b: khorderiz row-based detail -->
+<!-- ASIAGOLD UI v0.4.7 | Design Pass 1: Light Premium appbar + modals + list items -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -90,8 +90,39 @@
     <span class="ag-back-icon" aria-hidden="true">←</span>
   </button>
   <div class="ag-topbar-title" id="ag-topbar-title"></div>
-  <div aria-hidden="true"></div>
+  <div class="ag-topbar-actions" aria-label="ابزارها">
+    <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">؟</button>
+    <button class="ag-icon ag-logo" type="button" data-ag-open="about" aria-label="درباره ASIAGOLD">AG</button>
+  </div>
 </header>
+<div class="ag-modal" id="ag-modal-about" hidden>
+  <div class="ag-modal-backdrop" data-ag-close="about" aria-hidden="true"></div>
+  <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-about-title">
+    <div class="ag-modal-header">
+      <div class="ag-modal-title" id="ag-about-title">درباره ASIAGOLD</div>
+      <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">×</button>
+    </div>
+    <div class="ag-modal-body">
+      <div>ASIAGOLD واسطه ثبت و ارسال سفارش به کارخانه است.</div>
+      <div class="ag-modal-section" aria-label="تماس با ما">
+        <div class="ag-modal-title" style="font-size:13px;">تماس با ما</div>
+        <div class="ag-kv"><span>تلگرام</span><strong>—</strong></div>
+        <div class="ag-kv"><span>تلفن</span><strong>—</strong></div>
+        <div class="ag-kv"><span>ایمیل</span><strong>—</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ag-modal" id="ag-modal-help" hidden>
+  <div class="ag-modal-backdrop" data-ag-close="help" aria-hidden="true"></div>
+  <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-help-title">
+    <div class="ag-modal-header">
+      <div class="ag-modal-title" id="ag-help-title">راهنما</div>
+      <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">×</button>
+    </div>
+    <div class="ag-modal-body" id="ag-help-body"></div>
+  </div>
+</div>
 <div class="wrapper">
   <div class="card">
     <div class="header">
@@ -345,6 +376,67 @@
   })();
 
   renderCatalog();
+})();
+</script>
+<script>
+(() => {
+  const about = document.getElementById("ag-modal-about");
+  const help = document.getElementById("ag-modal-help");
+  const helpBody = document.getElementById("ag-help-body");
+
+  function getHelpText() {
+    const page = (location.pathname.split("/").pop() || "").toLowerCase();
+    if (page.includes("user-dashboard")) return "دسته، گروه و مدل را انتخاب کنید. برای ورود، روی کل ردیف بزنید.";
+    if (page.includes("user-orders")) return "جمع تعداد و وزن را بررسی کنید و «نهایی کردن سفارش» را بزنید.";
+    if (page.includes("admin")) return "این بخش مخصوص مدیریت است.";
+    if (page.includes("index")) return "ورود به سیستم از این صفحه انجام می‌شود.";
+    return "راهنمای این صفحه در دسترس نیست.";
+  }
+
+  function syncHelpContent() {
+    if (helpBody) helpBody.textContent = getHelpText();
+  }
+
+  function syncBodyLock() {
+    const anyOpen = (about && !about.hidden) || (help && !help.hidden);
+    document.body.classList.toggle("ag-modal-open", Boolean(anyOpen));
+  }
+
+  function openModal(which) {
+    if (which === "about" && about) {
+      about.hidden = false;
+      syncBodyLock();
+      const close = about.querySelector("[data-ag-close=\"about\"]");
+      if (close && close.focus) close.focus();
+      return;
+    }
+    if (which === "help" && help) {
+      syncHelpContent();
+      help.hidden = false;
+      syncBodyLock();
+      const close = help.querySelector("[data-ag-close=\"help\"]");
+      if (close && close.focus) close.focus();
+    }
+  }
+
+  function closeModal(which) {
+    if (which === "about" && about) about.hidden = true;
+    if (which === "help" && help) help.hidden = true;
+    syncBodyLock();
+  }
+
+  document.addEventListener("click", (e) => {
+    const open = e.target.closest("[data-ag-open]");
+    if (open) openModal(open.getAttribute("data-ag-open"));
+    const close = e.target.closest("[data-ag-close]");
+    if (close) closeModal(close.getAttribute("data-ag-close"));
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (about && !about.hidden) closeModal("about");
+    if (help && !help.hidden) closeModal("help");
+  });
 })();
 </script>
 </body>
