@@ -1,3 +1,4 @@
+<!-- ASIAGOLD UI v0.4.2 | Stage 0: Header + Back + CSS cleanup -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -6,23 +7,15 @@
 <title>Asia Gold | Admin</title>
 <link rel="stylesheet" href="./theme.css">
 <style>
-*{box-sizing:border-box;}
-body{margin:0;background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);}
-.wrapper{min-height:100vh;display:flex;justify-content:center;padding:16px;}
-.card{
-  width:100%;max-width:480px;margin-top:14px;
-  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
-  border-radius:var(--r26);padding:22px;
-  box-shadow:var(--shadow);
-  color:var(--text1);
-}
-.header{text-align:center;margin-bottom:16px;}
-.logo{
-  width:72px;height:72px;margin:0 auto 8px;border-radius:50%;
-  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:13px;color:var(--ink1);
-}
+ .card{
+  max-width:480px;margin-top:14px;
+  padding:22px;
+ }
+ .header{margin-bottom:16px;}
+ .logo{
+  width:72px;height:72px;margin:0 auto 8px;
+  font-size:13px;
+ }
 .title{font-size:16px;font-weight:bold;color:var(--text2);}
 .filter{
   margin-top:12px;border-radius:var(--r18);padding:12px;
@@ -59,10 +52,17 @@ select{
   font-size:13px;color:var(--text4);
 }
 .notice strong{color:var(--text1);font-weight:700;}
-.footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text5);}
+ .footer{margin-top:16px;}
 </style>
 </head>
 <body>
+<header class="ag-topbar" role="banner">
+  <button class="ag-back" type="button" data-fallback="./admin.html" aria-label="بازگشت">
+    <span class="ag-back-icon" aria-hidden="true">←</span>
+  </button>
+  <div class="ag-topbar-title" id="ag-topbar-title"></div>
+  <div aria-hidden="true"></div>
+</header>
 <div class="wrapper">
   <div class="card">
     <div class="header">
@@ -112,7 +112,22 @@ select{
     </div>
 
     <div class="footer">سفارش‌های تأیید شده در لیست نهایی چرخه بعدی به کارخانه ارسال می‌شوند</div>
-  </div>
 </div>
+</div>
+<script>
+(() => {
+  const titleEl = document.getElementById("ag-topbar-title");
+  const source = document.querySelector(".title");
+  if (titleEl) titleEl.textContent = (source?.textContent || "").trim() || document.title.split("|").pop().trim();
+
+  const backBtn = document.querySelector(".ag-back");
+  if (!backBtn) return;
+  const fallback = backBtn.getAttribute("data-fallback") || "./admin.html";
+  backBtn.addEventListener("click", () => {
+    if (window.history.length >= 2) window.history.back();
+    else window.location.href = fallback;
+  });
+})();
+</script>
 </body>
 </html>

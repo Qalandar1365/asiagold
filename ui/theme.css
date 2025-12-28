@@ -59,11 +59,14 @@ html,body{
 }
 
 body{
+  margin:0;
   font-family:"Vazirmatn";
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
   animation:pageFade .2s ease;
+  color:var(--text1);
+  background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
 }
 
 html,
@@ -126,6 +129,80 @@ textarea:focus-visible{
 
 .logo{
   line-height:1.2;
+}
+
+.wrapper{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:16px;
+}
+
+.card,
+.panel{
+  width:100%;
+  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
+  border-radius:var(--r26);
+  box-shadow:var(--shadow);
+  color:var(--text1);
+}
+
+.header{
+  text-align:center;
+}
+
+.logo{
+  border-radius:50%;
+  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:var(--ink1);
+}
+
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:var(--text5);
+}
+
+.ag-topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:grid;
+  grid-template-columns:44px 1fr 44px;
+  align-items:center;
+  padding:10px 12px;
+  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
+  box-shadow:var(--shadow-soft);
+}
+
+.ag-topbar-title{
+  text-align:center;
+  font-size:14px;
+  font-weight:700;
+  color:var(--text2);
+}
+
+.ag-back{
+  width:44px;
+  height:44px;
+  border:none;
+  border-radius:var(--r16);
+  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
+  color:var(--text2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.ag-back-icon{
+  display:inline-block;
+  transform:scaleX(-1);
+  font-size:18px;
+  line-height:1;
 }
 
 .logo-ring{
