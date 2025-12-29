@@ -1,3 +1,4 @@
+/* ASIAGOLD UI v0.4.9 | Design Pass 3: luxury polish */
 @import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap");
 
 :root{
@@ -71,7 +72,7 @@ html,body{
 body{
   margin:0;
   font-family:"Vazirmatn";
-  line-height:1.6;
+  line-height:1.55;
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
   animation:pageFade .2s ease;
@@ -250,6 +251,51 @@ textarea:focus-visible{
   line-height:1;
 }
 
+.ag-ico{
+  width:20px;
+  height:20px;
+  display:block;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.ag-modal-close .ag-ico{
+  width:18px;
+  height:18px;
+}
+
+.basket-btn,
+.pd-cta,
+.kr-cta,
+.kr-add-row{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.basket-btn .ag-ico,
+.pd-cta .ag-ico,
+.kr-cta .ag-ico,
+.kr-add-row .ag-ico{
+  width:18px;
+  height:18px;
+}
+
+.pd-nav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.pd-nav .ag-ico{
+  width:18px;
+  height:18px;
+}
+
 .ag-icon{
   width:40px;
   height:40px;
@@ -274,7 +320,7 @@ textarea:focus-visible{
   border-radius:999px;
   background:radial-gradient(circle at top,var(--gold1),var(--gold4),var(--gold7));
   color:var(--ink1);
-  font-weight:900;
+  font-weight:800;
   font-size:14px;
   letter-spacing:.5px;
 }
@@ -323,6 +369,16 @@ textarea:focus-visible{
   box-shadow:0 22px 60px rgba(0,0,0,.22);
 }
 
+.ag-modal:not([hidden]) .ag-modal-backdrop{
+  animation:agModalFade 150ms ease-out;
+}
+
+.ag-modal:not([hidden]) .ag-modal-dialog{
+  animation:agModalPop 170ms ease-out;
+  transform-origin:center;
+  will-change:transform,opacity;
+}
+
 .ag-modal-header{
   display:flex;
   align-items:center;
@@ -334,7 +390,7 @@ textarea:focus-visible{
 
 .ag-modal-title{
   font-size:14px;
-  font-weight:900;
+  font-weight:800;
   color:var(--text2);
 }
 
@@ -349,7 +405,7 @@ textarea:focus-visible{
 .ag-modal-body{
   padding:12px;
   font-size:13px;
-  line-height:1.9;
+  line-height:1.85;
   color:var(--text3);
 }
 
@@ -441,6 +497,16 @@ textarea:focus-visible{
   to{transform:rotate(360deg);}
 }
 
+@keyframes agModalFade{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+@keyframes agModalPop{
+  from{opacity:0;transform:scale(.985);}
+  to{opacity:1;transform:scale(1);}
+}
+
 .cart-action{
   display:inline-flex;
   align-items:center;
@@ -468,7 +534,7 @@ button,
 input,
 select,
 textarea{
-  transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease;
+  transition:background-color .16s ease-out,transform .14s ease-out,box-shadow .16s ease-out,opacity .16s ease-out;
 }
 
 .order:hover,
@@ -478,7 +544,7 @@ textarea{
 .badge:hover,
 button:hover,
 .cart-action:hover{
-  transform:translateY(-1px);
+  transform:none;
   box-shadow:0 10px 26px rgba(0,0,0,.10);
 }
 
@@ -489,7 +555,7 @@ button:hover,
 .badge:active,
 button:active,
 .cart-action:active{
-  transform:translateY(0);
+  transform:scale(.996);
   box-shadow:none;
 }
 
@@ -518,6 +584,13 @@ textarea:disabled{
   height:1px;
   background:var(--glass-strong);
   opacity:.65;
+}
+
+.basket-total strong,
+.pd-summary,
+.kr-summary{
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.2px;
 }
 
 @keyframes pageFade{

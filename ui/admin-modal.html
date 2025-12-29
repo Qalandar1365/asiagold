@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.7 | Design Pass 1: Light Premium appbar + modals + list items -->
+<!-- ASIAGOLD UI v0.4.9 | Design Pass 3: luxury polish -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -63,11 +63,22 @@ textarea{
 <body>
 <header class="ag-topbar" role="banner">
   <button class="ag-back" type="button" data-fallback="./admin.html" aria-label="بازگشت">
-    <span class="ag-back-icon" aria-hidden="true">←</span>
+    <span class="ag-back-icon" aria-hidden="true">
+      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"></path>
+        <path d="M9 12h12"></path>
+      </svg>
+    </span>
   </button>
   <div class="ag-topbar-title" id="ag-topbar-title"></div>
   <div class="ag-topbar-actions" aria-label="ابزارها">
-    <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">؟</button>
+    <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">
+      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"></path>
+        <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"></circle>
+      </svg>
+    </button>
     <button class="ag-icon ag-logo" type="button" data-ag-open="about" aria-label="درباره ASIAGOLD">AG</button>
   </div>
 </header>
@@ -76,7 +87,12 @@ textarea{
   <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-about-title">
     <div class="ag-modal-header">
       <div class="ag-modal-title" id="ag-about-title">درباره ASIAGOLD</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">×</button>
+      <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">
+        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 6L6 18"></path>
+          <path d="M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
     <div class="ag-modal-body">
       <div>ASIAGOLD واسطه ثبت و ارسال سفارش به کارخانه است.</div>
@@ -94,7 +110,12 @@ textarea{
   <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-help-title">
     <div class="ag-modal-header">
       <div class="ag-modal-title" id="ag-help-title">راهنما</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">×</button>
+      <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">
+        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 6L6 18"></path>
+          <path d="M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
     <div class="ag-modal-body" id="ag-help-body"></div>
   </div>

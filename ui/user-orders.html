@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.4.7 | Design Pass 1: Light Premium appbar + modals + list items -->
+<!-- ASIAGOLD UI v0.4.9 | Design Pass 3: luxury polish -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -308,11 +308,22 @@ textarea{
 <body>
 <header class="ag-topbar" role="banner">
   <button class="ag-back" type="button" data-fallback="./user-dashboard.html" aria-label="بازگشت">
-    <span class="ag-back-icon" aria-hidden="true">←</span>
+    <span class="ag-back-icon" aria-hidden="true">
+      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"></path>
+        <path d="M9 12h12"></path>
+      </svg>
+    </span>
   </button>
   <div class="ag-topbar-title" id="ag-topbar-title"></div>
   <div class="ag-topbar-actions" aria-label="ابزارها">
-    <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">؟</button>
+    <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">
+      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"></path>
+        <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"></circle>
+      </svg>
+    </button>
     <button class="ag-icon ag-logo" type="button" data-ag-open="about" aria-label="درباره ASIAGOLD">AG</button>
   </div>
 </header>
@@ -321,7 +332,12 @@ textarea{
   <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-about-title">
     <div class="ag-modal-header">
       <div class="ag-modal-title" id="ag-about-title">درباره ASIAGOLD</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">×</button>
+      <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">
+        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 6L6 18"></path>
+          <path d="M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
     <div class="ag-modal-body">
       <div>ASIAGOLD واسطه ثبت و ارسال سفارش به کارخانه است.</div>
@@ -339,7 +355,12 @@ textarea{
   <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-help-title">
     <div class="ag-modal-header">
       <div class="ag-modal-title" id="ag-help-title">راهنما</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">×</button>
+      <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">
+        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 6L6 18"></path>
+          <path d="M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
     <div class="ag-modal-body" id="ag-help-body"></div>
   </div>
@@ -368,8 +389,22 @@ textarea{
       <div class="basket-message" id="basket-message" hidden></div>
       <div class="list" id="basket-list" style="margin-top:12px;"></div>
       <div class="basket-actions">
-        <button class="basket-btn basket-primary" type="button" id="basket-finalize">نهایی کردن سفارش</button>
-        <button class="basket-btn basket-ghost" type="button" id="basket-clear">حذف کامل سفارشات</button>
+        <button class="basket-btn basket-primary" type="button" id="basket-finalize">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5"></path>
+          </svg>
+          نهایی کردن سفارش
+        </button>
+        <button class="basket-btn basket-ghost" type="button" id="basket-clear">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h16"></path>
+            <path d="M9 7V5h6v2"></path>
+            <path d="M10 11v7"></path>
+            <path d="M14 11v7"></path>
+            <path d="M7 7l1 14h8l1-14"></path>
+          </svg>
+          حذف کامل سفارشات
+        </button>
       </div>
     </div>
 
@@ -396,8 +431,20 @@ textarea{
         <div id="confirm-summary" style="margin-top:10px;"></div>
       </div>
       <div class="basket-actions" style="margin-top:10px;">
-        <button class="basket-btn basket-primary" type="button" id="confirm-send">ارسال سفارش</button>
-        <button class="basket-btn basket-ghost" type="button" id="confirm-edit">ویرایش سفارش</button>
+        <button class="basket-btn basket-primary" type="button" id="confirm-send">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22 2L11 13"></path>
+            <path d="M22 2l-7 20-4-9-9-4z"></path>
+          </svg>
+          ارسال سفارش
+        </button>
+        <button class="basket-btn basket-ghost" type="button" id="confirm-edit">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+          </svg>
+          ویرایش سفارش
+        </button>
       </div>
       <div class="confirm-success" id="confirm-success" hidden></div>
     </div>
@@ -405,16 +452,29 @@ textarea{
     <div id="bangle-detail" class="pd" hidden>
       <div class="pd-top">
         <button class="pd-back" type="button" id="pd-back" aria-label="بازگشت به لیست گروه‌ها">
-          <span aria-hidden="true">←</span>
+          <span aria-hidden="true">
+            <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"></path>
+              <path d="M9 12h12"></path>
+            </svg>
+          </span>
           بازگشت به گروه‌ها
         </button>
         <div class="badge" id="pd-model-badge" style="cursor:default;">النگو</div>
       </div>
       <div class="pd-name" id="pd-name"></div>
       <div class="pd-gallery" aria-label="گالری تصاویر">
-        <button class="pd-nav pd-prev" type="button" id="pd-prev" aria-label="تصویر قبلی">‹</button>
+        <button class="pd-nav pd-prev" type="button" id="pd-prev" aria-label="تصویر قبلی">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
         <img id="pd-image" alt="تصویر محصول">
-        <button class="pd-nav pd-next" type="button" id="pd-next" aria-label="تصویر بعدی">›</button>
+        <button class="pd-nav pd-next" type="button" id="pd-next" aria-label="تصویر بعدی">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 6l6 6-6 6"></path>
+          </svg>
+        </button>
         <div class="pd-dots" id="pd-dots" aria-hidden="true"></div>
       </div>
 
@@ -432,14 +492,25 @@ textarea{
       <div class="pd-sticky">
         <div class="pd-summary" id="pd-summary">۰ عدد | حدود ۰٫۰۰ گرم</div>
         <div class="pd-error" id="pd-error" hidden></div>
-        <button class="pd-cta" type="button" id="pd-add" disabled>افزودن به سبد</button>
+        <button class="pd-cta" type="button" id="pd-add" disabled>
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          افزودن به سبد
+        </button>
       </div>
     </div>
 
     <div id="khorderiz-detail" class="kr" hidden>
       <div class="kr-top">
         <button class="kr-back" type="button" id="kr-back" aria-label="بازگشت به لیست گروه‌ها">
-          <span aria-hidden="true">←</span>
+          <span aria-hidden="true">
+            <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"></path>
+              <path d="M9 12h12"></path>
+            </svg>
+          </span>
           بازگشت به گروه‌ها
         </button>
         <div class="badge" id="kr-model-badge" style="cursor:default;">خرده‌ریز</div>
@@ -450,7 +521,13 @@ textarea{
       </div>
 
       <div class="kr-actions">
-        <button class="kr-add-row" type="button" id="kr-add-row">افزودن ردیف جدید</button>
+        <button class="kr-add-row" type="button" id="kr-add-row">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          افزودن ردیف جدید
+        </button>
       </div>
 
       <div class="kr-rows" id="kr-rows"></div>
@@ -458,7 +535,13 @@ textarea{
       <div class="kr-sticky">
         <div class="kr-summary" id="kr-summary">۰ ردیف سفارش ثبت شده</div>
         <div class="kr-error" id="kr-error" hidden></div>
-        <button class="kr-cta" type="button" id="kr-add" disabled>افزودن به سبد</button>
+        <button class="kr-cta" type="button" id="kr-add" disabled>
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          افزودن به سبد
+        </button>
       </div>
     </div>
 
