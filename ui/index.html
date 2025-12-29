@@ -1,342 +1,72 @@
-<!-- ASIAGOLD UI v0.4.9 | Design Pass 3: luxury polish -->
+<!-- ASIAGOLD UI v0.4.9 | STAGE 4: Controlled Implementation -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asia Gold</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>ASIAGOLD</title>
 <link rel="stylesheet" href="./theme.css">
-
-<style>
-/* ===== Base ===== */
-body {
-  margin: 0;
-  background: linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 60%, var(--bg3) 100%);
-  color: var(--text1);
-}
-
-.wrapper {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-}
-
-/* ===== Card ===== */
-.card {
-  width: 100%;
-  max-width: 430px;
-  background: linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
-  border-radius: var(--r26);
-  padding: 26px 22px 30px;
-  box-shadow: var(--shadow);
-}
-
-/* ===== Header ===== */
-.header {
-  text-align: center;
-  margin-bottom: 22px;
-}
-
-.logo {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 12px;
-  border-radius: 50%;
-  background: radial-gradient(circle at top,var(--gold1) 0%, var(--gold2) 45%, var(--gold3) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: .5px;
-  color: var(--ink1);
-}
-
-.title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text2);
-}
-
-/* ===== Inputs ===== */
-.input {
-  width: 90%;
-  padding: 16px;
-  margin-top: 14px;
-  border-radius: var(--r18);
-  border: none;
-  font-size: 15px;
-  outline: none;
-  background: linear-gradient(180deg,var(--surface1),var(--surface2));
-  color: var(--ink2);
-}
-
-/* ===== Phone Row ===== */
-.phone-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.phone-row .input {
-  flex: 1;
-  margin-top: 0;
-}
-
-.tg-btn {
-  width: 140px;
-  border-radius: var(--r18);
-  border: none;
-  background: linear-gradient(135deg,var(--gold5),var(--gold7));
-  color: var(--ink5);
-  font-weight: bold;
-  font-size: 14px;
-  cursor: not-allowed;
-  opacity: .75;
-}
-
-/* ===== Select ===== */
-.select {
-  width: 90%;
-  padding: 16px;
-  margin-top: 14px;
-  border-radius: var(--r18);
-  border: none;
-  font-size: 15px;
-  background: linear-gradient(180deg,var(--surface1),var(--surface2));
-  color: var(--ink3);
-}
-
-/* ===== Rules ===== */
-.rules {
-  margin-top: 18px;
-  background: linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  border-radius: var(--r18);
-  padding: 14px;
-  font-size: 14px;
-  line-height: 1.9;
-  color: var(--text4);
-}
-
-.rule-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.rule-item input {
-  width: 18px;
-  height: 18px;
-}
-
-/* ===== Submit ===== */
-.submit {
-  width: 100%;
-  margin-top: 26px;
-  padding: 16px;
-  border-radius: 22px;
-  border: none;
-  background: linear-gradient(135deg,var(--gold4) 0%, var(--gold6) 45%, var(--gold7) 100%);
-  color: var(--ink4);
-  font-size: 17px;
-  font-weight: bold;
-  cursor: not-allowed;
-  opacity: .85;
-  box-shadow: var(--shadow-soft);
-  display: block;
-  text-decoration: none;
-  text-align: center;
-}
-
-/* ===== Footer ===== */
-.footer {
-  text-align: center;
-  margin-top: 26px;
-  font-size: 13px;
-  color: var(--text5);
-}
-</style>
 </head>
+<body class="ag-s4 ag-mode-login">
+<div class="ag-brand" id="ag-brand" aria-label="ASIAGOLD">
+  <img class="ag-brand-logo" id="ag-brand-logo" src="./assets/logo.svg" alt="ASIAGOLD">
+</div>
 
-<body>
-<header class="ag-topbar" role="banner">
-  <button class="ag-back" type="button" data-fallback="./index.html" aria-label="بازگشت">
-    <span class="ag-back-icon" aria-hidden="true">
-      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M15 18l-6-6 6-6"></path>
-        <path d="M9 12h12"></path>
-      </svg>
-    </span>
+<header class="ag-appbar" id="ag-appbar" role="banner" aria-label="نوار برنامه">
+  <button class="ag-appbar-back" id="ag-back" type="button" aria-label="بازگشت">
+    <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15 18l-6-6 6-6"></path>
+      <path d="M9 12h12"></path>
+    </svg>
   </button>
-  <div class="ag-topbar-title" id="ag-topbar-title"></div>
-  <div class="ag-topbar-actions" aria-label="ابزارها">
-    <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">
-      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="9"></circle>
-        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"></path>
-        <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"></circle>
-      </svg>
-    </button>
-    <button class="ag-icon ag-logo" type="button" data-ag-open="about" aria-label="درباره ASIAGOLD">AG</button>
-  </div>
+  <div class="ag-appbar-title" id="ag-title"></div>
 </header>
-<div class="ag-modal" id="ag-modal-about" hidden>
-  <div class="ag-modal-backdrop" data-ag-close="about" aria-hidden="true"></div>
-  <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-about-title">
-    <div class="ag-modal-header">
-      <div class="ag-modal-title" id="ag-about-title">درباره ASIAGOLD</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">
-        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18 6L6 18"></path>
-          <path d="M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
-    <div class="ag-modal-body">
-      <div>ASIAGOLD واسطه ثبت و ارسال سفارش به کارخانه است.</div>
-      <div class="ag-modal-section" aria-label="تماس با ما">
-        <div class="ag-modal-title" style="font-size:13px;">تماس با ما</div>
-        <div class="ag-kv"><span>تلگرام</span><strong>—</strong></div>
-        <div class="ag-kv"><span>تلفن</span><strong>—</strong></div>
-        <div class="ag-kv"><span>ایمیل</span><strong>—</strong></div>
+
+<main class="ag-login" id="ag-login" aria-label="ورود">
+  <div class="wrapper">
+    <div class="card ag-s4-card">
+      <div class="ag-login-head">
+        <div class="ag-login-title">ورود به ASIAGOLD</div>
+        <div class="ag-login-sub">امانی • تسویه با طلای آب‌شده • فقط وزن</div>
       </div>
+
+      <div class="ag-form">
+        <div class="ag-field">
+          <label for="ag-role">نقش</label>
+          <select id="ag-role">
+            <option value="customer">مشتری</option>
+            <option value="sales_manager">مدیر فروش (فقط مشاهده)</option>
+            <option value="office_order_manager">مدیر سفارش دفتر</option>
+            <option value="system_admin">ادمین سیستم</option>
+          </select>
+        </div>
+
+        <div class="ag-field">
+          <label for="ag-phone">شماره موبایل</label>
+          <input id="ag-phone" inputmode="tel" autocomplete="tel" placeholder="مثال: 09123456789">
+        </div>
+
+        <div class="ag-field">
+          <label for="ag-name">نام و نام خانوادگی (اختیاری)</label>
+          <input id="ag-name" autocomplete="name" placeholder="مثال: علی رضایی">
+        </div>
+      </div>
+
+      <button class="ag-primary" id="ag-enter" type="button">ورود به داشبورد</button>
+
+      <div class="footer">هیچ مبلغی دریافت نمی‌شود • فقط ثبت و پیگیری سفارش وزنی</div>
     </div>
   </div>
-</div>
-<div class="ag-modal" id="ag-modal-help" hidden>
-  <div class="ag-modal-backdrop" data-ag-close="help" aria-hidden="true"></div>
-  <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-help-title">
-    <div class="ag-modal-header">
-      <div class="ag-modal-title" id="ag-help-title">راهنما</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">
-        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18 6L6 18"></path>
-          <path d="M6 6l12 12"></path>
-        </svg>
-      </button>
+</main>
+
+<main class="ag-app" id="ag-app" hidden aria-label="برنامه">
+  <div class="wrapper">
+    <div class="card ag-s4-card">
+      <div id="ag-view" aria-live="polite"></div>
     </div>
-    <div class="ag-modal-body" id="ag-help-body"></div>
   </div>
-</div>
-<div class="wrapper">
-  <div class="card">
+</main>
 
-    <div class="header">
-      <div class="logo-ring">
-        <div class="logo">Asia<br>Gold</div>
-      </div>
-      <div class="title">ثبت و پیگیری سریع و دقیق سفارشات</div>
-    </div>
-
-    <input class="input" placeholder="نام">
-    <input class="input" placeholder="نام خانوادگی">
-
-    <div class="phone-row">
-      <input class="input" placeholder="شماره موبایل" readonly>
-      <button class="tg-btn">دریافت از تلگرام</a>
-    </div>
-
-    <select class="select">
-      <option>انتخاب دفتر فروش کارخانه</option>
-    </select>
-
-    <div class="rules">
-      <div class="rule-item">
-        <input type="checkbox">
-        <label>شرایط و قوانین را می‌پذیرم.</label>
-      </div>
-      <div class="rule-item">
-        <input type="checkbox">
-        <label>اطلاعات مطابق با مدارک هویتی من است.</label>
-      </div>
-    </div>
-
-    <a href="./user-dashboard.html" class="submit">ثبت نام</a>
-
-    <div class="footer">
-      چهل سال بر قله النگوی ایران
-    </div>
-
-  </div>
-</div>
-<script>
-(() => {
-  const titleEl = document.getElementById("ag-topbar-title");
-  const source = document.querySelector(".title");
-  if (titleEl) titleEl.textContent = (source?.textContent || "").trim() || document.title.split("|").pop().trim() || document.title;
-
-  const backBtn = document.querySelector(".ag-back");
-  if (backBtn) {
-    const fallback = backBtn.getAttribute("data-fallback") || "./index.html";
-    backBtn.addEventListener("click", () => {
-      if (window.history.length >= 2) window.history.back();
-      else window.location.href = fallback;
-    });
-  }
-
-  const about = document.getElementById("ag-modal-about");
-  const help = document.getElementById("ag-modal-help");
-  const helpBody = document.getElementById("ag-help-body");
-
-  function getHelpText() {
-    const page = (location.pathname.split("/").pop() || "").toLowerCase();
-    if (page.includes("user-dashboard")) return "دسته، گروه و مدل را انتخاب کنید. برای ورود، روی کل ردیف بزنید.";
-    if (page.includes("user-orders")) return "جمع تعداد و وزن را بررسی کنید و «نهایی کردن سفارش» را بزنید.";
-    if (page.includes("admin")) return "این بخش مخصوص مدیریت است.";
-    if (page.includes("index")) return "ورود به سیستم از این صفحه انجام می‌شود.";
-    return "راهنمای این صفحه در دسترس نیست.";
-  }
-
-  function syncHelpContent() {
-    if (helpBody) helpBody.textContent = getHelpText();
-  }
-
-  function syncBodyLock() {
-    const anyOpen = (about && !about.hidden) || (help && !help.hidden);
-    document.body.classList.toggle("ag-modal-open", Boolean(anyOpen));
-  }
-
-  function openModal(which) {
-    if (which === "about" && about) {
-      about.hidden = false;
-      syncBodyLock();
-      const close = about.querySelector("[data-ag-close=\"about\"]");
-      if (close && close.focus) close.focus();
-      return;
-    }
-    if (which === "help" && help) {
-      syncHelpContent();
-      help.hidden = false;
-      syncBodyLock();
-      const close = help.querySelector("[data-ag-close=\"help\"]");
-      if (close && close.focus) close.focus();
-    }
-  }
-
-  function closeModal(which) {
-    if (which === "about" && about) about.hidden = true;
-    if (which === "help" && help) help.hidden = true;
-    syncBodyLock();
-  }
-
-  document.addEventListener("click", (e) => {
-    const open = e.target.closest("[data-ag-open]");
-    if (open) openModal(open.getAttribute("data-ag-open"));
-    const close = e.target.closest("[data-ag-close]");
-    if (close) closeModal(close.getAttribute("data-ag-close"));
-  });
-
-  window.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    if (about && !about.hidden) closeModal("about");
-    if (help && !help.hidden) closeModal("help");
-  });
-})();
-</script>
+<script src="./stage4.js"></script>
 </body>
 </html>
