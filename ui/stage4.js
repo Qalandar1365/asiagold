@@ -1,10 +1,13 @@
-/* ASIAGOLD UI v0.4.9 | STAGE 4: Controlled Implementation (UI-only) */
+/* ASIAGOLD UI v0.4.9 | STAGE 4.1: Approved SPA (UI-only) */
 (() => {
   "use strict";
 
   const LS = Object.freeze({
     currentOfficeId: "asiagold.currentOfficeId",
     currentRole: "asiagold.currentRole",
+    currentUser: "asiagold.currentUser",
+    pendingUsers: "asiagold.pendingUsers",
+    users: "asiagold.users",
     offices: "asiagold.offices",
     orders: "asiagold.orders",
     inventory: "asiagold.inventory",
@@ -37,6 +40,12 @@
     ORDER_STATUS.COMPLETED,
   ]);
 
+  const USER_STATUS = Object.freeze({
+    PENDING: "PENDING",
+    APPROVED: "APPROVED",
+    REJECTED: "REJECTED",
+  });
+
   function nowIso() {
     return new Date().toISOString();
   }
@@ -57,6 +66,33 @@
   function writeJson(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   }
+
+  function redirectToIndexAndStop() {
+    try {
+      window.location.replace("./index.html");
+    } catch {
+      window.location.href = "./index.html";
+    }
+  }
+
+  function setLogoState(state) {
+    const brand = document.getElementById("ag-brand");
+    if (!brand) return;
+    brand.classList.toggle("logo--hero", state === "hero");
+    brand.classList.toggle("logo--app", state === "app");
+  }
+
+  const currentUser = readJson(LS.currentUser, null);
+  const currentRole = currentUser?.role || "";
+  if (!currentUser || currentUser.status !== USER_STATUS.APPROVED) {
+    redirectToIndexAndStop();
+    return;
+  }
+  if (!Object.values(ROLES).includes(currentRole)) {
+    redirectToIndexAndStop();
+    return;
+  }
+  setLogoState("app");
 
   function genId(prefix) {
     return `${prefix}-${Math.random().toString(16).slice(2)}-${Date.now().toString(16)}`;
@@ -176,8 +212,8 @@
     writeJson(LS.inventory, inventory);
     writeJson(LS.chats, chats);
     writeJson(LS.contacts, contacts);
-    localStorage.setItem(LS.currentOfficeId, office1.id);
-    localStorage.setItem(LS.currentRole, "");
+    if (!localStorage.getItem(LS.currentOfficeId)) localStorage.setItem(LS.currentOfficeId, office1.id);
+    localStorage.setItem(LS.currentRole, currentRole);
     localStorage.setItem(LS.seeded, "1");
   }
 
@@ -222,12 +258,11 @@
   }
 
   function getCurrentRole() {
-    const raw = (localStorage.getItem(LS.currentRole) || "").trim();
-    return Object.values(ROLES).includes(raw) ? raw : "";
+    return currentRole;
   }
 
   function setCurrentRole(role) {
-    localStorage.setItem(LS.currentRole, role);
+    localStorage.setItem(LS.currentRole, currentRole);
   }
 
   function getCurrentOfficeId() {
@@ -236,6 +271,22 @@
 
   function setCurrentOfficeId(officeId) {
     localStorage.setItem(LS.currentOfficeId, officeId);
+  }
+
+  function getUsers() {
+    return readJson(LS.users, []);
+  }
+
+  function setUsers(users) {
+    writeJson(LS.users, users);
+  }
+
+  function getPendingUsers() {
+    return readJson(LS.pendingUsers, []);
+  }
+
+  function setPendingUsers(pending) {
+    writeJson(LS.pendingUsers, pending);
   }
 
   function ensureOfficeId() {
@@ -299,50 +350,30 @@
     appbar: document.getElementById("ag-appbar"),
     back: document.getElementById("ag-back"),
     title: document.getElementById("ag-title"),
-    login: document.getElementById("ag-login"),
     app: document.getElementById("ag-app"),
     view: document.getElementById("ag-view"),
-    role: document.getElementById("ag-role"),
-    phone: document.getElementById("ag-phone"),
-    name: document.getElementById("ag-name"),
-    enter: document.getElementById("ag-enter"),
   };
 
-  if (!els.view || !els.enter || !els.role) return;
+  if (!els.view || !els.app) return;
 
-  let adminOfficeFilterId = "ALL";
+  if (currentUser.officeId) setCurrentOfficeId(String(currentUser.officeId));
+  ensureOfficeId();
 
   function setTitle(text) {
     if (els.title) els.title.textContent = text || "";
   }
 
   function setMode(mode) {
-    const isLogin = mode === "login";
-    const entering = !isLogin && els.body.classList.contains("ag-mode-entering");
-    els.body.classList.toggle("ag-mode-login", isLogin);
-    els.body.classList.toggle("ag-mode-app", !isLogin);
-    if (els.login) els.login.hidden = entering ? false : !isLogin;
-    if (els.app) els.app.hidden = isLogin;
-  }
-
-  function beginEnterAppTransition() {
-    if (els.app) els.app.hidden = false;
-    els.body.classList.add("ag-mode-entering");
-    els.body.classList.remove("ag-mode-login");
-    els.body.classList.add("ag-mode-app");
-    window.setTimeout(() => {
-      if (els.login) els.login.hidden = true;
-      els.body.classList.remove("ag-mode-entering");
-    }, 560);
+    const isApp = mode === "app";
+    els.body.classList.toggle("ag-mode-login", !isApp);
+    els.body.classList.toggle("ag-mode-app", isApp);
+    if (els.app) els.app.hidden = !isApp;
   }
 
   function logoutToLogin() {
-    setCurrentRole("");
-    setMode("login");
-    setTitle("");
-    try {
-      history.replaceState(null, "", "#/");
-    } catch {}
+    localStorage.removeItem(LS.currentUser);
+    localStorage.removeItem(LS.currentRole);
+    redirectToIndexAndStop();
   }
 
   function parseRoute() {
@@ -352,6 +383,7 @@
     if (parts[0] === "dashboard") return { name: "dashboard" };
     if (parts[0] === "orders" && (parts[1] === "active" || parts[1] === "archive")) return { name: "orders", kind: parts[1] };
     if (parts[0] === "order" && parts[1]) return { name: "order", id: parts[1] };
+    if (parts[0] === "registration" && parts[1]) return { name: "registration", id: parts[1] };
     if (parts[0] === "order-new") return { name: "order-new" };
     if (parts[0] === "inventory") return { name: "inventory", id: parts[1] || "" };
     if (parts[0] === "inventory-import") return { name: "inventory-import" };
@@ -376,6 +408,10 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  function onlyDigits(value) {
+    return String(value || "").replace(/\D+/g, "");
   }
 
   function formatDateFa(iso) {
@@ -408,22 +444,21 @@
     return (office?.customers || []).find((c) => c.id === customerId) || null;
   }
 
-  function getActiveCustomerId(office) {
-    return office?._session?.customerId || office?.customers?.[0]?.id || "";
+  function getActiveCustomerId() {
+    return String(currentUser?.id || "");
   }
 
-  function getSessionNameForRole(office, role) {
-    const name = office?._session?.userNameByRole?.[role];
-    return (name || "").trim() || roleLabel(role);
+  function getSessionNameForRole(_office, role) {
+    if (role === currentRole) return String(currentUser?.name || "").trim() || roleLabel(role);
+    return roleLabel(role);
   }
 
   function scopedOrders(role, officeId) {
     const orders = getOrders();
     if (role === ROLES.system_admin) return orders;
     if (!officeId) return [];
-    const office = findOffice(officeId);
     if (role === ROLES.customer) {
-      const cid = getActiveCustomerId(office);
+      const cid = getActiveCustomerId();
       return orders.filter((o) => o.officeId === officeId && o.customerId === cid);
     }
     return orders.filter((o) => o.officeId === officeId);
@@ -443,9 +478,6 @@
 
   function ensureChatForOrder(order, role) {
     if (!order) return;
-    const st = order.status;
-    const eligible = st === ORDER_STATUS.SENT_TO_FACTORY || st === ORDER_STATUS.DELIVERED || st === ORDER_STATUS.COMPLETED;
-    if (!eligible) return;
     const chats = getChats();
     if (chats.some((c) => c.orderId === order.id)) return;
     const office = findOffice(order.officeId);
@@ -653,6 +685,40 @@
       `;
     })();
 
+    const pendingRegsBlock = (() => {
+      if (role !== ROLES.system_admin) return "";
+      const pending = getPendingUsers().filter((u) => u && u.status === USER_STATUS.PENDING);
+      const rows =
+        pending.length === 0
+          ? `<div class="ag-empty">موردی در انتظار تأیید نیست.</div>`
+          : `
+            <div class="ag-list">
+              ${pending
+                .slice()
+                .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
+                .map((u) => {
+                  const sub = `${String(u.phone || "")} • ${formatDateFa(u.createdAt)}`;
+                  return `
+                    <button class="ag-list-item" type="button" data-nav="#/registration/${escapeHtml(u.id)}">
+                      <div class="ag-li-main">
+                        <div class="ag-li-title">${escapeHtml(u.name || "—")}</div>
+                        <div class="ag-li-sub">${escapeHtml(sub)}</div>
+                      </div>
+                      <div class="ag-li-meta">${renderBadge("در انتظار", "gold")}</div>
+                    </button>
+                  `;
+                })
+                .join("")}
+            </div>
+          `;
+      return `
+        <section class="ag-s4-section" aria-label="ثبت‌نام‌های در انتظار">
+          <div class="ag-s4-section-title">ثبت‌نام‌های در انتظار</div>
+          ${rows}
+        </section>
+      `;
+    })();
+
     const quickNav = `
       <section class="ag-s4-section" aria-label="منو">
         <div class="ag-s4-section-title">دسترسی سریع</div>
@@ -723,6 +789,7 @@
       </section>
       ${renderBasketSummarySection(orders)}
       ${officesBlock}
+      ${pendingRegsBlock}
       ${debtBlock}
       ${quickNav}
       ${renderContactManagerSection(officeId)}
@@ -798,6 +865,53 @@
     `;
   }
 
+  function renderRegistrationDetail(regId) {
+    const role = getCurrentRole();
+    if (role !== ROLES.system_admin) {
+      nav("/dashboard", true);
+      return;
+    }
+
+    const pending = getPendingUsers();
+    const rec = pending.find((u) => String(u?.id || "") === String(regId)) || null;
+    if (!rec) {
+      setTitle("جزئیات ثبت‌نام");
+      els.view.innerHTML = `<div class="ag-empty">ثبت‌نام پیدا نشد.</div>`;
+      return;
+    }
+
+    setTitle("جزئیات ثبت‌نام");
+    const status = String(rec.status || "");
+    const badge =
+      status === USER_STATUS.PENDING
+        ? renderBadge("در انتظار", "gold")
+        : status === USER_STATUS.APPROVED
+          ? renderBadge("تأیید شده", "muted")
+          : renderBadge("رد شده", "danger");
+
+    const canAct = status === USER_STATUS.PENDING;
+    els.view.innerHTML = `
+      <section class="ag-s4-section" aria-label="جزئیات ثبت‌نام">
+        <div class="ag-s4-section-title">جزئیات ثبت‌نام</div>
+        <div class="ag-kpi">
+          <div class="ag-kpi-row"><span>نام</span><strong>${escapeHtml(rec.name || "—")}</strong></div>
+          <div class="ag-kpi-row"><span>موبایل</span><strong>${escapeHtml(rec.phone || "—")}</strong></div>
+          <div class="ag-kpi-row"><span>تاریخ</span><strong>${escapeHtml(formatDateFa(rec.createdAt))}</strong></div>
+          <div class="ag-kpi-row"><span>وضعیت</span><strong>${badge}</strong></div>
+          <div class="ag-kpi-row"><span>یادداشت</span><strong>${escapeHtml(rec.note || "—")}</strong></div>
+        </div>
+      </section>
+      <section class="ag-s4-section" aria-label="اقدامات">
+        <div class="ag-s4-section-title">اقدامات</div>
+        <div class="ag-actions">
+          <button class="ag-primary" type="button" data-action="approve-registration" data-reg-id="${escapeHtml(rec.id)}" ${canAct ? "" : "disabled"}>تأیید</button>
+          <button class="ag-danger" type="button" data-action="reject-registration" data-reg-id="${escapeHtml(rec.id)}" ${canAct ? "" : "disabled"}>رد</button>
+          <button class="ag-ghost" type="button" data-nav="#/dashboard">بازگشت</button>
+        </div>
+      </section>
+    `;
+  }
+
   function renderOrderDetail(orderId) {
     const role = getCurrentRole();
     if (!role) return renderDashboard();
@@ -812,7 +926,7 @@
     const customer = office ? findCustomer(office, order.customerId) : null;
     const weight = sumOrderWeight(order.items);
 
-    ensureChatForOrder(order, ROLES.office_order_manager);
+    ensureChatForOrder(order, currentRole);
     const chat = getChats().find((c) => c.orderId === order.id) || null;
 
     const blocked = order.blocked ? renderBadge("مسدود", "danger") : "";
@@ -1099,7 +1213,15 @@
       return;
     }
     host.className = "ag-list";
-    host.innerHTML = draftItems
+    const totalCount = draftItems.reduce((acc, it) => acc + (Number(it?.count) || 0), 0);
+    const totalWeight = draftItems.reduce((acc, it) => acc + (Number(it?.weight) || 0), 0);
+    const summary =
+      `<div class="ag-s4-subsection" aria-label="جمع سبد">` +
+      `<div class="ag-kpi">` +
+      `<div class="ag-kpi-row"><span>تعداد کل</span><strong>${escapeHtml(totalCount)}</strong></div>` +
+      `<div class="ag-kpi-row"><span>وزن کل</span><strong>${escapeHtml(toFixedWeight(totalWeight))} گرم</strong></div>` +
+      `</div></div>`;
+    host.innerHTML = summary + draftItems
       .map((it, i) => {
         const sub = `${toFixedWeight(it.weight)} گرم • ${it.count} عدد`;
         return `
@@ -1281,35 +1403,18 @@
   }
 
   function renderApp() {
-    const role = getCurrentRole();
-    if (!role) {
-      setMode("login");
-      return;
-    }
     setMode("app");
     const route = parseRoute();
     if (route.name === "dashboard") return renderDashboard();
     if (route.name === "orders") return renderOrdersList(route.kind);
     if (route.name === "order") return renderOrderDetail(route.id);
+    if (route.name === "registration") return renderRegistrationDetail(route.id);
     if (route.name === "order-new") return renderNewOrder();
     if (route.name === "inventory") return renderInventory(route);
     if (route.name === "inventory-import") return renderInventoryImport();
     if (route.name === "contact-chat") return renderContactChat();
     return renderDashboard();
   }
-
-  // Login
-  els.enter.addEventListener("click", () => {
-    const role = (els.role.value || "").trim();
-    if (!Object.values(ROLES).includes(role)) return;
-    const officeId = getCurrentOfficeId();
-    setCurrentRole(role);
-    upsertSessionUserName(officeId, role, els.name?.value || "");
-    if (role === ROLES.customer) upsertCustomerSession(officeId, els.phone?.value || "", els.name?.value || "");
-    beginEnterAppTransition();
-    nav("/dashboard", true);
-    renderApp();
-  });
 
   // Back
   if (els.back) {
@@ -1346,6 +1451,73 @@
       setCurrentOfficeId(officeId);
       adminOfficeFilterId = officeId;
       nav("/orders/active", true);
+      renderApp();
+      return;
+    }
+
+    if (action === "approve-registration") {
+      if (role !== ROLES.system_admin) return;
+      const regId = actionEl.getAttribute("data-reg-id") || "";
+      if (!regId) return;
+
+      const pending = getPendingUsers().slice();
+      const idx = pending.findIndex((u) => String(u?.id || "") === String(regId));
+      if (idx < 0) return;
+      const rec = pending[idx];
+      if (rec.status !== USER_STATUS.PENDING) return;
+      const officeId = String(rec.officeId || getCurrentOfficeId() || "");
+
+      pending[idx] = { ...rec, status: USER_STATUS.APPROVED, approvedAt: nowIso(), officeId };
+      setPendingUsers(pending);
+
+      const users = getUsers().slice();
+      const phone = onlyDigits(rec.phone);
+      const exists = users.some((u) => onlyDigits(u.phone) === phone);
+      if (!exists) {
+        users.push({
+          id: rec.id,
+          name: rec.name,
+          phone: rec.phone,
+          officeId,
+          role: ROLES.customer,
+          status: USER_STATUS.APPROVED,
+          createdAt: rec.createdAt || nowIso(),
+        });
+        setUsers(users);
+      }
+
+      const offices = getOffices().slice();
+      const oIdx = offices.findIndex((o) => o.id === officeId);
+      if (oIdx >= 0) {
+        const office = { ...offices[oIdx] };
+        const customers = Array.isArray(office.customers) ? office.customers.slice() : [];
+        const hasCustomer = customers.some((c) => String(c.id || "") === String(rec.id));
+        if (!hasCustomer) {
+          customers.push({ id: rec.id, name: rec.name, phone: rec.phone, creditLimitWeight: 0 });
+          office.customers = customers;
+          offices[oIdx] = office;
+          setOffices(offices);
+        }
+      }
+
+      nav("/dashboard", true);
+      renderApp();
+      return;
+    }
+
+    if (action === "reject-registration") {
+      if (role !== ROLES.system_admin) return;
+      const regId = actionEl.getAttribute("data-reg-id") || "";
+      if (!regId) return;
+
+      const pending = getPendingUsers().slice();
+      const idx = pending.findIndex((u) => String(u?.id || "") === String(regId));
+      if (idx < 0) return;
+      const rec = pending[idx];
+      if (rec.status !== USER_STATUS.PENDING) return;
+      pending[idx] = { ...rec, status: USER_STATUS.REJECTED, rejectedAt: nowIso() };
+      setPendingUsers(pending);
+      nav("/dashboard", true);
       renderApp();
       return;
     }
@@ -1622,6 +1794,7 @@
       };
       orders.push(order);
       setOrders(orders);
+      ensureChatForOrder(order, role);
       draftItems = [];
       nav(`/order/${id}`, true);
       renderApp();
@@ -1680,7 +1853,6 @@
     setMode("app");
     renderApp();
   } else {
-    setMode("login");
-    setTitle("");
+    logoutToLogin();
   }
 })();

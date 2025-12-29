@@ -1,72 +1,63 @@
-<!-- ASIAGOLD UI v0.4.9 | STAGE 4: Controlled Implementation -->
+<!-- ASIAGOLD UI v0.4.9 | STAGE 4.1: Signup/Login Gate (locked) -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASIAGOLD</title>
-<link rel="stylesheet" href="./theme.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASIAGOLD</title>
+  <link rel="stylesheet" href="./theme.css">
 </head>
 <body class="ag-s4 ag-mode-login">
-<div class="ag-brand" id="ag-brand" aria-label="ASIAGOLD">
-  <img class="ag-brand-logo" id="ag-brand-logo" src="./assets/logo.svg" alt="ASIAGOLD">
-</div>
-
-<header class="ag-appbar" id="ag-appbar" role="banner" aria-label="نوار برنامه">
-  <button class="ag-appbar-back" id="ag-back" type="button" aria-label="بازگشت">
-    <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M15 18l-6-6 6-6"></path>
-      <path d="M9 12h12"></path>
-    </svg>
-  </button>
-  <div class="ag-appbar-title" id="ag-title"></div>
-</header>
-
-<main class="ag-login" id="ag-login" aria-label="ورود">
-  <div class="wrapper">
-    <div class="card ag-s4-card">
-      <div class="ag-login-head">
-        <div class="ag-login-title">ورود به ASIAGOLD</div>
-        <div class="ag-login-sub">امانی • تسویه با طلای آب‌شده • فقط وزن</div>
-      </div>
-
-      <div class="ag-form">
-        <div class="ag-field">
-          <label for="ag-role">نقش</label>
-          <select id="ag-role">
-            <option value="customer">مشتری</option>
-            <option value="sales_manager">مدیر فروش (فقط مشاهده)</option>
-            <option value="office_order_manager">مدیر سفارش دفتر</option>
-            <option value="system_admin">ادمین سیستم</option>
-          </select>
-        </div>
-
-        <div class="ag-field">
-          <label for="ag-phone">شماره موبایل</label>
-          <input id="ag-phone" inputmode="tel" autocomplete="tel" placeholder="مثال: 09123456789">
-        </div>
-
-        <div class="ag-field">
-          <label for="ag-name">نام و نام خانوادگی (اختیاری)</label>
-          <input id="ag-name" autocomplete="name" placeholder="مثال: علی رضایی">
-        </div>
-      </div>
-
-      <button class="ag-primary" id="ag-enter" type="button">ورود به داشبورد</button>
-
-      <div class="footer">هیچ مبلغی دریافت نمی‌شود • فقط ثبت و پیگیری سفارش وزنی</div>
-    </div>
+  <div class="ag-brand logo--hero" id="ag-brand" aria-label="ASIAGOLD">
+    <img class="ag-brand-logo" id="ag-brand-logo" src="./assets/logo.svg" alt="ASIAGOLD">
   </div>
-</main>
 
-<main class="ag-app" id="ag-app" hidden aria-label="برنامه">
-  <div class="wrapper">
-    <div class="card ag-s4-card">
-      <div id="ag-view" aria-live="polite"></div>
+  <main class="ag-login" id="ag-gate" aria-label="ورود و ثبت‌نام">
+    <div class="wrapper">
+      <div class="card ag-s4-card">
+        <div class="ag-login-head">
+          <div class="ag-login-title">ASIAGOLD</div>
+          <div class="ag-login-sub">سیستم عملیاتی امانی (UI-only) — ورود فقط پس از تأیید مدیریت</div>
+        </div>
+
+        <section class="ag-s4-section" aria-label="ثبت‌نام مشتری">
+          <div class="ag-s4-section-title">ثبت‌نام مشتری</div>
+          <div class="ag-form">
+            <div class="ag-field">
+              <label for="ag-signup-name">نام</label>
+              <input id="ag-signup-name" autocomplete="name" placeholder="مثال: علی رضایی">
+            </div>
+            <div class="ag-field">
+              <label for="ag-signup-phone">شماره موبایل</label>
+              <input id="ag-signup-phone" inputmode="tel" autocomplete="tel" placeholder="مثال: 09123456789">
+            </div>
+            <div class="ag-field">
+              <label for="ag-signup-note">یادداشت (اختیاری)</label>
+              <input id="ag-signup-note" placeholder="اختیاری">
+            </div>
+          </div>
+          <button class="ag-primary" id="ag-signup-submit" type="button">ثبت‌نام</button>
+          <div class="ag-hint" id="ag-signup-msg" aria-live="polite"></div>
+        </section>
+
+        <section class="ag-s4-section" aria-label="ورود کاربران تأیید شده">
+          <div class="ag-s4-section-title">ورود (پس از تأیید)</div>
+          <div class="ag-form">
+            <div class="ag-field">
+              <label for="ag-login-phone">شماره موبایل</label>
+              <input id="ag-login-phone" inputmode="tel" autocomplete="tel" placeholder="مثال: 09123456789">
+            </div>
+          </div>
+          <button class="ag-primary" id="ag-login-submit" type="button">ورود به پنل</button>
+          <div class="ag-hint" id="ag-login-msg" aria-live="polite"></div>
+        </section>
+
+        <div class="footer">ثبت‌نام انجام شد — منتظر تأیید مدیریت</div>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
-<script src="./stage4.js"></script>
+  <script src="./gate.js"></script>
 </body>
 </html>
+

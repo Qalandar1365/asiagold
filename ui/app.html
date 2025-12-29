@@ -1,0 +1,35 @@
+<!-- ASIAGOLD UI v0.4.9 | STAGE 4.1: Approved App Shell (SPA) -->
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASIAGOLD | App</title>
+  <link rel="stylesheet" href="./theme.css">
+</head>
+<body class="ag-s4 ag-mode-app">
+  <header class="ag-appbar" id="ag-appbar" role="banner" aria-label="نوار برنامه">
+    <button class="ag-appbar-back" id="ag-back" type="button" aria-label="بازگشت">
+      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"></path>
+        <path d="M9 12h12"></path>
+      </svg>
+    </button>
+    <div class="ag-appbar-title" id="ag-title"></div>
+    <div class="ag-brand logo--app" id="ag-brand" aria-label="ASIAGOLD">
+      <img class="ag-brand-logo" id="ag-brand-logo" src="./assets/logo.svg" alt="ASIAGOLD">
+    </div>
+  </header>
+
+  <main class="ag-app" id="ag-app" aria-label="برنامه">
+    <div class="wrapper">
+      <div class="card ag-s4-card">
+        <div id="ag-view" aria-live="polite"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="./stage4.js"></script>
+</body>
+</html>
+

@@ -670,19 +670,18 @@ body.ag-s4 .ag-appbar-title{
   text-overflow:ellipsis;
 }
 
-/* Brand logo: same SVG, never remounted */
-body.ag-s4 .ag-brand{
+/* Brand logo state */
+body.ag-s4 .ag-brand.logo--hero{
   position:fixed;
   z-index:20;
   top:50%;
   right:50%;
   transform:translate(50%,-50%) scale(1);
-  transform-origin:top right;
-  transition:transform 520ms ease, top 520ms ease, right 520ms ease, filter 520ms ease;
+  transform-origin:50% 50%;
   pointer-events:none;
 }
 
-body.ag-s4 .ag-brand::before{
+body.ag-s4 .ag-brand.logo--hero::before{
   content:"";
   position:absolute;
   inset:-18px -26px;
@@ -694,7 +693,7 @@ body.ag-s4 .ag-brand::before{
   animation:agS4Shimmer 4.5s ease-in-out infinite;
 }
 
-body.ag-s4 .ag-brand-logo{
+body.ag-s4 .ag-brand.logo--hero .ag-brand-logo{
   position:relative;
   display:block;
   width:min(320px, 76vw);
@@ -703,15 +702,21 @@ body.ag-s4 .ag-brand-logo{
   animation:agS4Glow 4.8s ease-in-out infinite;
 }
 
-body.ag-s4.ag-mode-app .ag-brand{
-  top:10px;
-  right:12px;
-  transform:translate(0,0) scale(.22);
+body.ag-s4 .ag-brand.logo--app{
+  position:relative;
+  z-index:16;
   pointer-events:auto;
+  flex-shrink:0;
 }
 
-@media (min-width:520px){
-  body.ag-s4.ag-mode-app .ag-brand{ transform:translate(0,0) scale(.20); }
+body.ag-s4 .ag-brand.logo--app::before{ content:none; }
+
+body.ag-s4 .ag-brand.logo--app .ag-brand-logo{
+  display:block;
+  width:96px;
+  height:auto;
+  filter:drop-shadow(0 10px 22px rgba(201,162,58,.10)) drop-shadow(0 8px 18px rgba(0,0,0,.10));
+  animation:agS4Glow 6.2s ease-in-out infinite;
 }
 
 @keyframes agS4Glow{
