@@ -1486,8 +1486,12 @@
       }
 
       // Central Routing & UI Management
+      // Central Routing & UI Management
       function route() {
-        const p = new URLSearchParams(window.location.search);
+        // Parse Hash instead of Search
+        const hash = window.location.hash.substring(1); // remove #
+        const p = new URLSearchParams(hash);
+
         const cat = p.get("cat");
         const level = p.get("level");
         const group = p.get("group");
@@ -1511,7 +1515,7 @@
         allPanels.forEach(el => { if (el) el.hidden = true; });
 
         // Always show dashboard list unless in detail/confirm modes (simplified rule)
-        const isDetail = Boolean(cat || model || level);
+        const isDetail = Boolean(cat || model || level === "model");
         if (pageNotice) pageNotice.hidden = isDetail;
         if (filter) filter.hidden = isDetail;
         if (orders) orders.hidden = isDetail;
@@ -1519,6 +1523,7 @@
         // Routing Logic
 
         // 1. Root Selection (Default Entry)
+        // Treat empty params as Root
         if (!cat && !model && !level) {
           if (selRoot) selRoot.hidden = false;
           // Show dashboard list below
@@ -1526,9 +1531,6 @@
           if (filter) filter.hidden = false;
           if (orders) orders.hidden = false;
           if (titleEl) titleEl.textContent = "سفارش‌های من";
-
-          // Render Root logic not strictly needed as it's static HTML, 
-          // but we attach event listeners once.
           return;
         }
 
@@ -1541,15 +1543,7 @@
             return;
           }
           if (model) {
-            // Show Bangle Detail (Managed by Bangle IIFE, just ensure container is ready)
-            // The Bangle logic runs in its own block, checking params. 
-            // We just ensure we didn't hide it if logic wants to show it.
-            // Actually, centralized route() should probably coordinate visibility.
-            // But existing code blocks run on load. 
-            // Ideally we trigger them or they react to URL.
-            // Current architecture relies on reload for state change mostly.
-            // We will facilitate "No Reload" by using History API and triggering render.
-            // For now, let's assume reload-based mostly or simple visibility.
+            // Show Bangle Detail
             if (bangleDetail) bangleDetail.hidden = false;
             return;
           }
@@ -1564,21 +1558,17 @@
       }
 
       // Initialize Selection Views
+      // Initialize Selection Views
       function initSelectionViews() {
-        // Helper for SPA navigation
+        // Helper for SPA navigation (Hash based)
         function go(params) {
-          const url = new URL(window.location);
-          // Clear previous relevant keys to be safe
-          url.searchParams.delete("cat");
-          url.searchParams.delete("level");
-          url.searchParams.delete("group");
-          url.searchParams.delete("model");
-
+          // Construct new hash
+          const p = new URLSearchParams();
           for (const [k, v] of Object.entries(params)) {
-            url.searchParams.set(k, v);
+            p.set(k, v);
           }
-          window.history.pushState({}, "", url);
-          route();
+          window.location.hash = p.toString();
+          // route() is called by hashchange
         }
 
         // Root clicks
@@ -1609,15 +1599,15 @@
         const grpBack = document.getElementById("grp-back");
         if (grpBack) {
           grpBack.addEventListener("click", () => {
-            // Go to root (remove all params)
-            const url = new URL(window.location);
-            url.search = "";
-            window.history.pushState({}, "", url);
-            route();
+            // Go to root (empty hash)
+            window.location.hash = "";
           });
         }
 
-        // Handle Browser Back
+        // Handle Browser Forward/Back
+        window.addEventListener("hashchange", route);
+
+        // Handle Popstate (sometimes needed for wider compat, but hashchange is key here)
         window.addEventListener("popstate", route);
       }
 
@@ -2127,7 +2117,8 @@
         if (el.image) el.image.src = svgDataUri(model.name);
 
         if (el.back) el.back.addEventListener("click", () => {
-          window.location.href = "./user-dashboard.html#cat=cat-khorderiz&level=group";
+          // Hash based back to group
+          window.location.hash = "cat=cat-khorderiz&level=group";
         });
 
         if (el.addRow) el.addRow.addEventListener("click", () => {
@@ -2140,7 +2131,8 @@
             render();
             return;
           }
-          window.location.href = "./user-dashboard.html#cat=cat-khorderiz&level=group";
+          // Hash based back to group
+          window.location.hash = "cat=cat-khorderiz&level=group";
         });
 
         stateRows.push(newRow());
@@ -2486,12 +2478,8 @@
             if (!window.confirm("آیا از ثبت سفارش انصراف می‌دهید؟")) return;
           }
           stopSlide();
-          // Back to Group (SPA)
-          const url = new URL(window.location);
-          url.searchParams.delete("model");
-          url.searchParams.set("level", "group");
-          window.history.pushState({}, "", url);
-          if (typeof route === "function") route(); else window.location.reload();
+          // Back to Group (Hash)
+          window.location.hash = "cat=cat-bangle&level=group";
         });
       }
 
@@ -2500,7 +2488,8 @@
         if (!validate()) return;
         basketAddItem();
         stopSlide();
-        window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
+        // Back to Group (Hash)
+        window.location.hash = "cat=cat-bangle&level=group";
       });
 
       // 7. Start
