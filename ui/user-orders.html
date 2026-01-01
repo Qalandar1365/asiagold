@@ -1,491 +1,997 @@
 <!-- ASIAGOLD UI v0.4.9 | Design Pass 3: luxury polish -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asia Gold | سفارش‌های کاربر</title>
-<link rel="stylesheet" href="./theme.css">
-<style>
-.card{
-  max-width:480px;margin-top:14px;
-  padding:22px;
-}
-.header{margin-bottom:16px;}
-.logo{
-  width:72px;height:72px;margin:0 auto 8px;
-  font-size:13px;
-}
-.title{font-size:16px;font-weight:bold;color:var(--text2);}
-.filter{
-  margin-top:12px;border-radius:var(--r18);padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  display:flex;gap:10px;
-}
-select{
-  flex:1;border:none;outline:none;border-radius:14px;padding:10px;
-  background:linear-gradient(180deg,var(--surface1),var(--surface2));
-  color:var(--ink3);font-size:13px;
-}
-.list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
-.order{
-  border-radius:var(--r18);padding:14px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-}
-.row{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--text4);margin-top:8px;}
-.row strong{color:var(--text1);font-weight:700;}
-.badge{
-  display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold;
-  background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);
-  text-decoration:none;
-  border:none;
-}
-.badge.review{background:linear-gradient(135deg,var(--pending),var(--gold7));color:var(--ink4);}
-.badge.approved{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
-.badge.sent{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
-.badge.delivered{background:linear-gradient(135deg,var(--ok),var(--success));color:var(--ink1);}
-.badge.rejected{background:linear-gradient(135deg,var(--danger1),var(--danger2));color:var(--text1);}
-.notice{
-  margin-top:12px;border-radius:var(--r18);padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  font-size:13px;color:var(--text4);
-}
-.notice strong{color:var(--text1);font-weight:700;}
-.form{
-  margin-top:12px;border-radius:var(--r18);padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-}
-.form-title{font-size:14px;font-weight:700;color:var(--text2);}
-.form-sub{margin-top:6px;font-size:12px;color:var(--text5);line-height:1.7;}
-.field{margin-top:10px;}
-.field label{display:block;font-size:12px;color:var(--text5);margin-bottom:6px;}
-input{
-  width:100%;
-  border:none;outline:none;border-radius:14px;padding:10px;
-  background:linear-gradient(180deg,var(--surface1),var(--surface2));
-  color:var(--ink3);font-size:13px;
-}
-textarea{
-  width:100%;
-  border:none;outline:none;border-radius:14px;padding:10px;
-  background:linear-gradient(180deg,var(--surface1),var(--surface2));
-  color:var(--ink3);font-size:13px;
-  resize:none;
-}
-.pd{margin-top:12px;border-radius:var(--r18);padding:12px;background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));}
-.pd-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.pd-back{
-  border:none;border-radius:14px;padding:10px 12px;
-  background:linear-gradient(135deg,var(--surface3),var(--surface4));
-  color:var(--ink2);font-weight:700;font-size:13px;cursor:pointer;
-  display:inline-flex;align-items:center;gap:8px;
-}
-.pd-back span{transform:scaleX(-1);display:inline-block;}
-.pd-name{margin-top:10px;font-size:14px;font-weight:800;color:var(--text2);line-height:1.6;}
-.pd-gallery{
-  --g:min(30vh, 240px);
-  margin:10px auto 0;
-  position:relative;
-  width:min(100%, var(--g));
-  height:var(--g);
-  border-radius:var(--r18);
-  overflow:hidden;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.pd-gallery img{width:100%;height:100%;object-fit:cover;display:block;}
-.pd-nav{
-  position:absolute;top:50%;transform:translateY(-50%);
-  border:none;border-radius:14px;
-  width:44px;height:44px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  color:var(--text2);
-  cursor:pointer;
-}
-.pd-prev{left:10px;}
-.pd-next{right:10px;}
-.pd-dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:6px;}
-.pd-dot{width:8px;height:8px;border-radius:999px;background:var(--glass-strong);opacity:.7;}
-.pd-dot.active{background:var(--gold4);opacity:1;}
-.pd-section{margin-top:12px;}
-.pd-section-title{font-size:13px;font-weight:800;color:var(--text2);}
-.pd-row{
-  margin-top:10px;
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  display:flex;
-  gap:12px;
-  align-items:center;
-  direction:ltr;
-}
-.pd-thumb{
-  width:52px;height:52px;border-radius:14px;
-  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
-  display:flex;align-items:center;justify-content:center;
-  color:var(--ink1);font-weight:900;
-  flex-shrink:0;
-}
-.pd-info{flex:1;direction:rtl;text-align:right;}
-.pd-size-name{font-size:13px;font-weight:900;color:var(--text2);}
-.pd-size-meta{margin-top:4px;font-size:12px;color:var(--text5);line-height:1.7;}
-.pd-qty{direction:rtl;display:flex;align-items:center;gap:10px;}
-.pd-qty-group{display:flex;flex-direction:column;gap:6px;}
-.pd-qty-btn{
-  border:none;border-radius:12px;
-  padding:8px 10px;
-  background:linear-gradient(135deg,var(--gold4),var(--gold6));
-  color:var(--ink4);
-  font-weight:900;
-  font-size:12px;
-  cursor:pointer;
-  min-width:54px;
-}
-.pd-qty-btn.secondary{background:linear-gradient(135deg,var(--surface3),var(--surface4));color:var(--ink2);}
-.pd-qty-value{min-width:44px;text-align:center;font-weight:900;color:var(--text1);font-size:14px;}
-.pd-custom-note{margin-top:10px;}
-.pd-custom-note label{display:block;font-size:12px;color:var(--text5);margin-bottom:6px;}
-.pd-error{margin-top:8px;font-size:12px;color:var(--bad);line-height:1.7;}
-.pd-sticky{
-  position:sticky;
-  bottom:0;
-  margin-top:12px;
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
-  box-shadow:var(--shadow-soft);
-}
-.pd-summary{color:var(--text2);font-weight:900;font-size:14px;}
-.pd-cta{
-  margin-top:10px;
-  width:100%;
-  border:none;
-  border-radius:18px;
-  padding:14px 12px;
-  background:linear-gradient(135deg,var(--gold4),var(--gold6));
-  color:var(--ink4);
-  font-weight:900;
-  font-size:14px;
-  cursor:pointer;
-}
-.pd-cta:disabled{opacity:.65;cursor:not-allowed;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asia Gold | سفارش‌های کاربر</title>
+  <link rel="stylesheet" href="./theme.css">
+  <style>
+    .card {
+      max-width: 480px;
+      margin-top: 14px;
+      padding: 22px;
+    }
 
-.kr{margin-top:12px;border-radius:var(--r18);padding:12px;background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));}
-.kr-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.kr-back{
-  border:none;border-radius:14px;padding:10px 12px;
-  background:linear-gradient(135deg,var(--surface3),var(--surface4));
-  color:var(--ink2);font-weight:700;font-size:13px;cursor:pointer;
-  display:inline-flex;align-items:center;gap:8px;
-}
-.kr-back span{transform:scaleX(-1);display:inline-block;}
-.kr-name{margin-top:10px;font-size:14px;font-weight:800;color:var(--text2);line-height:1.6;}
-.kr-image{
-  --g:min(30vh, 240px);
-  margin:10px auto 0;
-  width:min(100%, var(--g));
-  height:var(--g);
-  border-radius:var(--r18);
-  overflow:hidden;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.kr-image img{width:100%;height:100%;object-fit:cover;display:block;}
-.kr-actions{margin-top:12px;display:flex;gap:10px;}
-.kr-add-row{
-  flex:1;
-  border:none;border-radius:14px;padding:12px;
-  background:linear-gradient(135deg,var(--gold4),var(--gold6));
-  color:var(--ink4);font-weight:900;font-size:13px;cursor:pointer;
-}
-.kr-rows{margin-top:12px;display:flex;flex-direction:column;gap:10px;}
-.kr-row{
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-}
-.kr-row.invalid{box-shadow:0 0 0 2px var(--danger1);}
-.kr-row-top{display:flex;gap:10px;align-items:center;}
-.kr-row-top select{flex:1;}
-.kr-row-top input{flex:1;}
-.kr-hint{margin-top:8px;font-size:12px;color:var(--text5);line-height:1.7;}
-.kr-note{margin-top:8px;}
-.kr-remove{
-  margin-top:10px;
-  width:100%;
-  border:none;border-radius:14px;padding:10px 12px;
-  background:linear-gradient(135deg,var(--danger1),var(--danger2));
-  color:var(--text1);
-  font-weight:900;
-  font-size:13px;
-  cursor:pointer;
-}
-.kr-row-error{margin-top:8px;font-size:12px;color:var(--bad);line-height:1.7;}
-.kr-sticky{
-  position:sticky;
-  bottom:0;
-  margin-top:12px;
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
-  box-shadow:var(--shadow-soft);
-}
-.kr-summary{color:var(--text2);font-weight:900;font-size:14px;}
-.kr-error{margin-top:8px;font-size:12px;color:var(--bad);line-height:1.7;}
-.kr-cta{
-  margin-top:10px;
-  width:100%;
-  border:none;
-  border-radius:18px;
-  padding:14px 12px;
-  background:linear-gradient(135deg,var(--gold4),var(--gold6));
-  color:var(--ink4);
-  font-weight:900;
-  font-size:14px;
-  cursor:pointer;
-}
-.kr-cta:disabled{opacity:.65;cursor:not-allowed;}
-.basket{
-  margin-top:12px;
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-}
-.basket-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
-.basket-title{color:var(--accent-light);font-weight:900;font-size:14px;}
-.basket-totals{
-  margin-top:10px;
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--panel1) 0%, var(--panel2) 100%);
-  box-shadow:var(--shadow-soft);
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.basket-total{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--text4);}
-.basket-total strong{color:var(--text2);font-weight:900;}
-.basket-message{margin-top:10px;font-size:12px;line-height:1.7;color:var(--pending);}
-.basket-actions{margin-top:10px;display:flex;gap:10px;}
-.basket-btn{
-  flex:1;
-  border:none;
-  border-radius:18px;
-  padding:12px 10px;
-  font-weight:900;
-  font-size:13px;
-  cursor:pointer;
-}
-.basket-primary{background:linear-gradient(135deg,var(--gold4),var(--gold6));color:var(--ink4);}
-.basket-ghost{background:linear-gradient(180deg,var(--surface3),var(--surface4));color:var(--ink2);}
-.basket-btn:disabled{opacity:.65;cursor:not-allowed;}
-.confirm{
-  margin-top:12px;
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-}
-.confirm-title{color:var(--accent-light);font-weight:900;font-size:14px;}
-.confirm-note{margin-top:10px;font-size:13px;line-height:1.8;color:var(--text4);}
-.confirm-error{margin-top:10px;font-size:12px;line-height:1.7;color:var(--bad);}
-.confirm-success{
-  margin-top:10px;
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  color:var(--success);
-  font-size:13px;
-  line-height:1.8;
-  font-weight:700;
-}
-.footer{margin-top:16px;}
-</style>
+    .header {
+      margin-bottom: 16px;
+    }
+
+    .pd-totals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .pd-total-box {
+      background: linear-gradient(180deg, var(--panel1) 0%, var(--panel2) 100%);
+      border-radius: 14px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(0, 0, 0, .04);
+    }
+
+    .pd-total-label {
+      font-size: 11px;
+      color: var(--text5);
+    }
+
+    .pd-total-value {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text2);
+      margin-top: 4px;
+      direction: ltr;
+    }
+
+    .pd-custom-confirm {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface3);
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .pd-custom-confirm input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+    }
+
+    .pd-custom-confirm label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text2);
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 8px;
+      font-size: 13px;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--text2);
+    }
+
+    .filter {
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+      display: flex;
+      gap: 10px;
+    }
+
+    select {
+      flex: 1;
+      border: none;
+      outline: none;
+      border-radius: 14px;
+      padding: 10px;
+      background: linear-gradient(180deg, var(--surface1), var(--surface2));
+      color: var(--ink3);
+      font-size: 13px;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .order {
+      border-radius: var(--r18);
+      padding: 14px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text4);
+      margin-top: 8px;
+    }
+
+    .row strong {
+      color: var(--text1);
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--gold4), var(--gold6));
+      color: var(--ink4);
+      text-decoration: none;
+      border: none;
+    }
+
+    .badge.review {
+      background: linear-gradient(135deg, var(--pending), var(--gold7));
+      color: var(--ink4);
+    }
+
+    .badge.approved {
+      background: linear-gradient(135deg, var(--gold4), var(--gold6));
+      color: var(--ink4);
+    }
+
+    .badge.sent {
+      background: linear-gradient(135deg, var(--surface3), var(--surface4));
+      color: var(--ink2);
+    }
+
+    .badge.delivered {
+      background: linear-gradient(135deg, var(--ok), var(--success));
+      color: var(--ink1);
+    }
+
+    .badge.rejected {
+      background: linear-gradient(135deg, var(--danger1), var(--danger2));
+      color: var(--text1);
+    }
+
+    .notice {
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+      font-size: 13px;
+      color: var(--text4);
+    }
+
+    .notice strong {
+      color: var(--text1);
+      font-weight: 700;
+    }
+
+    .form {
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+    }
+
+    .form-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text2);
+    }
+
+    .form-sub {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--text5);
+      line-height: 1.7;
+    }
+
+    .field {
+      margin-top: 10px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      color: var(--text5);
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      border: none;
+      outline: none;
+      border-radius: 14px;
+      padding: 10px;
+      background: linear-gradient(180deg, var(--surface1), var(--surface2));
+      color: var(--ink3);
+      font-size: 13px;
+    }
+
+    textarea {
+      width: 100%;
+      border: none;
+      outline: none;
+      border-radius: 14px;
+      padding: 10px;
+      background: linear-gradient(180deg, var(--surface1), var(--surface2));
+      color: var(--ink3);
+      font-size: 13px;
+      resize: none;
+    }
+
+    .pd {
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+    }
+
+    .pd-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pd-back {
+      border: none;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, var(--surface3), var(--surface4));
+      color: var(--ink2);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pd-back span {
+      transform: scaleX(-1);
+      display: inline-block;
+    }
+
+    .pd-name {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text2);
+      line-height: 1.6;
+    }
+
+    .pd-gallery {
+      --g: min(30vh, 240px);
+      margin: 10px auto 0;
+      position: relative;
+      width: min(100%, var(--g));
+      height: var(--g);
+      border-radius: var(--r18);
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pd-gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pd-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      border-radius: 14px;
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+      color: var(--text2);
+      cursor: pointer;
+    }
+
+    .pd-prev {
+      left: 10px;
+    }
+
+    .pd-next {
+      right: 10px;
+    }
+
+    .pd-dots {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .pd-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--glass-strong);
+      opacity: .7;
+    }
+
+    .pd-dot.active {
+      background: var(--gold4);
+      opacity: 1;
+    }
+
+    .pd-section {
+      margin-top: 12px;
+    }
+
+    .pd-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text2);
+    }
+
+    .pd-row {
+      margin-top: 10px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      direction: ltr;
+    }
+
+    .pd-thumb {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: radial-gradient(circle at top, var(--gold1), var(--gold2), var(--gold3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink1);
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .pd-info {
+      flex: 1;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .pd-size-name {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--text2);
+    }
+
+    .pd-size-meta {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text5);
+      line-height: 1.7;
+    }
+
+    .pd-qty {
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pd-qty-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pd-qty-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 8px 10px;
+      background: linear-gradient(135deg, var(--gold4), var(--gold6));
+      color: var(--ink4);
+      font-weight: 900;
+      font-size: 12px;
+      cursor: pointer;
+      cursor: pointer;
+      min-width: 44px;
+      /* Slightly smaller min-width for 4 buttons */
+    }
+
+    .pd-qty-btn.secondary {
+      background: linear-gradient(135deg, var(--surface3), var(--surface4));
+      color: var(--ink2);
+    }
+
+    .pd-qty-value {
+      min-width: 44px;
+      text-align: center;
+      font-weight: 900;
+      color: var(--text1);
+      font-size: 14px;
+    }
+
+    .pd-custom-note {
+      margin-top: 10px;
+    }
+
+    .pd-custom-note label {
+      display: block;
+      font-size: 12px;
+      color: var(--text5);
+      margin-bottom: 6px;
+    }
+
+    .pd-error {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--bad);
+      line-height: 1.7;
+    }
+
+    .pd-sticky {
+      position: sticky;
+      bottom: 0;
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--panel1) 0%, var(--panel2) 100%);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pd-summary {
+      color: var(--text2);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .pd-cta {
+      margin-top: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 14px 12px;
+      background: linear-gradient(135deg, var(--gold4), var(--gold6));
+      color: var(--ink4);
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .pd-cta:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .kr {
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+    }
+
+    .kr-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .kr-back {
+      border: none;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, var(--surface3), var(--surface4));
+      color: var(--ink2);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kr-back span {
+      transform: scaleX(-1);
+      display: inline-block;
+    }
+
+    .kr-name {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text2);
+      line-height: 1.6;
+    }
+
+    .kr-image {
+      --g: min(30vh, 240px);
+      margin: 10px auto 0;
+      width: min(100%, var(--g));
+      height: var(--g);
+      border-radius: var(--r18);
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kr-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .kr-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .kr-add-row {
+      flex: 1;
+      border: none;
+      border-radius: 14px;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--gold4), var(--gold6));
+      color: var(--ink4);
+      font-weight: 900;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .kr-rows {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .kr-row {
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+    }
+
+    .kr-row.invalid {
+      box-shadow: 0 0 0 2px var(--danger1);
+    }
+
+    .kr-row-top {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .kr-row-top select {
+      flex: 1;
+    }
+
+    .kr-row-top input {
+      flex: 1;
+    }
+
+    .kr-hint {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text5);
+      line-height: 1.7;
+    }
+
+    .kr-note {
+      margin-top: 8px;
+    }
+
+    .kr-remove {
+      margin-top: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, var(--danger1), var(--danger2));
+      color: var(--text1);
+      font-weight: 900;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .kr-row-error {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--bad);
+      line-height: 1.7;
+    }
+
+    .kr-sticky {
+      position: sticky;
+      bottom: 0;
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--panel1) 0%, var(--panel2) 100%);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .kr-summary {
+      color: var(--text2);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .kr-error {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--bad);
+      line-height: 1.7;
+    }
+
+    .kr-cta {
+      margin-top: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 14px 12px;
+      background: linear-gradient(135deg, var(--gold4), var(--gold6));
+      color: var(--ink4);
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .kr-cta:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .basket {
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+    }
+
+    .basket-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .basket-title {
+      color: var(--accent-light);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .basket-totals {
+      margin-top: 10px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--panel1) 0%, var(--panel2) 100%);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .basket-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text4);
+    }
+
+    .basket-total strong {
+      color: var(--text2);
+      font-weight: 900;
+    }
+
+    .basket-message {
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--pending);
+    }
+
+    .basket-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .basket-btn {
+      flex: 1;
+      border: none;
+      border-radius: 18px;
+      padding: 12px 10px;
+      font-weight: 900;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .basket-primary {
+      background: linear-gradient(135deg, var(--gold4), var(--gold6));
+      color: var(--ink4);
+    }
+
+    .basket-ghost {
+      background: linear-gradient(180deg, var(--surface3), var(--surface4));
+      color: var(--ink2);
+    }
+
+    .basket-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .confirm {
+      margin-top: 12px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+    }
+
+    .confirm-title {
+      color: var(--accent-light);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .confirm-note {
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text4);
+    }
+
+    .confirm-error {
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--bad);
+    }
+
+    .confirm-success {
+      margin-top: 10px;
+      border-radius: var(--r18);
+      padding: 12px;
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+      color: var(--success);
+      font-size: 13px;
+      line-height: 1.8;
+      font-weight: 700;
+    }
+
+    .footer {
+      margin-top: 16px;
+    }
+  </style>
 </head>
+
 <body>
-<header class="ag-topbar" role="banner">
-  <button class="ag-back" type="button" data-fallback="./user-dashboard.html" aria-label="بازگشت">
-    <span class="ag-back-icon" aria-hidden="true">
-      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M15 18l-6-6 6-6"></path>
-        <path d="M9 12h12"></path>
-      </svg>
-    </span>
-  </button>
-  <div class="ag-topbar-title" id="ag-topbar-title"></div>
-  <div class="ag-topbar-actions" aria-label="ابزارها">
-    <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">
-      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="9"></circle>
-        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"></path>
-        <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"></circle>
-      </svg>
+  <header class="ag-topbar" role="banner">
+    <button class="ag-back" type="button" data-fallback="./user-dashboard.html" aria-label="بازگشت">
+      <span class="ag-back-icon" aria-hidden="true">
+        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6"></path>
+          <path d="M9 12h12"></path>
+        </svg>
+      </span>
     </button>
-    <button class="ag-icon ag-logo" type="button" data-ag-open="about" aria-label="درباره ASIAGOLD">AG</button>
-  </div>
-</header>
-<div class="ag-modal" id="ag-modal-about" hidden>
-  <div class="ag-modal-backdrop" data-ag-close="about" aria-hidden="true"></div>
-  <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-about-title">
-    <div class="ag-modal-header">
-      <div class="ag-modal-title" id="ag-about-title">درباره ASIAGOLD</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">
+    <div class="ag-topbar-title" id="ag-topbar-title"></div>
+    <div class="ag-topbar-actions" aria-label="ابزارها">
+      <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">
         <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18 6L6 18"></path>
-          <path d="M6 6l12 12"></path>
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"></path>
+          <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"></circle>
         </svg>
       </button>
+      <button class="ag-icon ag-logo" type="button" data-ag-open="about" aria-label="درباره ASIAGOLD">AG</button>
     </div>
-    <div class="ag-modal-body">
-      <div>ASIAGOLD واسطه ثبت و ارسال سفارش به کارخانه است.</div>
-      <div class="ag-modal-section" aria-label="تماس با ما">
-        <div class="ag-modal-title" style="font-size:13px;">تماس با ما</div>
-        <div class="ag-kv"><span>تلگرام</span><strong>—</strong></div>
-        <div class="ag-kv"><span>تلفن</span><strong>—</strong></div>
-        <div class="ag-kv"><span>ایمیل</span><strong>—</strong></div>
+  </header>
+  <div class="ag-modal" id="ag-modal-about" hidden>
+    <div class="ag-modal-backdrop" data-ag-close="about" aria-hidden="true"></div>
+    <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-about-title">
+      <div class="ag-modal-header">
+        <div class="ag-modal-title" id="ag-about-title">درباره ASIAGOLD</div>
+        <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6L6 18"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="ag-modal-body">
+        <div>ASIAGOLD واسطه ثبت و ارسال سفارش به کارخانه است.</div>
+        <div class="ag-modal-section" aria-label="تماس با ما">
+          <div class="ag-modal-title" style="font-size:13px;">تماس با ما</div>
+          <div class="ag-kv"><span>تلگرام</span><strong>—</strong></div>
+          <div class="ag-kv"><span>تلفن</span><strong>—</strong></div>
+          <div class="ag-kv"><span>ایمیل</span><strong>—</strong></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div class="ag-modal" id="ag-modal-help" hidden>
-  <div class="ag-modal-backdrop" data-ag-close="help" aria-hidden="true"></div>
-  <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-help-title">
-    <div class="ag-modal-header">
-      <div class="ag-modal-title" id="ag-help-title">راهنما</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">
-        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18 6L6 18"></path>
-          <path d="M6 6l12 12"></path>
-        </svg>
-      </button>
+  <div class="ag-modal" id="ag-modal-help" hidden>
+    <div class="ag-modal-backdrop" data-ag-close="help" aria-hidden="true"></div>
+    <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-help-title">
+      <div class="ag-modal-header">
+        <div class="ag-modal-title" id="ag-help-title">راهنما</div>
+        <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">
+          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6L6 18"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="ag-modal-body" id="ag-help-body"></div>
     </div>
-    <div class="ag-modal-body" id="ag-help-body"></div>
   </div>
-</div>
-<div class="wrapper">
-  <div class="card">
-    <div class="header">
-      <div class="logo-ring">
-        <div class="logo">Asia<br>Gold</div>
-      </div>
-      <div class="title">سفارش‌های من</div>
-    </div>
-
-    <div class="notice">
-      <strong>اطمینان خاطر:</strong> هیچ پرداختی در این پلتفرم انجام نمی‌شود. درخواست‌ها پس از بررسی مدیر فروش و در نوبت‌های مشخص به کارخانه ارسال می‌شوند.
-    </div>
-
-    <div id="basket-panel" class="basket" aria-label="سبد سفارش">
-      <div class="basket-head">
-        <div class="basket-title">سبد سفارش</div>
-      </div>
-      <div class="basket-totals">
-        <div class="basket-total"><span>تعداد کل:</span><strong id="basket-total-count">۰</strong></div>
-        <div class="basket-total"><span>وزن حدودی کل:</span><strong id="basket-total-weight">۰٫۰۰ گرم</strong></div>
-      </div>
-      <div class="basket-message" id="basket-message" hidden></div>
-      <div class="list" id="basket-list" style="margin-top:12px;"></div>
-      <div class="basket-actions">
-        <button class="basket-btn basket-primary" type="button" id="basket-finalize">
-          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 6L9 17l-5-5"></path>
-          </svg>
-          نهایی کردن سفارش
-        </button>
-        <button class="basket-btn basket-ghost" type="button" id="basket-clear">
-          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 7h16"></path>
-            <path d="M9 7V5h6v2"></path>
-            <path d="M10 11v7"></path>
-            <path d="M14 11v7"></path>
-            <path d="M7 7l1 14h8l1-14"></path>
-          </svg>
-          حذف کامل سفارشات
-        </button>
-      </div>
-    </div>
-
-    <div id="confirm-panel" class="confirm" hidden aria-label="تأیید نهایی سفارش">
-      <div class="confirm-title">تأیید نهایی سفارش</div>
-      <div class="notice" style="margin-top:10px;">
-        <strong>یادآوری:</strong> سفارش شما پس از تأیید مدیر فروش به کارخانه ارسال می‌شود.
-      </div>
-      <div class="form" style="margin-top:10px;">
-        <div class="row"><span>نام مشتری</span><strong id="confirm-customer">مشتری</strong></div>
-        <div class="row"><span>تاریخ</span><strong id="confirm-date"></strong></div>
-        <div class="field" style="margin-top:10px;">
-          <label for="confirm-phone">شماره موبایل (برای ساخت کد سفارش)</label>
-          <input id="confirm-phone" inputmode="tel" autocomplete="tel" placeholder="مثال: 09123456789">
+  <div class="wrapper">
+    <div class="card">
+      <div class="header">
+        <div class="logo-ring">
+          <div class="logo">Asia<br>Gold</div>
         </div>
-        <div class="field" style="margin-top:10px;">
-          <label for="confirm-name">نام و نام خانوادگی (اختیاری)</label>
-          <input id="confirm-name" autocomplete="name" placeholder="مثال: علی رضایی">
-        </div>
-        <div class="confirm-error" id="confirm-error" hidden></div>
+        <div class="title">سفارش‌های من</div>
       </div>
-      <div class="pd" style="margin-top:10px;padding:12px;" aria-label="خلاصه سفارش">
-        <div class="pd-section-title">خلاصه سفارش</div>
-        <div id="confirm-summary" style="margin-top:10px;"></div>
-      </div>
-      <div class="basket-actions" style="margin-top:10px;">
-        <button class="basket-btn basket-primary" type="button" id="confirm-send">
-          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M22 2L11 13"></path>
-            <path d="M22 2l-7 20-4-9-9-4z"></path>
-          </svg>
-          ارسال سفارش
-        </button>
-        <button class="basket-btn basket-ghost" type="button" id="confirm-edit">
-          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 20h9"></path>
-            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
-          </svg>
-          ویرایش سفارش
-        </button>
-      </div>
-      <div class="confirm-success" id="confirm-success" hidden></div>
-    </div>
 
-    <div id="bangle-detail" class="pd" hidden>
-      <div class="pd-top">
-        <button class="pd-back" type="button" id="pd-back" aria-label="بازگشت به لیست گروه‌ها">
-          <span aria-hidden="true">
+      <div class="notice">
+        <strong>اطمینان خاطر:</strong> هیچ پرداختی در این پلتفرم انجام نمی‌شود. درخواست‌ها پس از بررسی مدیر فروش و در
+        نوبت‌های مشخص به کارخانه ارسال می‌شوند.
+      </div>
+
+      <div id="basket-panel" class="basket" aria-label="سبد سفارش">
+        <div class="basket-head">
+          <div class="basket-title">سبد سفارش</div>
+        </div>
+        <div class="basket-totals">
+          <div class="basket-total"><span>تعداد کل:</span><strong id="basket-total-count">۰</strong></div>
+          <div class="basket-total"><span>وزن حدودی کل:</span><strong id="basket-total-weight">۰٫۰۰ گرم</strong></div>
+        </div>
+        <div class="basket-message" id="basket-message" hidden></div>
+        <div class="list" id="basket-list" style="margin-top:12px;"></div>
+        <div class="basket-actions">
+          <button class="basket-btn basket-primary" type="button" id="basket-finalize">
+            <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            نهایی کردن سفارش
+          </button>
+          <button class="basket-btn basket-ghost" type="button" id="basket-clear">
+            <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16"></path>
+              <path d="M9 7V5h6v2"></path>
+              <path d="M10 11v7"></path>
+              <path d="M14 11v7"></path>
+              <path d="M7 7l1 14h8l1-14"></path>
+            </svg>
+            حذف کامل سفارشات
+          </button>
+        </div>
+      </div>
+
+      <div id="confirm-panel" class="confirm" hidden aria-label="تأیید نهایی سفارش">
+        <div class="confirm-title">تأیید نهایی سفارش</div>
+        <div class="notice" style="margin-top:10px;">
+          <strong>یادآوری:</strong> سفارش شما پس از تأیید مدیر فروش به کارخانه ارسال می‌شود.
+        </div>
+        <div class="form" style="margin-top:10px;">
+          <div class="row"><span>نام مشتری</span><strong id="confirm-customer">مشتری</strong></div>
+          <div class="row"><span>تاریخ</span><strong id="confirm-date"></strong></div>
+          <div class="field" style="margin-top:10px;">
+            <label for="confirm-phone">شماره موبایل (برای ساخت کد سفارش)</label>
+            <input id="confirm-phone" inputmode="tel" autocomplete="tel" placeholder="مثال: 09123456789">
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="confirm-name">نام و نام خانوادگی (اختیاری)</label>
+            <input id="confirm-name" autocomplete="name" placeholder="مثال: علی رضایی">
+          </div>
+          <div class="confirm-error" id="confirm-error" hidden></div>
+        </div>
+        <div class="pd" style="margin-top:10px;padding:12px;" aria-label="خلاصه سفارش">
+          <div class="pd-section-title">خلاصه سفارش</div>
+          <div id="confirm-summary" style="margin-top:10px;"></div>
+        </div>
+        <div class="basket-actions" style="margin-top:10px;">
+          <button class="basket-btn basket-primary" type="button" id="confirm-send">
+            <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22 2L11 13"></path>
+              <path d="M22 2l-7 20-4-9-9-4z"></path>
+            </svg>
+            ارسال سفارش
+          </button>
+          <button class="basket-btn basket-ghost" type="button" id="confirm-edit">
+            <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+            </svg>
+            ویرایش سفارش
+          </button>
+        </div>
+        <div class="confirm-success" id="confirm-success" hidden></div>
+      </div>
+
+      <div id="bangle-detail" class="pd" hidden>
+        <div class="pd-top">
+          <button class="pd-back" type="button" id="pd-back" aria-label="بازگشت به لیست گروه‌ها">
+            <span aria-hidden="true">
+              <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"></path>
+                <path d="M9 12h12"></path>
+              </svg>
+            </span>
+            بازگشت به گروه‌ها
+          </button>
+          <div class="badge" id="pd-model-badge" style="cursor:default;">النگو</div>
+        </div>
+        <div class="pd-name" id="pd-name"></div>
+
+        <div class="pd-totals">
+          <div class="pd-total-box">
+            <div class="pd-total-label">تعداد کل سفارش</div>
+            <div class="pd-total-value" id="pd-total-count">۰</div>
+          </div>
+          <div class="pd-total-box">
+            <div class="pd-total-label">وزن حدودی سفارش</div>
+            <div class="pd-total-value"><span id="pd-total-weight">۰.۰۰</span> گرم</div>
+          </div>
+        </div>
+        <div class="pd-gallery" aria-label="گالری تصاویر">
+          <button class="pd-nav pd-prev" type="button" id="pd-prev" aria-label="تصویر قبلی">
             <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M15 18l-6-6 6-6"></path>
-              <path d="M9 12h12"></path>
             </svg>
-          </span>
-          بازگشت به گروه‌ها
-        </button>
-        <div class="badge" id="pd-model-badge" style="cursor:default;">النگو</div>
-      </div>
-      <div class="pd-name" id="pd-name"></div>
-      <div class="pd-gallery" aria-label="گالری تصاویر">
-        <button class="pd-nav pd-prev" type="button" id="pd-prev" aria-label="تصویر قبلی">
-          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M15 18l-6-6 6-6"></path>
-          </svg>
-        </button>
-        <img id="pd-image" alt="تصویر محصول">
-        <button class="pd-nav pd-next" type="button" id="pd-next" aria-label="تصویر بعدی">
-          <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 6l6 6-6 6"></path>
-          </svg>
-        </button>
-        <div class="pd-dots" id="pd-dots" aria-hidden="true"></div>
-      </div>
+          </button>
+          <img id="pd-image" alt="تصویر محصول">
+          <button class="pd-nav pd-next" type="button" id="pd-next" aria-label="تصویر بعدی">
+            <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 6l6 6-6 6"></path>
+            </svg>
+          </button>
+          <div class="pd-dots" id="pd-dots" aria-hidden="true"></div>
+        </div>
 
-      <div class="pd-section">
-        <div class="pd-section-title">سفارش (سایز ۱ تا ۵)</div>
-        <div id="pd-sizes"></div>
-      </div>
+        <div class="pd-section">
+          <div class="pd-section-title">سفارش (سایز ۱ تا ۵)</div>
+          <div id="pd-sizes"></div>
+        </div>
 
-      <div class="pd-custom-note" id="pd-custom-note-wrap" hidden>
         <label for="pd-custom-note">سایز سفارشی (الزامی)</label>
-        <textarea id="pd-custom-note" rows="3" placeholder="توضیحات سایز سفارشی را وارد کنید (حداقل ۵ کاراکتر)"></textarea>
+        <textarea id="pd-custom-note" rows="3"
+          placeholder="توضیحات سایز سفارشی را وارد کنید (حداقل ۵ کاراکتر)"></textarea>
+        <div class="pd-custom-confirm">
+          <input type="checkbox" id="pd-custom-confirm">
+          <label for="pd-custom-confirm">این سفارش قطعی است</label>
+        </div>
         <div class="pd-error" id="pd-custom-error" hidden></div>
       </div>
 
@@ -630,1131 +1136,1167 @@ textarea{
     </div>
 
     <div class="footer">پرداختی در این پلتفرم دریافت نمی‌شود • ASIAGOLD فقط تسهیل‌گر ارتباط با کارخانه است</div>
-</div>
-</div>
-<script>
-(() => {
-  const titleEl = document.getElementById("ag-topbar-title");
-  const source = document.querySelector(".title");
-  if (titleEl) titleEl.textContent = (source?.textContent || "").trim() || document.title.split("|").pop().trim();
+  </div>
+  </div>
+  <script>
+    (() => {
+      const titleEl = document.getElementById("ag-topbar-title");
+      const source = document.querySelector(".title");
+      if (titleEl) titleEl.textContent = (source?.textContent || "").trim() || document.title.split("|").pop().trim();
 
-  const backBtn = document.querySelector(".ag-back");
-  if (backBtn) {
-    const fallback = backBtn.getAttribute("data-fallback") || "./user-dashboard.html";
-    backBtn.addEventListener("click", () => {
-      if (window.history.length >= 2) window.history.back();
-      else window.location.href = fallback;
-    });
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const cat = params.get("cat");
-  const modelId = params.get("model");
-  const groupId = params.get("group") || "grp-bangle-asia";
-
-  // Stage 3: Basket + finalize + order code (default mode only)
-  const AG_PROFILE_KEY = "asiagold_customer_profile_v1";
-  const AG_ORDER_CODE_COUNTER_KEY = "asiagold_order_code_counter_v1";
-  const AG_ORDERS_KEY = "asiagold_orders_v1";
-  const AG_BASKET_KEY = "asiagold_basket_v1";
-  const AG_DAY_MS = 24 * 60 * 60 * 1000;
-  const AG_BASKET_TTL_MS = 4 * AG_DAY_MS;
-  const agNfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
-  const agNfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-  function agEscapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  function agToLatinDigits(value) {
-    const s = String(value ?? "");
-    const fa = "۰۱۲۳۴۵۶۷۸۹";
-    const ar = "٠١٢٣٤٥٦٧٨٩";
-    return s
-      .replace(/[۰-۹]/g, (d) => String(fa.indexOf(d)))
-      .replace(/[٠-٩]/g, (d) => String(ar.indexOf(d)));
-  }
-
-  function agOnlyDigits(value) {
-    return agToLatinDigits(value).replace(/[^\d]/g, "");
-  }
-
-  function agReadProfile() {
-    const raw = localStorage.getItem(AG_PROFILE_KEY);
-    if (!raw) return { name: "", phone: "" };
-    try {
-      const data = JSON.parse(raw);
-      if (!data || typeof data !== "object") return { name: "", phone: "" };
-      return { name: String(data.name || ""), phone: String(data.phone || "") };
-    } catch {
-      return { name: "", phone: "" };
-    }
-  }
-
-  function agSaveProfile(next) {
-    const cur = agReadProfile();
-    const data = {
-      v: 1,
-      name: String(next?.name ?? cur.name ?? "").trim(),
-      phone: String(next?.phone ?? cur.phone ?? "").trim(),
-      updatedAt: new Date().toISOString(),
-    };
-    localStorage.setItem(AG_PROFILE_KEY, JSON.stringify(data));
-    return data;
-  }
-
-  function agEmptyBasket() {
-    const t = new Date().toISOString();
-    return { v: 1, createdAt: t, updatedAt: t, items: [] };
-  }
-
-  function agLoadBasketWithTtl() {
-    const now = Date.now();
-    const raw = localStorage.getItem(AG_BASKET_KEY);
-    if (!raw) return { basket: agEmptyBasket(), cleared: false };
-    try {
-      const data = JSON.parse(raw);
-      if (!data || typeof data !== "object" || !Array.isArray(data.items)) throw new Error("bad");
-      const createdAt = Date.parse(data.createdAt);
-      if (!Number.isFinite(createdAt) || now - createdAt > AG_BASKET_TTL_MS) {
-        localStorage.removeItem(AG_BASKET_KEY);
-        return { basket: agEmptyBasket(), cleared: true };
-      }
-      return { basket: data, cleared: false };
-    } catch {
-      localStorage.removeItem(AG_BASKET_KEY);
-      return { basket: agEmptyBasket(), cleared: true };
-    }
-  }
-
-  function agComputeItemApprox(item) {
-    const count = (() => {
-      if (typeof item?.totalCount === "number" && Number.isFinite(item.totalCount)) return Math.max(0, Math.trunc(item.totalCount));
-      if (String(item?.orderType || "") === "تعدادی") {
-        const n = Number(item?.value);
-        if (Number.isFinite(n)) return Math.max(0, Math.trunc(n));
-      }
-      return 0;
-    })();
-
-    const weight = (() => {
-      if (typeof item?.totalWeight === "number" && Number.isFinite(item.totalWeight)) return Math.max(0, item.totalWeight);
-      if (typeof item?.approxWeight === "number" && Number.isFinite(item.approxWeight)) return Math.max(0, item.approxWeight);
-      return 0;
-    })();
-
-    return { count, weight };
-  }
-
-  function agComputeBasketTotals(items) {
-    let totalCount = 0;
-    let totalWeight = 0;
-    for (const it of items || []) {
-      const { count, weight } = agComputeItemApprox(it);
-      totalCount += count;
-      totalWeight += weight;
-    }
-    return { totalCount, totalWeight: Number(totalWeight.toFixed(2)) };
-  }
-
-  function agFormatItemDetails(item) {
-    if (item?.categoryId === "cat-bangle") {
-      const sizes = item?.sizes || {};
-      const parts = [];
-      for (const k of [1, 2, 3, 4, 5]) {
-        const q = Number(sizes[k] ?? 0);
-        if (Number.isFinite(q) && q > 0) parts.push(`سایز ${k}: ${agNfInt.format(Math.trunc(q))}`);
-      }
-      const customQty = Number(item?.custom?.qty ?? 0);
-      if (Number.isFinite(customQty) && customQty > 0) parts.push(`سایز سفارشی: ${agNfInt.format(Math.trunc(customQty))}`);
-      return parts.join(" • ") || "بدون جزئیات";
-    }
-    if (item?.categoryId === "cat-khorderiz") {
-      const type = String(item?.orderType || "").trim();
-      const unit = type === "وزنی" ? "گرم" : "عدد";
-      const val = Number(item?.value);
-      const safeVal =
-        Number.isFinite(val) && type === "وزنی"
-          ? agNfWeight.format(val)
-          : Number.isFinite(val)
-            ? agNfInt.format(Math.trunc(val))
-            : "-";
-      return `${type || "—"} • ${safeVal} ${unit}`;
-    }
-    return "—";
-  }
-
-  function agRenderBasketCard(item) {
-    const { count, weight } = agComputeItemApprox(item);
-    const modelName = String(item?.modelName || item?.modelId || "محصول");
-    const catName = String(item?.categoryName || "");
-    const groupName = String(item?.groupName || "");
-    const note = String(item?.note || item?.custom?.note || "").trim();
-    const details = agFormatItemDetails(item);
-    const isKh = item?.categoryId === "cat-khorderiz";
-    const orderType = String(item?.orderType || "").trim();
-    const valueNum = Number(item?.value);
-    const valueUnit = orderType === "وزنی" ? "گرم" : "عدد";
-    const valueText =
-      Number.isFinite(valueNum) && orderType === "وزنی"
-        ? agNfWeight.format(valueNum)
-        : Number.isFinite(valueNum)
-          ? agNfInt.format(Math.trunc(valueNum))
-          : "-";
-    const middleRows = isKh
-      ? `<div class="row"><span>نوع سفارش</span><span>${agEscapeHtml(orderType || "—")}</span></div>` +
-        `<div class="row"><span>مقدار</span><span>${agEscapeHtml(`${valueText} ${valueUnit}`)}</span></div>`
-      : `<div class="row"><span>جزئیات</span><span>${agEscapeHtml(details)}</span></div>` +
-        `<div class="row"><span>تعداد</span><span>${agNfInt.format(count)}</span></div>`;
-    return (
-      `<div class="order">` +
-      `<div class="row"><strong>${agEscapeHtml(modelName)}</strong><span class="badge" style="cursor:default;">${agEscapeHtml(catName || "سفارش")}</span></div>` +
-      `<div class="row"><span>گروه</span><span>${agEscapeHtml(groupName || "—")}</span></div>` +
-      middleRows +
-      `<div class="row"><span>وزن حدودی</span><span>${agNfWeight.format(weight)} گرم</span></div>` +
-      `<div class="row"><span>توضیح</span><span>${agEscapeHtml(note || "بدون توضیح")}</span></div>` +
-      `</div>`
-    );
-  }
-
-  function agReadOrders() {
-    try {
-      const raw = localStorage.getItem(AG_ORDERS_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function agWriteOrders(list) {
-    localStorage.setItem(AG_ORDERS_KEY, JSON.stringify(list));
-  }
-
-  function agNextOrderCode(phoneLast6) {
-    const last6 = String(phoneLast6 || "").replace(/[^\d]/g, "");
-    if (!/^\d{6}$/.test(last6)) throw new Error("bad_phone");
-
-    let data = { v: 1, per: {} };
-    try {
-      const raw = localStorage.getItem(AG_ORDER_CODE_COUNTER_KEY);
-      const parsed = raw ? JSON.parse(raw) : null;
-      if (parsed && typeof parsed === "object" && parsed.per && typeof parsed.per === "object") data = parsed;
-    } catch {}
-
-    const cur = Number(data.per[last6] || 0);
-    const next = cur + 1;
-    const max = 26 * 99;
-    if (next > max) throw new Error("limit");
-
-    data.per[last6] = next;
-    localStorage.setItem(AG_ORDER_CODE_COUNTER_KEY, JSON.stringify(data));
-
-    const letterIdx = Math.floor((next - 1) / 99) % 26;
-    const number = ((next - 1) % 99) + 1;
-    const letter = String.fromCharCode(65 + letterIdx);
-    const num = String(number).padStart(2, "0");
-    return `${last6}${letter}${num}`;
-  }
-
-  function agInitStage3() {
-    const basketPanel = document.getElementById("basket-panel");
-    const confirmPanel = document.getElementById("confirm-panel");
-    if (!basketPanel || !confirmPanel) return;
-
-    const msg = document.getElementById("basket-message");
-    const list = document.getElementById("basket-list");
-    const totalCountEl = document.getElementById("basket-total-count");
-    const totalWeightEl = document.getElementById("basket-total-weight");
-    const finalizeBtn = document.getElementById("basket-finalize");
-    const clearBtn = document.getElementById("basket-clear");
-
-    const customerLabel = document.getElementById("confirm-customer");
-    const dateLabel = document.getElementById("confirm-date");
-    const confirmPhone = document.getElementById("confirm-phone");
-    const confirmName = document.getElementById("confirm-name");
-    const confirmError = document.getElementById("confirm-error");
-    const summaryWrap = document.getElementById("confirm-summary");
-    const confirmSend = document.getElementById("confirm-send");
-    const confirmEdit = document.getElementById("confirm-edit");
-    const confirmSuccess = document.getElementById("confirm-success");
-
-    const dyn = document.getElementById("orders-dynamic");
-    const pageNotice = document.querySelector(".notice");
-    const newOrder = document.getElementById("new-order");
-    const filter = document.querySelector(".filter");
-    const orders = document.getElementById("orders");
-
-    function setConfirmError(text) {
-      if (!confirmError) return;
-      const t = String(text || "").trim();
-      confirmError.hidden = !t;
-      confirmError.textContent = t;
-    }
-
-    function renderOrders() {
-      if (!dyn) return;
-      const stored = agReadOrders();
-      dyn.innerHTML = stored
-        .slice()
-        .reverse()
-        .slice(0, 8)
-        .map((o) => {
-          const code = String(o?.code || "—");
-          const dt = String(o?.dateFa || "");
-          const sum = o?.summary || {};
-          const tc = Number(sum.totalCount) || 0;
-          const tw = Number(sum.totalWeight) || 0;
-          return (
-            `<div class="order">` +
-            `<div class="row"><strong>${agEscapeHtml(code)}</strong><span class="badge review">در انتظار بررسی مدیر فروش</span></div>` +
-            `<div class="row"><span>تاریخ</span><span>${agEscapeHtml(dt || "—")}</span></div>` +
-            `<div class="row"><span>تعداد کل</span><span>${agNfInt.format(tc)}</span></div>` +
-            `<div class="row"><span>وزن حدودی کل</span><span>${agNfWeight.format(tw)} گرم</span></div>` +
-            `</div>`
-          );
-        })
-        .join("");
-    }
-
-    function renderBasket() {
-      const { basket, cleared } = agLoadBasketWithTtl();
-      const items = Array.isArray(basket.items) ? basket.items : [];
-      const { totalCount, totalWeight } = agComputeBasketTotals(items);
-
-      if (totalCountEl) totalCountEl.textContent = agNfInt.format(totalCount);
-      if (totalWeightEl) totalWeightEl.textContent = `${agNfWeight.format(totalWeight)} گرم`;
-
-      if (msg) {
-        if (cleared) {
-          msg.hidden = false;
-          msg.textContent = "سبد سفارش شما به دلیل گذشت بیش از ۴ روز پاک شد.";
-        } else msg.hidden = true;
+      const backBtn = document.querySelector(".ag-back");
+      if (backBtn) {
+        const fallback = backBtn.getAttribute("data-fallback") || "./user-dashboard.html";
+        backBtn.addEventListener("click", () => {
+          if (window.history.length >= 2) window.history.back();
+          else window.location.href = fallback;
+        });
       }
 
-      if (list) {
-        if (!items.length) {
-          list.innerHTML =
-            `<div class="order">` +
-            `<div class="row"><strong>سبد سفارش خالی است</strong><span class="badge" style="cursor:default;">—</span></div>` +
-            `<div class="row"><span>راهنما</span><span>برای افزودن محصول، از داشبورد وارد کاتالوگ شوید.</span></div>` +
-            `</div>`;
-        } else {
-          list.innerHTML = items.map(agRenderBasketCard).join("");
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get("cat");
+      const modelId = params.get("model");
+      const groupId = params.get("group") || "grp-bangle-asia";
+
+      // Stage 3: Basket + finalize + order code (default mode only)
+      const AG_PROFILE_KEY = "asiagold_customer_profile_v1";
+      const AG_ORDER_CODE_COUNTER_KEY = "asiagold_order_code_counter_v1";
+      const AG_ORDERS_KEY = "asiagold_orders_v1";
+      const AG_BASKET_KEY = "asiagold_basket_v1";
+      const AG_DAY_MS = 24 * 60 * 60 * 1000;
+      const AG_BASKET_TTL_MS = 4 * AG_DAY_MS;
+      const agNfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
+      const agNfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      function agEscapeHtml(s) {
+        return String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function agToLatinDigits(value) {
+        const s = String(value ?? "");
+        const fa = "۰۱۲۳۴۵۶۷۸۹";
+        const ar = "٠١٢٣٤٥٦٧٨٩";
+        return s
+          .replace(/[۰-۹]/g, (d) => String(fa.indexOf(d)))
+          .replace(/[٠-٩]/g, (d) => String(ar.indexOf(d)));
+      }
+
+      function agOnlyDigits(value) {
+        return agToLatinDigits(value).replace(/[^\d]/g, "");
+      }
+
+      function agReadProfile() {
+        const raw = localStorage.getItem(AG_PROFILE_KEY);
+        if (!raw) return { name: "", phone: "" };
+        try {
+          const data = JSON.parse(raw);
+          if (!data || typeof data !== "object") return { name: "", phone: "" };
+          return { name: String(data.name || ""), phone: String(data.phone || "") };
+        } catch {
+          return { name: "", phone: "" };
         }
       }
 
-      if (finalizeBtn) finalizeBtn.disabled = items.length === 0;
-      if (clearBtn) clearBtn.disabled = items.length === 0;
-
-      const profile = agReadProfile();
-      if (confirmPhone && !confirmPhone.value) confirmPhone.value = profile.phone || "";
-      if (confirmName && !confirmName.value) confirmName.value = profile.name || "";
-
-      renderOrders();
-      return items;
-    }
-
-    function openConfirm(items) {
-      if (!items.length) return;
-      const profile = agReadProfile();
-      const name = String((confirmName && confirmName.value) || profile.name || "").trim() || "مشتری";
-      if (customerLabel) customerLabel.textContent = name;
-      if (dateLabel) dateLabel.textContent = new Date().toLocaleDateString("fa-IR");
-      if (summaryWrap) summaryWrap.innerHTML = items.map(agRenderBasketCard).join("");
-      if (confirmSuccess) confirmSuccess.hidden = true;
-      if (confirmSend) confirmSend.disabled = false;
-      if (confirmEdit) confirmEdit.disabled = false;
-      setConfirmError("");
-      basketPanel.hidden = true;
-      confirmPanel.hidden = false;
-      if (pageNotice) pageNotice.hidden = true;
-      if (newOrder) newOrder.hidden = true;
-      if (filter) filter.hidden = true;
-      if (orders) orders.hidden = true;
-      if (titleEl) titleEl.textContent = "تأیید نهایی سفارش";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function closeConfirm() {
-      confirmPanel.hidden = true;
-      basketPanel.hidden = false;
-      if (pageNotice) pageNotice.hidden = false;
-      if (newOrder) newOrder.hidden = false;
-      if (filter) filter.hidden = false;
-      if (orders) orders.hidden = false;
-      if (titleEl) titleEl.textContent = (document.querySelector(".title")?.textContent || "").trim() || document.title;
-      if (confirmSuccess) confirmSuccess.hidden = true;
-      setConfirmError("");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function submitOrder(items) {
-      const phoneDigits = agOnlyDigits((confirmPhone && confirmPhone.value) || agReadProfile().phone || "");
-      if (phoneDigits.length < 6) {
-        setConfirmError("شماره موبایل باید حداقل ۶ رقم باشد.");
-        return;
-      }
-      const last6 = phoneDigits.slice(-6);
-      const name = String((confirmName && confirmName.value) || agReadProfile().name || "").trim();
-      agSaveProfile({ name, phone: phoneDigits });
-
-      let code = "";
-      try {
-        code = agNextOrderCode(last6);
-      } catch {
-        setConfirmError("امکان ساخت کد سفارش وجود ندارد. لطفاً بعداً دوباره تلاش کنید.");
-        return;
+      function agSaveProfile(next) {
+        const cur = agReadProfile();
+        const data = {
+          v: 1,
+          name: String(next?.name ?? cur.name ?? "").trim(),
+          phone: String(next?.phone ?? cur.phone ?? "").trim(),
+          updatedAt: new Date().toISOString(),
+        };
+        localStorage.setItem(AG_PROFILE_KEY, JSON.stringify(data));
+        return data;
       }
 
-      const t = new Date();
-      const sum = agComputeBasketTotals(items);
-      const record = {
-        code,
-        createdAt: t.toISOString(),
-        dateFa: t.toLocaleDateString("fa-IR"),
-        customer: { name: name || "مشتری", phoneLast6: last6 },
-        summary: sum,
-        items,
-        status: "pending_review",
-      };
-
-      const orders = agReadOrders();
-      orders.push(record);
-      agWriteOrders(orders);
-
-      localStorage.removeItem(AG_BASKET_KEY);
-
-      if (confirmSuccess) {
-        confirmSuccess.hidden = false;
-        confirmSuccess.textContent = `سفارش شما با کد ${code} ثبت گردید`;
-      }
-      setConfirmError("");
-      if (confirmSend) confirmSend.disabled = true;
-      if (confirmEdit) confirmEdit.disabled = true;
-
-      renderBasket();
-    }
-
-    let itemsSnapshot = renderBasket();
-
-    if (finalizeBtn) finalizeBtn.addEventListener("click", () => openConfirm(itemsSnapshot));
-    if (clearBtn) clearBtn.addEventListener("click", () => {
-      if (!window.confirm("همه سفارش‌های داخل سبد حذف شود؟")) return;
-      localStorage.removeItem(AG_BASKET_KEY);
-      itemsSnapshot = renderBasket();
-    });
-    if (confirmEdit) confirmEdit.addEventListener("click", () => {
-      itemsSnapshot = renderBasket();
-      closeConfirm();
-    });
-    if (confirmSend) confirmSend.addEventListener("click", () => submitOrder(itemsSnapshot));
-    if (confirmPhone) confirmPhone.addEventListener("input", () => setConfirmError(""));
-    if (confirmName) confirmName.addEventListener("input", () => setConfirmError(""));
-
-    window.addEventListener("focus", () => {
-      if (!confirmPanel.hidden) return;
-      itemsSnapshot = renderBasket();
-    });
-  }
-
-  // Stage 2b: خرده‌ریز (row-based)
-  if (cat === "cat-khorderiz" && modelId) {
-    const kh = document.getElementById("khorderiz-detail");
-    if (!kh) return;
-
-    const MODELS = {
-      "mdl-earring-yellow-fantasy": { name: "گوشواره زرد فانتزی", groupName: "گوشواره" },
-      "mdl-earring-white-simple": { name: "گوشواره سفید ساده", groupName: "گوشواره" },
-    };
-    const model = MODELS[modelId];
-    if (!model) return;
-
-    const BASKET_KEY = "asiagold_basket_v1";
-    const DAY_MS = 24 * 60 * 60 * 1000;
-    const BASKET_TTL_MS = 4 * DAY_MS;
-    const isAdmin = localStorage.getItem("asiagold_role_v1") === "admin";
-    void isAdmin;
-
-    const avgWeightMin = 3;
-    const avgWeightMax = 5;
-    const avgUnit = (avgWeightMin + avgWeightMax) / 2;
-
-    const nfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
-    const nfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-    const el = {
-      notice: document.querySelector(".notice"),
-      newOrder: document.getElementById("new-order"),
-      filter: document.querySelector(".filter"),
-      orders: document.getElementById("orders"),
-      bangle: document.getElementById("bangle-detail"),
-      basket: document.getElementById("basket-panel"),
-      confirm: document.getElementById("confirm-panel"),
-
-      back: document.getElementById("kr-back"),
-      badge: document.getElementById("kr-model-badge"),
-      name: document.getElementById("kr-name"),
-      image: document.getElementById("kr-image"),
-      addRow: document.getElementById("kr-add-row"),
-      rows: document.getElementById("kr-rows"),
-      summary: document.getElementById("kr-summary"),
-      error: document.getElementById("kr-error"),
-      add: document.getElementById("kr-add"),
-    };
-
-    function escapeHtml(s) {
-      return String(s)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function svgDataUri(text) {
-      const safe = String(text || "").slice(0, 48);
-      const svg =
-        `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">` +
-        `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
-        `<stop offset="0%" stop-color="#f6edc7"/><stop offset="100%" stop-color="#2b2500"/></linearGradient></defs>` +
-        `<rect width="100%" height="100%" fill="url(#g)"/>` +
-        `<circle cx="520" cy="260" r="220" fill="rgba(255,255,255,.08)"/>` +
-        `<circle cx="320" cy="520" r="260" fill="rgba(255,255,255,.05)"/>` +
-        `<text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="44" fill="rgba(255,255,255,.85)">` +
-        `${escapeHtml(safe)}` +
-        `</text>` +
-        `</svg>`;
-      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-    }
-
-    function toLatinDigits(value) {
-      const s = String(value ?? "");
-      const fa = "۰۱۲۳۴۵۶۷۸۹";
-      const ar = "٠١٢٣٤٥٦٧٨٩";
-      return s
-        .replace(/[۰-۹]/g, (d) => String(fa.indexOf(d)))
-        .replace(/[٠-٩]/g, (d) => String(ar.indexOf(d)))
-        .replaceAll("٫", ".");
-    }
-
-    function parsePositiveInt(value) {
-      const raw = toLatinDigits(value).replaceAll(",", "").replaceAll("٬", "").trim();
-      if (!raw) return null;
-      if (!/^\d+$/.test(raw)) return null;
-      const n = Number(raw);
-      if (!Number.isSafeInteger(n) || n <= 0) return null;
-      return n;
-    }
-
-    function parsePositiveNumber(value) {
-      const raw = toLatinDigits(value).replaceAll(",", "").replaceAll("٬", "").trim();
-      if (!raw) return null;
-      if (!/^\d+(\.\d+)?$/.test(raw)) return null;
-      const n = Number(raw);
-      if (!Number.isFinite(n) || n <= 0) return null;
-      return n;
-    }
-
-    function basketEnsureValid() {
-      const now = Date.now();
-      const raw = localStorage.getItem(BASKET_KEY);
-      if (!raw) {
+      function agEmptyBasket() {
         const t = new Date().toISOString();
         return { v: 1, createdAt: t, updatedAt: t, items: [] };
       }
-      try {
-        const data = JSON.parse(raw);
-        if (!data || typeof data !== "object" || !Array.isArray(data.items)) throw new Error("bad");
-        const createdAt = Date.parse(data.createdAt);
+
+      function agLoadBasketWithTtl() {
+        const now = Date.now();
+        const raw = localStorage.getItem(AG_BASKET_KEY);
+        if (!raw) return { basket: agEmptyBasket(), cleared: false };
+        try {
+          const data = JSON.parse(raw);
+          if (!data || typeof data !== "object" || !Array.isArray(data.items)) throw new Error("bad");
+          const createdAt = Date.parse(data.createdAt);
+          if (!Number.isFinite(createdAt) || now - createdAt > AG_BASKET_TTL_MS) {
+            localStorage.removeItem(AG_BASKET_KEY);
+            return { basket: agEmptyBasket(), cleared: true };
+          }
+          return { basket: data, cleared: false };
+        } catch {
+          localStorage.removeItem(AG_BASKET_KEY);
+          return { basket: agEmptyBasket(), cleared: true };
+        }
+      }
+
+      function agComputeItemApprox(item) {
+        const count = (() => {
+          if (typeof item?.totalCount === "number" && Number.isFinite(item.totalCount)) return Math.max(0, Math.trunc(item.totalCount));
+          if (String(item?.orderType || "") === "تعدادی") {
+            const n = Number(item?.value);
+            if (Number.isFinite(n)) return Math.max(0, Math.trunc(n));
+          }
+          return 0;
+        })();
+
+        const weight = (() => {
+          if (typeof item?.totalWeight === "number" && Number.isFinite(item.totalWeight)) return Math.max(0, item.totalWeight);
+          if (typeof item?.approxWeight === "number" && Number.isFinite(item.approxWeight)) return Math.max(0, item.approxWeight);
+          return 0;
+        })();
+
+        return { count, weight };
+      }
+
+      function agComputeBasketTotals(items) {
+        let totalCount = 0;
+        let totalWeight = 0;
+        for (const it of items || []) {
+          const { count, weight } = agComputeItemApprox(it);
+          totalCount += count;
+          totalWeight += weight;
+        }
+        return { totalCount, totalWeight: Number(totalWeight.toFixed(2)) };
+      }
+
+      function agFormatItemDetails(item) {
+        if (item?.categoryId === "cat-bangle") {
+          const sizes = item?.sizes || {};
+          const parts = [];
+          for (const k of [1, 2, 3, 4, 5]) {
+            const q = Number(sizes[k] ?? 0);
+            if (Number.isFinite(q) && q > 0) parts.push(`سایز ${k}: ${agNfInt.format(Math.trunc(q))}`);
+          }
+          const customQty = Number(item?.custom?.qty ?? 0);
+          if (Number.isFinite(customQty) && customQty > 0) parts.push(`سایز سفارشی: ${agNfInt.format(Math.trunc(customQty))}`);
+          return parts.join(" • ") || "بدون جزئیات";
+        }
+        if (item?.categoryId === "cat-khorderiz") {
+          const type = String(item?.orderType || "").trim();
+          const unit = type === "وزنی" ? "گرم" : "عدد";
+          const val = Number(item?.value);
+          const safeVal =
+            Number.isFinite(val) && type === "وزنی"
+              ? agNfWeight.format(val)
+              : Number.isFinite(val)
+                ? agNfInt.format(Math.trunc(val))
+                : "-";
+          return `${type || "—"} • ${safeVal} ${unit}`;
+        }
+        return "—";
+      }
+
+      function agRenderBasketCard(item) {
+        const { count, weight } = agComputeItemApprox(item);
+        const modelName = String(item?.modelName || item?.modelId || "محصول");
+        const catName = String(item?.categoryName || "");
+        const groupName = String(item?.groupName || "");
+        const note = String(item?.note || item?.custom?.note || "").trim();
+        const details = agFormatItemDetails(item);
+        const isKh = item?.categoryId === "cat-khorderiz";
+        const orderType = String(item?.orderType || "").trim();
+        const valueNum = Number(item?.value);
+        const valueUnit = orderType === "وزنی" ? "گرم" : "عدد";
+        const valueText =
+          Number.isFinite(valueNum) && orderType === "وزنی"
+            ? agNfWeight.format(valueNum)
+            : Number.isFinite(valueNum)
+              ? agNfInt.format(Math.trunc(valueNum))
+              : "-";
+        const middleRows = isKh
+          ? `<div class="row"><span>نوع سفارش</span><span>${agEscapeHtml(orderType || "—")}</span></div>` +
+          `<div class="row"><span>مقدار</span><span>${agEscapeHtml(`${valueText} ${valueUnit}`)}</span></div>`
+          : `<div class="row"><span>جزئیات</span><span>${agEscapeHtml(details)}</span></div>` +
+          `<div class="row"><span>تعداد</span><span>${agNfInt.format(count)}</span></div>`;
+        return (
+          `<div class="order">` +
+          `<div class="row"><strong>${agEscapeHtml(modelName)}</strong><span class="badge" style="cursor:default;">${agEscapeHtml(catName || "سفارش")}</span></div>` +
+          `<div class="row"><span>گروه</span><span>${agEscapeHtml(groupName || "—")}</span></div>` +
+          middleRows +
+          `<div class="row"><span>وزن حدودی</span><span>${agNfWeight.format(weight)} گرم</span></div>` +
+          `<div class="row"><span>توضیح</span><span>${agEscapeHtml(note || "بدون توضیح")}</span></div>` +
+          `</div>`
+        );
+      }
+
+      function agReadOrders() {
+        try {
+          const raw = localStorage.getItem(AG_ORDERS_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function agWriteOrders(list) {
+        localStorage.setItem(AG_ORDERS_KEY, JSON.stringify(list));
+      }
+
+      function agNextOrderCode(phoneLast6) {
+        const last6 = String(phoneLast6 || "").replace(/[^\d]/g, "");
+        if (!/^\d{6}$/.test(last6)) throw new Error("bad_phone");
+
+        let data = { v: 1, per: {} };
+        try {
+          const raw = localStorage.getItem(AG_ORDER_CODE_COUNTER_KEY);
+          const parsed = raw ? JSON.parse(raw) : null;
+          if (parsed && typeof parsed === "object" && parsed.per && typeof parsed.per === "object") data = parsed;
+        } catch { }
+
+        const cur = Number(data.per[last6] || 0);
+        const next = cur + 1;
+        const max = 26 * 99;
+        if (next > max) throw new Error("limit");
+
+        data.per[last6] = next;
+        localStorage.setItem(AG_ORDER_CODE_COUNTER_KEY, JSON.stringify(data));
+
+        const letterIdx = Math.floor((next - 1) / 99) % 26;
+        const number = ((next - 1) % 99) + 1;
+        const letter = String.fromCharCode(65 + letterIdx);
+        const num = String(number).padStart(2, "0");
+        return `${last6}${letter}${num}`;
+      }
+
+      function agInitStage3() {
+        const basketPanel = document.getElementById("basket-panel");
+        const confirmPanel = document.getElementById("confirm-panel");
+        if (!basketPanel || !confirmPanel) return;
+
+        const msg = document.getElementById("basket-message");
+        const list = document.getElementById("basket-list");
+        const totalCountEl = document.getElementById("basket-total-count");
+        const totalWeightEl = document.getElementById("basket-total-weight");
+        const finalizeBtn = document.getElementById("basket-finalize");
+        const clearBtn = document.getElementById("basket-clear");
+
+        const customerLabel = document.getElementById("confirm-customer");
+        const dateLabel = document.getElementById("confirm-date");
+        const confirmPhone = document.getElementById("confirm-phone");
+        const confirmName = document.getElementById("confirm-name");
+        const confirmError = document.getElementById("confirm-error");
+        const summaryWrap = document.getElementById("confirm-summary");
+        const confirmSend = document.getElementById("confirm-send");
+        const confirmEdit = document.getElementById("confirm-edit");
+        const confirmSuccess = document.getElementById("confirm-success");
+
+        const dyn = document.getElementById("orders-dynamic");
+        const pageNotice = document.querySelector(".notice");
+        const newOrder = document.getElementById("new-order");
+        const filter = document.querySelector(".filter");
+        const orders = document.getElementById("orders");
+
+        function setConfirmError(text) {
+          if (!confirmError) return;
+          const t = String(text || "").trim();
+          confirmError.hidden = !t;
+          confirmError.textContent = t;
+        }
+
+        function renderOrders() {
+          if (!dyn) return;
+          const stored = agReadOrders();
+          dyn.innerHTML = stored
+            .slice()
+            .reverse()
+            .slice(0, 8)
+            .map((o) => {
+              const code = String(o?.code || "—");
+              const dt = String(o?.dateFa || "");
+              const sum = o?.summary || {};
+              const tc = Number(sum.totalCount) || 0;
+              const tw = Number(sum.totalWeight) || 0;
+              return (
+                `<div class="order">` +
+                `<div class="row"><strong>${agEscapeHtml(code)}</strong><span class="badge review">در انتظار بررسی مدیر فروش</span></div>` +
+                `<div class="row"><span>تاریخ</span><span>${agEscapeHtml(dt || "—")}</span></div>` +
+                `<div class="row"><span>تعداد کل</span><span>${agNfInt.format(tc)}</span></div>` +
+                `<div class="row"><span>وزن حدودی کل</span><span>${agNfWeight.format(tw)} گرم</span></div>` +
+                `</div>`
+              );
+            })
+            .join("");
+        }
+
+        function renderBasket() {
+          const { basket, cleared } = agLoadBasketWithTtl();
+          const items = Array.isArray(basket.items) ? basket.items : [];
+          const { totalCount, totalWeight } = agComputeBasketTotals(items);
+
+          if (totalCountEl) totalCountEl.textContent = agNfInt.format(totalCount);
+          if (totalWeightEl) totalWeightEl.textContent = `${agNfWeight.format(totalWeight)} گرم`;
+
+          if (msg) {
+            if (cleared) {
+              msg.hidden = false;
+              msg.textContent = "سبد سفارش شما به دلیل گذشت بیش از ۴ روز پاک شد.";
+            } else msg.hidden = true;
+          }
+
+          if (list) {
+            if (!items.length) {
+              list.innerHTML =
+                `<div class="order">` +
+                `<div class="row"><strong>سبد سفارش خالی است</strong><span class="badge" style="cursor:default;">—</span></div>` +
+                `<div class="row"><span>راهنما</span><span>برای افزودن محصول، از داشبورد وارد کاتالوگ شوید.</span></div>` +
+                `</div>`;
+            } else {
+              list.innerHTML = items.map(agRenderBasketCard).join("");
+            }
+          }
+
+          if (finalizeBtn) finalizeBtn.disabled = items.length === 0;
+          if (clearBtn) clearBtn.disabled = items.length === 0;
+
+          const profile = agReadProfile();
+          if (confirmPhone && !confirmPhone.value) confirmPhone.value = profile.phone || "";
+          if (confirmName && !confirmName.value) confirmName.value = profile.name || "";
+
+          renderOrders();
+          return items;
+        }
+
+        function openConfirm(items) {
+          if (!items.length) return;
+          const profile = agReadProfile();
+          const name = String((confirmName && confirmName.value) || profile.name || "").trim() || "مشتری";
+          if (customerLabel) customerLabel.textContent = name;
+          if (dateLabel) dateLabel.textContent = new Date().toLocaleDateString("fa-IR");
+          if (summaryWrap) summaryWrap.innerHTML = items.map(agRenderBasketCard).join("");
+          if (confirmSuccess) confirmSuccess.hidden = true;
+          if (confirmSend) confirmSend.disabled = false;
+          if (confirmEdit) confirmEdit.disabled = false;
+          setConfirmError("");
+          basketPanel.hidden = true;
+          confirmPanel.hidden = false;
+          if (pageNotice) pageNotice.hidden = true;
+          if (newOrder) newOrder.hidden = true;
+          if (filter) filter.hidden = true;
+          if (orders) orders.hidden = true;
+          if (titleEl) titleEl.textContent = "تأیید نهایی سفارش";
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function closeConfirm() {
+          confirmPanel.hidden = true;
+          basketPanel.hidden = false;
+          if (pageNotice) pageNotice.hidden = false;
+          if (newOrder) newOrder.hidden = false;
+          if (filter) filter.hidden = false;
+          if (orders) orders.hidden = false;
+          if (titleEl) titleEl.textContent = (document.querySelector(".title")?.textContent || "").trim() || document.title;
+          if (confirmSuccess) confirmSuccess.hidden = true;
+          setConfirmError("");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function submitOrder(items) {
+          const phoneDigits = agOnlyDigits((confirmPhone && confirmPhone.value) || agReadProfile().phone || "");
+          if (phoneDigits.length < 6) {
+            setConfirmError("شماره موبایل باید حداقل ۶ رقم باشد.");
+            return;
+          }
+          const last6 = phoneDigits.slice(-6);
+          const name = String((confirmName && confirmName.value) || agReadProfile().name || "").trim();
+          agSaveProfile({ name, phone: phoneDigits });
+
+          let code = "";
+          try {
+            code = agNextOrderCode(last6);
+          } catch {
+            setConfirmError("امکان ساخت کد سفارش وجود ندارد. لطفاً بعداً دوباره تلاش کنید.");
+            return;
+          }
+
+          const t = new Date();
+          const sum = agComputeBasketTotals(items);
+          const record = {
+            code,
+            createdAt: t.toISOString(),
+            dateFa: t.toLocaleDateString("fa-IR"),
+            customer: { name: name || "مشتری", phoneLast6: last6 },
+            summary: sum,
+            items,
+            status: "pending_review",
+          };
+
+          const orders = agReadOrders();
+          orders.push(record);
+          agWriteOrders(orders);
+
+          localStorage.removeItem(AG_BASKET_KEY);
+
+          if (confirmSuccess) {
+            confirmSuccess.hidden = false;
+            confirmSuccess.textContent = `سفارش شما با کد ${code} ثبت گردید`;
+          }
+          setConfirmError("");
+          if (confirmSend) confirmSend.disabled = true;
+          if (confirmEdit) confirmEdit.disabled = true;
+
+          renderBasket();
+        }
+
+        let itemsSnapshot = renderBasket();
+
+        if (finalizeBtn) finalizeBtn.addEventListener("click", () => openConfirm(itemsSnapshot));
+        if (clearBtn) clearBtn.addEventListener("click", () => {
+          if (!window.confirm("همه سفارش‌های داخل سبد حذف شود؟")) return;
+          localStorage.removeItem(AG_BASKET_KEY);
+          itemsSnapshot = renderBasket();
+        });
+        if (confirmEdit) confirmEdit.addEventListener("click", () => {
+          itemsSnapshot = renderBasket();
+          closeConfirm();
+        });
+        if (confirmSend) confirmSend.addEventListener("click", () => submitOrder(itemsSnapshot));
+        if (confirmPhone) confirmPhone.addEventListener("input", () => setConfirmError(""));
+        if (confirmName) confirmName.addEventListener("input", () => setConfirmError(""));
+
+        window.addEventListener("focus", () => {
+          if (!confirmPanel.hidden) return;
+          itemsSnapshot = renderBasket();
+        });
+      }
+
+      // Stage 2b: خرده‌ریز (row-based)
+      if (cat === "cat-khorderiz" && modelId) {
+        const kh = document.getElementById("khorderiz-detail");
+        if (!kh) return;
+
+        const MODELS = {
+          "mdl-earring-yellow-fantasy": { name: "گوشواره زرد فانتزی", groupName: "گوشواره" },
+          "mdl-earring-white-simple": { name: "گوشواره سفید ساده", groupName: "گوشواره" },
+        };
+        const model = MODELS[modelId];
+        if (!model) return;
+
+        const BASKET_KEY = "asiagold_basket_v1";
+        const DAY_MS = 24 * 60 * 60 * 1000;
+        const BASKET_TTL_MS = 4 * DAY_MS;
+        const isAdmin = localStorage.getItem("asiagold_role_v1") === "admin";
+        void isAdmin;
+
+        const avgWeightMin = 3;
+        const avgWeightMax = 5;
+        const avgUnit = (avgWeightMin + avgWeightMax) / 2;
+
+        const nfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
+        const nfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        const el = {
+          notice: document.querySelector(".notice"),
+          newOrder: document.getElementById("new-order"),
+          filter: document.querySelector(".filter"),
+          orders: document.getElementById("orders"),
+          bangle: document.getElementById("bangle-detail"),
+          basket: document.getElementById("basket-panel"),
+          confirm: document.getElementById("confirm-panel"),
+
+          back: document.getElementById("kr-back"),
+          badge: document.getElementById("kr-model-badge"),
+          name: document.getElementById("kr-name"),
+          image: document.getElementById("kr-image"),
+          addRow: document.getElementById("kr-add-row"),
+          rows: document.getElementById("kr-rows"),
+          summary: document.getElementById("kr-summary"),
+          error: document.getElementById("kr-error"),
+          add: document.getElementById("kr-add"),
+        };
+
+        function escapeHtml(s) {
+          return String(s)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+        }
+
+        function svgDataUri(text) {
+          const safe = String(text || "").slice(0, 48);
+          const svg =
+            `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">` +
+            `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
+            `<stop offset="0%" stop-color="#f6edc7"/><stop offset="100%" stop-color="#2b2500"/></linearGradient></defs>` +
+            `<rect width="100%" height="100%" fill="url(#g)"/>` +
+            `<circle cx="520" cy="260" r="220" fill="rgba(255,255,255,.08)"/>` +
+            `<circle cx="320" cy="520" r="260" fill="rgba(255,255,255,.05)"/>` +
+            `<text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="44" fill="rgba(255,255,255,.85)">` +
+            `${escapeHtml(safe)}` +
+            `</text>` +
+            `</svg>`;
+          return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+        }
+
+        function toLatinDigits(value) {
+          const s = String(value ?? "");
+          const fa = "۰۱۲۳۴۵۶۷۸۹";
+          const ar = "٠١٢٣٤٥٦٧٨٩";
+          return s
+            .replace(/[۰-۹]/g, (d) => String(fa.indexOf(d)))
+            .replace(/[٠-٩]/g, (d) => String(ar.indexOf(d)))
+            .replaceAll("٫", ".");
+        }
+
+        function parsePositiveInt(value) {
+          const raw = toLatinDigits(value).replaceAll(",", "").replaceAll("٬", "").trim();
+          if (!raw) return null;
+          if (!/^\d+$/.test(raw)) return null;
+          const n = Number(raw);
+          if (!Number.isSafeInteger(n) || n <= 0) return null;
+          return n;
+        }
+
+        function parsePositiveNumber(value) {
+          const raw = toLatinDigits(value).replaceAll(",", "").replaceAll("٬", "").trim();
+          if (!raw) return null;
+          if (!/^\d+(\.\d+)?$/.test(raw)) return null;
+          const n = Number(raw);
+          if (!Number.isFinite(n) || n <= 0) return null;
+          return n;
+        }
+
+        function basketEnsureValid() {
+          const now = Date.now();
+          const raw = localStorage.getItem(BASKET_KEY);
+          if (!raw) {
+            const t = new Date().toISOString();
+            return { v: 1, createdAt: t, updatedAt: t, items: [] };
+          }
+          try {
+            const data = JSON.parse(raw);
+            if (!data || typeof data !== "object" || !Array.isArray(data.items)) throw new Error("bad");
+            const createdAt = Date.parse(data.createdAt);
+            if (!Number.isFinite(createdAt) || now - createdAt > BASKET_TTL_MS) {
+              const t = new Date().toISOString();
+              return { v: 1, createdAt: t, updatedAt: t, items: [] };
+            }
+            return data;
+          } catch {
+            const t = new Date().toISOString();
+            return { v: 1, createdAt: t, updatedAt: t, items: [] };
+          }
+        }
+
+        function basketSave(basket) {
+          localStorage.setItem(BASKET_KEY, JSON.stringify(basket));
+        }
+
+        const stateRows = [];
+        function newRow() {
+          return {
+            id: `kr_${Date.now().toString(16)}_${Math.random().toString(16).slice(2)}`,
+            type: "count", // count | weight
+            value: "",
+            note: "",
+          };
+        }
+
+        function setError(message) {
+          if (!el.error) return;
+          if (!message) {
+            el.error.hidden = true;
+            el.error.textContent = "";
+            return;
+          }
+          el.error.hidden = false;
+          el.error.textContent = message;
+        }
+
+        function computeSummary(validRows) {
+          const count = validRows.length;
+          let totalWeight = 0;
+          for (const r of validRows) {
+            if (r.type === "weight") totalWeight += Number(r._parsed || 0);
+            if (r.type === "count") totalWeight += Number(r._parsed || 0) * avgUnit;
+          }
+          return { count, totalWeight };
+        }
+
+        function validateRow(row) {
+          row._valid = false;
+          row._parsed = null;
+          if (row.type === "count") {
+            const n = parsePositiveInt(row.value);
+            if (n !== null) {
+              row._valid = true;
+              row._parsed = n;
+            }
+            return row._valid ? "" : "برای «تعدادی» فقط عدد صحیح بزرگتر از ۰ مجاز است.";
+          }
+          const g = parsePositiveNumber(row.value);
+          if (g !== null) {
+            row._valid = true;
+            row._parsed = Number(g.toFixed(2));
+          }
+          return row._valid ? "" : "برای «وزنی» مقدار گرم را وارد کنید (بزرگتر از ۰).";
+        }
+
+        function render() {
+          if (!el.rows) return;
+          el.rows.innerHTML = "";
+
+          const validRows = [];
+          for (const r of stateRows) {
+            const error = validateRow(r);
+            if (r._valid) validRows.push(r);
+
+            const box = document.createElement("div");
+            box.className = `kr-row${r._valid ? "" : " invalid"}`;
+            box.dataset.rowId = r.id;
+
+            const hint = r.type === "weight" ? `میانگین وزن حدودی ${avgWeightMin} تا ${avgWeightMax} گرم` : "";
+            const valuePh = r.type === "weight" ? "مثال: ۱۲٫۵" : "مثال: ۳";
+            const valueLabel = r.type === "weight" ? "مقدار (گرم)" : "تعداد";
+
+            box.innerHTML =
+              `<div class="kr-row-top">` +
+              `<select aria-label="نوع سفارش">` +
+              `<option value="count">تعدادی</option>` +
+              `<option value="weight">وزنی</option>` +
+              `</select>` +
+              `<input aria-label="${escapeHtml(valueLabel)}" placeholder="${escapeHtml(valuePh)}" inputmode="decimal" autocomplete="off">` +
+              `</div>` +
+              `<div class="kr-hint" ${hint ? "" : "hidden"}>${escapeHtml(hint)}</div>` +
+              `<div class="kr-note"><textarea rows="2" placeholder="توضیحات (اختیاری)"></textarea></div>` +
+              `<button class="kr-remove" type="button">حذف این ردیف</button>` +
+              `<div class="kr-row-error" ${error ? "" : "hidden"}>${escapeHtml(error)}</div>`;
+
+            const select = box.querySelector("select");
+            const input = box.querySelector("input");
+            const textarea = box.querySelector("textarea");
+            const removeBtn = box.querySelector("button.kr-remove");
+
+            if (select) {
+              select.value = r.type === "weight" ? "weight" : "count";
+              select.addEventListener("change", () => {
+                r.type = select.value === "weight" ? "weight" : "count";
+                render();
+              });
+            }
+            if (input) {
+              input.value = r.value;
+              input.addEventListener("input", () => {
+                r.value = input.value;
+                render();
+              });
+            }
+            if (textarea) {
+              textarea.value = r.note;
+              textarea.addEventListener("input", () => {
+                r.note = textarea.value;
+              });
+            }
+            if (removeBtn) {
+              removeBtn.addEventListener("click", () => {
+                const idx = stateRows.findIndex((x) => x.id === r.id);
+                if (idx >= 0) stateRows.splice(idx, 1);
+                render();
+              });
+            }
+
+            el.rows.appendChild(box);
+          }
+
+          const { count, totalWeight } = computeSummary(validRows);
+          if (el.summary) {
+            el.summary.textContent = count
+              ? `${nfInt.format(count)} ردیف سفارش ثبت شده | حدود ${nfWeight.format(totalWeight)} گرم`
+              : "۰ ردیف سفارش ثبت شده";
+          }
+          setError(count ? "" : "حداقل یک ردیف سفارش معتبر لازم است.");
+          if (el.add) el.add.disabled = count === 0;
+        }
+
+        function addToBasket() {
+          const valid = stateRows.filter((r) => (validateRow(r), r._valid));
+          if (!valid.length) return false;
+
+          const basket = basketEnsureValid();
+          const t = new Date().toISOString();
+          basket.updatedAt = t;
+
+          for (const r of valid) {
+            const approxWeight = r.type === "weight" ? Number(r._parsed) : Number(r._parsed) * avgUnit;
+            basket.items.push({
+              itemId: r.id,
+              categoryId: "cat-khorderiz",
+              categoryName: "خرده‌ریز",
+              groupId,
+              groupName: model.groupName,
+              modelId,
+              modelName: model.name,
+              orderType: r.type === "weight" ? "وزنی" : "تعدادی",
+              value: r._parsed,
+              note: String(r.note || "").trim(),
+              approxWeight: Number(approxWeight.toFixed(2)),
+              createdAt: t,
+            });
+          }
+
+          basketSave(basket);
+          return true;
+        }
+
+        // Activate detail mode
+        kh.hidden = false;
+        if (el.bangle) el.bangle.hidden = true;
+        if (el.notice) el.notice.hidden = true;
+        if (el.basket) el.basket.hidden = true;
+        if (el.confirm) el.confirm.hidden = true;
+        if (el.newOrder) el.newOrder.hidden = true;
+        if (el.filter) el.filter.hidden = true;
+        if (el.orders) el.orders.hidden = true;
+
+        if (titleEl) titleEl.textContent = model.name;
+        if (el.name) el.name.textContent = model.name;
+        if (el.badge) el.badge.textContent = "خرده‌ریز";
+        if (el.image) el.image.src = svgDataUri(model.name);
+
+        if (el.back) el.back.addEventListener("click", () => {
+          window.location.href = "./user-dashboard.html#cat=cat-khorderiz&level=group";
+        });
+
+        if (el.addRow) el.addRow.addEventListener("click", () => {
+          stateRows.push(newRow());
+          render();
+        });
+
+        if (el.add) el.add.addEventListener("click", () => {
+          if (!addToBasket()) {
+            render();
+            return;
+          }
+          window.location.href = "./user-dashboard.html#cat=cat-khorderiz&level=group";
+        });
+
+        stateRows.push(newRow());
+        render();
+        return;
+      }
+
+      const detail = document.getElementById("bangle-detail");
+      if (!detail || cat !== "cat-bangle" || !modelId) {
+        if (!cat && !modelId) agInitStage3();
+        return;
+      }
+
+      const MODELS = {
+        "mdl-bangle-asia-120-yellow": {
+          name: "النگو آسیا 120 زرد",
+          groupName: "النگو آسیا",
+          unitWeights: { 1: 4.10, 2: 4.20, 3: 4.30, 4: 4.40, 5: 4.50 },
+        },
+        "mdl-bangle-asia-155-yellow": {
+          name: "النگو آسیا 155 زرد",
+          groupName: "النگو آسیا",
+          unitWeights: { 1: 4.40, 2: 4.55, 3: 4.70, 4: 4.85, 5: 5.00 },
+        },
+      };
+
+      const model = MODELS[modelId];
+      if (!model) return;
+
+      const isAdmin = localStorage.getItem("asiagold_role_v1") === "admin";
+      const MAX_TOTAL = 120;
+      const DAY_MS = 24 * 60 * 60 * 1000;
+      const BASKET_TTL_MS = 4 * DAY_MS;
+      const BASKET_KEY = "asiagold_basket_v1";
+
+      const nfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
+      const nfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      const el = {
+        notice: document.querySelector(".notice"),
+        newOrder: document.getElementById("new-order"),
+        filter: document.querySelector(".filter"),
+        orders: document.getElementById("orders"),
+        basket: document.getElementById("basket-panel"),
+        confirm: document.getElementById("confirm-panel"),
+
+        back: document.getElementById("pd-back"),
+        name: document.getElementById("pd-name"),
+        modelBadge: document.getElementById("pd-model-badge"),
+        sizes: document.getElementById("pd-sizes"),
+
+        prev: document.getElementById("pd-prev"),
+        next: document.getElementById("pd-next"),
+        image: document.getElementById("pd-image"),
+        dots: document.getElementById("pd-dots"),
+
+        customWrap: document.getElementById("pd-custom-note-wrap"),
+        customNote: document.getElementById("pd-custom-note"),
+        customConfirm: document.getElementById("pd-custom-confirm"),
+        customError: document.getElementById("pd-custom-error"),
+
+        totalCountEl: document.getElementById("pd-total-count"),
+        totalWeightEl: document.getElementById("pd-total-weight"),
+
+        summary: document.getElementById("pd-summary"),
+        error: document.getElementById("pd-error"),
+        add: document.getElementById("pd-add"),
+      };
+
+      function escapeHtml(s) {
+        return String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function svgDataUri(text, idx) {
+        const safe = String(text || "").slice(0, 32);
+        const bgA = ["#f6edc7", "#c9a23a", "#7a6408"][idx % 3];
+        const bgB = ["#2b2500", "#0f0d00", "#2b2500"][(idx + 1) % 3];
+        const svg =
+          `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">` +
+          `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
+          `<stop offset="0%" stop-color="${bgA}"/><stop offset="100%" stop-color="${bgB}"/></linearGradient></defs>` +
+          `<rect width="100%" height="100%" fill="url(#g)"/>` +
+          `<circle cx="520" cy="260" r="220" fill="rgba(255,255,255,.08)"/>` +
+          `<circle cx="320" cy="520" r="260" fill="rgba(255,255,255,.05)"/>` +
+          `<text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="44" fill="rgba(255,255,255,.85)">` +
+          `${escapeHtml(safe)}` +
+          `</text>` +
+          `</svg>`;
+        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      }
+
+      function averageWeight(unitWeights) {
+        const values = Object.values(unitWeights).map((x) => Number(x)).filter((x) => Number.isFinite(x));
+        if (!values.length) return 0;
+        return values.reduce((a, b) => a + b, 0) / values.length;
+      }
+
+      const unitWeightCustom = averageWeight(model.unitWeights);
+
+      const qty = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, custom: 0 };
+      const images = [0, 1, 2].map((i) => svgDataUri(model.name, i));
+      let imgIdx = 0;
+
+      function setImage(index) {
+        const nextIdx = (index + images.length) % images.length;
+        imgIdx = nextIdx;
+        el.image.src = images[imgIdx];
+        el.dots.querySelectorAll(".pd-dot").forEach((d, i) => d.classList.toggle("active", i === imgIdx));
+      }
+
+      let slideTimer = null;
+      function startSlide() {
+        stopSlide();
+        slideTimer = setInterval(() => setImage(imgIdx + 1), 3000);
+      }
+      function stopSlide() {
+        if (slideTimer) clearInterval(slideTimer);
+        slideTimer = null;
+      }
+
+      function renderDots() {
+        el.dots.innerHTML = images.map((_, i) => `<div class="pd-dot${i === imgIdx ? " active" : ""}"></div>`).join("");
+      }
+
+      function clampNonNegInt(n) {
+        const x = Number(n);
+        if (!Number.isFinite(x)) return 0;
+        return Math.max(0, Math.trunc(x));
+      }
+
+      function computeTotals() {
+        const totalCount = qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty.custom;
+        const totalWeight =
+          qty[1] * model.unitWeights[1] +
+          qty[2] * model.unitWeights[2] +
+          qty[3] * model.unitWeights[3] +
+          qty[4] * model.unitWeights[4] +
+          qty[5] * model.unitWeights[5] +
+          qty.custom * unitWeightCustom;
+        return { totalCount, totalWeight };
+      }
+
+      function setError(message) {
+        if (!message) {
+          el.error.hidden = true;
+          el.error.textContent = "";
+          return;
+        }
+        el.error.hidden = false;
+        el.error.textContent = message;
+      }
+
+      function validate() {
+        const { totalCount, totalWeight } = computeTotals();
+        const wStr = nfWeight.format(totalWeight);
+        el.summary.textContent = `${nfInt.format(totalCount)} عدد | حدود ${wStr} گرم`;
+
+        // Top totals
+        if (el.totalCountEl) el.totalCountEl.textContent = nfInt.format(totalCount);
+        if (el.totalWeightEl) el.totalWeightEl.textContent = wStr;
+
+        const needsCustom = qty.custom > 0;
+        el.customWrap.hidden = !needsCustom;
+
+        let ok = true;
+        let message = "";
+
+        if (totalCount < 1) {
+          ok = false;
+          message = "حداقل سفارش برای این مدل: ۱ عدد.";
+        } else {
+          // Clamp max logic
+          if (!isAdmin && totalCount > MAX_TOTAL) {
+            ok = false;
+            message = `حداکثر تعداد مجاز برای هر مدل ${nfInt.format(MAX_TOTAL)} عدد است.`;
+          }
+        }
+
+        if (needsCustom) {
+          const note = String(el.customNote.value || "").trim();
+          const confirmed = el.customConfirm && el.customConfirm.checked;
+
+          if (note.length < 5) {
+            ok = false;
+            el.customError.hidden = false;
+            el.customError.textContent = "توضیحات سایز سفارشی الزامی است (حداقل ۵ کاراکتر).";
+          } else if (!confirmed) {
+            ok = false;
+            el.customError.hidden = false;
+            el.customError.textContent = "تیک «این سفارش قطعی است» الزامی می‌باشد.";
+          } else {
+            el.customError.hidden = true;
+            el.customError.textContent = "";
+          }
+        } else {
+          el.customError.hidden = true;
+          el.customError.textContent = "";
+          if (el.customConfirm) el.customConfirm.checked = false; // Reset if hidden
+        }
+
+        setError(message);
+        el.add.disabled = !ok;
+        return ok;
+      }
+
+      function renderSizeRow(sizeKey, label, unitW, thumbText) {
+        const row = document.createElement("div");
+        row.className = "pd-row";
+        row.dataset.size = String(sizeKey);
+
+        row.innerHTML =
+          `<div class="pd-thumb" aria-hidden="true">${escapeHtml(thumbText)}</div>` +
+          `<div class="pd-info">` +
+          `<div class="pd-size-name">${escapeHtml(label)}</div>` +
+          `<div class="pd-size-meta">میانگین وزن هر عدد: ${nfWeight.format(unitW)} گرم</div>` +
+          `</div>` +
+          `<div class="pd-qty">` +
+          `<div class="pd-qty-group">` +
+          `<button class="pd-qty-btn" type="button" data-delta="6">+۶</button>` +
+          `<button class="pd-qty-btn" type="button" data-delta="1">+۱</button>` +
+          `</div>` +
+          `<div class="pd-qty-value" id="pd-q-${escapeHtml(String(sizeKey))}">${nfInt.format(0)}</div>` +
+          `<div class="pd-qty-group">` +
+          `<button class="pd-qty-btn secondary" type="button" data-delta="-1">−۱</button>` +
+          `<button class="pd-qty-btn secondary" type="button" data-delta="-6">−۶</button>` +
+          `</div>` +
+          `</div>`;
+
+        const valueEl = row.querySelector(`#pd-q-${CSS.escape(String(sizeKey))}`);
+        row.querySelectorAll("button[data-delta]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const delta = Number(btn.getAttribute("data-delta") || "0");
+            qty[sizeKey] = clampNonNegInt(qty[sizeKey] + delta);
+            if (valueEl) valueEl.textContent = nfInt.format(qty[sizeKey]);
+            validate();
+          });
+        });
+        return row;
+      }
+
+      function basketLoad() {
+        const raw = localStorage.getItem(BASKET_KEY);
+        if (!raw) return null;
+        try {
+          const data = JSON.parse(raw);
+          if (!data || typeof data !== "object") return null;
+          if (!Array.isArray(data.items)) return null;
+          return data;
+        } catch {
+          return null;
+        }
+      }
+
+      function basketSave(basket) {
+        localStorage.setItem(BASKET_KEY, JSON.stringify(basket));
+      }
+
+      function basketEnsureValid() {
+        const now = Date.now();
+        const basket = basketLoad();
+        if (!basket) {
+          const t = new Date().toISOString();
+          return { v: 1, createdAt: t, updatedAt: t, items: [] };
+        }
+        const createdAt = Date.parse(basket.createdAt);
         if (!Number.isFinite(createdAt) || now - createdAt > BASKET_TTL_MS) {
           const t = new Date().toISOString();
           return { v: 1, createdAt: t, updatedAt: t, items: [] };
         }
-        return data;
-      } catch {
+        return basket;
+      }
+
+      function basketAddItem() {
+        const basket = basketEnsureValid();
+        const { totalCount, totalWeight } = computeTotals();
         const t = new Date().toISOString();
-        return { v: 1, createdAt: t, updatedAt: t, items: [] };
-      }
-    }
-
-    function basketSave(basket) {
-      localStorage.setItem(BASKET_KEY, JSON.stringify(basket));
-    }
-
-    const stateRows = [];
-    function newRow() {
-      return {
-        id: `kr_${Date.now().toString(16)}_${Math.random().toString(16).slice(2)}`,
-        type: "count", // count | weight
-        value: "",
-        note: "",
-      };
-    }
-
-    function setError(message) {
-      if (!el.error) return;
-      if (!message) {
-        el.error.hidden = true;
-        el.error.textContent = "";
-        return;
-      }
-      el.error.hidden = false;
-      el.error.textContent = message;
-    }
-
-    function computeSummary(validRows) {
-      const count = validRows.length;
-      let totalWeight = 0;
-      for (const r of validRows) {
-        if (r.type === "weight") totalWeight += Number(r._parsed || 0);
-        if (r.type === "count") totalWeight += Number(r._parsed || 0) * avgUnit;
-      }
-      return { count, totalWeight };
-    }
-
-    function validateRow(row) {
-      row._valid = false;
-      row._parsed = null;
-      if (row.type === "count") {
-        const n = parsePositiveInt(row.value);
-        if (n !== null) {
-          row._valid = true;
-          row._parsed = n;
-        }
-        return row._valid ? "" : "برای «تعدادی» فقط عدد صحیح بزرگتر از ۰ مجاز است.";
-      }
-      const g = parsePositiveNumber(row.value);
-      if (g !== null) {
-        row._valid = true;
-        row._parsed = Number(g.toFixed(2));
-      }
-      return row._valid ? "" : "برای «وزنی» مقدار گرم را وارد کنید (بزرگتر از ۰).";
-    }
-
-    function render() {
-      if (!el.rows) return;
-      el.rows.innerHTML = "";
-
-      const validRows = [];
-      for (const r of stateRows) {
-        const error = validateRow(r);
-        if (r._valid) validRows.push(r);
-
-        const box = document.createElement("div");
-        box.className = `kr-row${r._valid ? "" : " invalid"}`;
-        box.dataset.rowId = r.id;
-
-        const hint = r.type === "weight" ? `میانگین وزن حدودی ${avgWeightMin} تا ${avgWeightMax} گرم` : "";
-        const valuePh = r.type === "weight" ? "مثال: ۱۲٫۵" : "مثال: ۳";
-        const valueLabel = r.type === "weight" ? "مقدار (گرم)" : "تعداد";
-
-        box.innerHTML =
-          `<div class="kr-row-top">` +
-          `<select aria-label="نوع سفارش">` +
-          `<option value="count">تعدادی</option>` +
-          `<option value="weight">وزنی</option>` +
-          `</select>` +
-          `<input aria-label="${escapeHtml(valueLabel)}" placeholder="${escapeHtml(valuePh)}" inputmode="decimal" autocomplete="off">` +
-          `</div>` +
-          `<div class="kr-hint" ${hint ? "" : "hidden"}>${escapeHtml(hint)}</div>` +
-          `<div class="kr-note"><textarea rows="2" placeholder="توضیحات (اختیاری)"></textarea></div>` +
-          `<button class="kr-remove" type="button">حذف این ردیف</button>` +
-          `<div class="kr-row-error" ${error ? "" : "hidden"}>${escapeHtml(error)}</div>`;
-
-        const select = box.querySelector("select");
-        const input = box.querySelector("input");
-        const textarea = box.querySelector("textarea");
-        const removeBtn = box.querySelector("button.kr-remove");
-
-        if (select) {
-          select.value = r.type === "weight" ? "weight" : "count";
-          select.addEventListener("change", () => {
-            r.type = select.value === "weight" ? "weight" : "count";
-            render();
-          });
-        }
-        if (input) {
-          input.value = r.value;
-          input.addEventListener("input", () => {
-            r.value = input.value;
-            render();
-          });
-        }
-        if (textarea) {
-          textarea.value = r.note;
-          textarea.addEventListener("input", () => {
-            r.note = textarea.value;
-          });
-        }
-        if (removeBtn) {
-          removeBtn.addEventListener("click", () => {
-            const idx = stateRows.findIndex((x) => x.id === r.id);
-            if (idx >= 0) stateRows.splice(idx, 1);
-            render();
-          });
-        }
-
-        el.rows.appendChild(box);
-      }
-
-      const { count, totalWeight } = computeSummary(validRows);
-      if (el.summary) {
-        el.summary.textContent = count
-          ? `${nfInt.format(count)} ردیف سفارش ثبت شده | حدود ${nfWeight.format(totalWeight)} گرم`
-          : "۰ ردیف سفارش ثبت شده";
-      }
-      setError(count ? "" : "حداقل یک ردیف سفارش معتبر لازم است.");
-      if (el.add) el.add.disabled = count === 0;
-    }
-
-    function addToBasket() {
-      const valid = stateRows.filter((r) => (validateRow(r), r._valid));
-      if (!valid.length) return false;
-
-      const basket = basketEnsureValid();
-      const t = new Date().toISOString();
-      basket.updatedAt = t;
-
-      for (const r of valid) {
-        const approxWeight = r.type === "weight" ? Number(r._parsed) : Number(r._parsed) * avgUnit;
-        basket.items.push({
-          itemId: r.id,
-          categoryId: "cat-khorderiz",
-          categoryName: "خرده‌ریز",
+        const item = {
+          itemId: `b_${Date.now().toString(16)}_${Math.random().toString(16).slice(2)}`,
+          categoryId: "cat-bangle",
+          categoryName: "النگو",
           groupId,
           groupName: model.groupName,
           modelId,
           modelName: model.name,
-          orderType: r.type === "weight" ? "وزنی" : "تعدادی",
-          value: r._parsed,
-          note: String(r.note || "").trim(),
-          approxWeight: Number(approxWeight.toFixed(2)),
+          sizes: { 1: qty[1], 2: qty[2], 3: qty[3], 4: qty[4], 5: qty[5] },
+          custom: { qty: qty.custom, note: String(el.customNote.value || "").trim(), confirmed: Boolean(el.customConfirm?.checked) },
+          unitWeights: { ...model.unitWeights, custom: unitWeightCustom },
+          totalCount,
+          totalWeight: Number(totalWeight.toFixed(2)),
           createdAt: t,
+        };
+        basket.items.push(item);
+        basket.updatedAt = t;
+        basketSave(basket);
+      }
+
+      // Activate detail mode
+      detail.hidden = false;
+      if (el.notice) el.notice.hidden = true;
+      if (el.basket) el.basket.hidden = true;
+      if (el.confirm) el.confirm.hidden = true;
+      if (el.newOrder) el.newOrder.hidden = true;
+      if (el.filter) el.filter.hidden = true;
+      if (el.orders) el.orders.hidden = true;
+
+      if (titleEl) titleEl.textContent = model.name;
+      if (el.name) el.name.textContent = model.name;
+      if (el.modelBadge) el.modelBadge.textContent = "النگو";
+
+      if (el.back) {
+        el.back.addEventListener("click", () => {
+          const { totalCount } = computeTotals();
+          if (totalCount > 0) {
+            if (!window.confirm("آیا از ثبت سفارش انصراف می‌دهید؟")) return;
+          }
+          stopSlide(); // Ensure we stop the timer
+          window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
         });
       }
 
-      basketSave(basket);
-      return true;
-    }
+      el.sizes.innerHTML = "";
+      el.sizes.appendChild(renderSizeRow(1, "سایز ۱", model.unitWeights[1], "۱"));
+      el.sizes.appendChild(renderSizeRow(2, "سایز ۲", model.unitWeights[2], "۲"));
+      el.sizes.appendChild(renderSizeRow(3, "سایز ۳", model.unitWeights[3], "۳"));
+      el.sizes.appendChild(renderSizeRow(4, "سایز ۴", model.unitWeights[4], "۴"));
+      el.sizes.appendChild(renderSizeRow(5, "سایز ۵", model.unitWeights[5], "۵"));
+      el.sizes.appendChild(renderSizeRow("custom", "سایز سفارشی", unitWeightCustom, "✦"));
 
-    // Activate detail mode
-    kh.hidden = false;
-    if (el.bangle) el.bangle.hidden = true;
-    if (el.notice) el.notice.hidden = true;
-    if (el.basket) el.basket.hidden = true;
-    if (el.confirm) el.confirm.hidden = true;
-    if (el.newOrder) el.newOrder.hidden = true;
-    if (el.filter) el.filter.hidden = true;
-    if (el.orders) el.orders.hidden = true;
+      el.customNote.addEventListener("input", () => validate());
+      if (el.customConfirm) el.customConfirm.addEventListener("change", () => validate());
+      el.prev.addEventListener("click", () => { stopSlide(); setImage(imgIdx - 1); });
+      el.next.addEventListener("click", () => { stopSlide(); setImage(imgIdx + 1); });
 
-    if (titleEl) titleEl.textContent = model.name;
-    if (el.name) el.name.textContent = model.name;
-    if (el.badge) el.badge.textContent = "خرده‌ریز";
-    if (el.image) el.image.src = svgDataUri(model.name);
+      renderDots();
+      setImage(0);
+      startSlide();
+      validate();
 
-    if (el.back) el.back.addEventListener("click", () => {
-      window.location.href = "./user-dashboard.html#cat=cat-khorderiz&level=group";
-    });
-
-    if (el.addRow) el.addRow.addEventListener("click", () => {
-      stateRows.push(newRow());
-      render();
-    });
-
-    if (el.add) el.add.addEventListener("click", () => {
-      if (!addToBasket()) {
-        render();
-        return;
-      }
-      window.location.href = "./user-dashboard.html#cat=cat-khorderiz&level=group";
-    });
-
-    stateRows.push(newRow());
-    render();
-    return;
-  }
-
-  const detail = document.getElementById("bangle-detail");
-  if (!detail || cat !== "cat-bangle" || !modelId) {
-    if (!cat && !modelId) agInitStage3();
-    return;
-  }
-
-  const MODELS = {
-    "mdl-bangle-asia-120-yellow": {
-      name: "النگو آسیا 120 زرد",
-      groupName: "النگو آسیا",
-      unitWeights: { 1: 4.10, 2: 4.20, 3: 4.30, 4: 4.40, 5: 4.50 },
-    },
-    "mdl-bangle-asia-155-yellow": {
-      name: "النگو آسیا 155 زرد",
-      groupName: "النگو آسیا",
-      unitWeights: { 1: 4.40, 2: 4.55, 3: 4.70, 4: 4.85, 5: 5.00 },
-    },
-  };
-
-  const model = MODELS[modelId];
-  if (!model) return;
-
-  const isAdmin = localStorage.getItem("asiagold_role_v1") === "admin";
-  const MAX_TOTAL = 120;
-  const DAY_MS = 24 * 60 * 60 * 1000;
-  const BASKET_TTL_MS = 4 * DAY_MS;
-  const BASKET_KEY = "asiagold_basket_v1";
-
-  const nfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
-  const nfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-  const el = {
-    notice: document.querySelector(".notice"),
-    newOrder: document.getElementById("new-order"),
-    filter: document.querySelector(".filter"),
-    orders: document.getElementById("orders"),
-    basket: document.getElementById("basket-panel"),
-    confirm: document.getElementById("confirm-panel"),
-
-    back: document.getElementById("pd-back"),
-    name: document.getElementById("pd-name"),
-    modelBadge: document.getElementById("pd-model-badge"),
-    sizes: document.getElementById("pd-sizes"),
-
-    prev: document.getElementById("pd-prev"),
-    next: document.getElementById("pd-next"),
-    image: document.getElementById("pd-image"),
-    dots: document.getElementById("pd-dots"),
-
-    customWrap: document.getElementById("pd-custom-note-wrap"),
-    customNote: document.getElementById("pd-custom-note"),
-    customError: document.getElementById("pd-custom-error"),
-
-    summary: document.getElementById("pd-summary"),
-    error: document.getElementById("pd-error"),
-    add: document.getElementById("pd-add"),
-  };
-
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  function svgDataUri(text, idx) {
-    const safe = String(text || "").slice(0, 32);
-    const bgA = ["#f6edc7", "#c9a23a", "#7a6408"][idx % 3];
-    const bgB = ["#2b2500", "#0f0d00", "#2b2500"][(idx + 1) % 3];
-    const svg =
-      `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">` +
-      `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
-      `<stop offset="0%" stop-color="${bgA}"/><stop offset="100%" stop-color="${bgB}"/></linearGradient></defs>` +
-      `<rect width="100%" height="100%" fill="url(#g)"/>` +
-      `<circle cx="520" cy="260" r="220" fill="rgba(255,255,255,.08)"/>` +
-      `<circle cx="320" cy="520" r="260" fill="rgba(255,255,255,.05)"/>` +
-      `<text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="44" fill="rgba(255,255,255,.85)">` +
-      `${escapeHtml(safe)}` +
-      `</text>` +
-      `</svg>`;
-    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-  }
-
-  function averageWeight(unitWeights) {
-    const values = Object.values(unitWeights).map((x) => Number(x)).filter((x) => Number.isFinite(x));
-    if (!values.length) return 0;
-    return values.reduce((a, b) => a + b, 0) / values.length;
-  }
-
-  const unitWeightCustom = averageWeight(model.unitWeights);
-
-  const qty = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, custom: 0 };
-  const images = [0, 1, 2].map((i) => svgDataUri(model.name, i));
-  let imgIdx = 0;
-
-  function setImage(index) {
-    const nextIdx = (index + images.length) % images.length;
-    imgIdx = nextIdx;
-    el.image.src = images[imgIdx];
-    el.dots.querySelectorAll(".pd-dot").forEach((d, i) => d.classList.toggle("active", i === imgIdx));
-  }
-
-  function renderDots() {
-    el.dots.innerHTML = images.map((_, i) => `<div class="pd-dot${i === imgIdx ? " active" : ""}"></div>`).join("");
-  }
-
-  function clampNonNegInt(n) {
-    const x = Number(n);
-    if (!Number.isFinite(x)) return 0;
-    return Math.max(0, Math.trunc(x));
-  }
-
-  function computeTotals() {
-    const totalCount = qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty.custom;
-    const totalWeight =
-      qty[1] * model.unitWeights[1] +
-      qty[2] * model.unitWeights[2] +
-      qty[3] * model.unitWeights[3] +
-      qty[4] * model.unitWeights[4] +
-      qty[5] * model.unitWeights[5] +
-      qty.custom * unitWeightCustom;
-    return { totalCount, totalWeight };
-  }
-
-  function setError(message) {
-    if (!message) {
-      el.error.hidden = true;
-      el.error.textContent = "";
-      return;
-    }
-    el.error.hidden = false;
-    el.error.textContent = message;
-  }
-
-  function validate() {
-    const { totalCount, totalWeight } = computeTotals();
-    el.summary.textContent = `${nfInt.format(totalCount)} عدد | حدود ${nfWeight.format(totalWeight)} گرم`;
-
-    const needsCustom = qty.custom > 0;
-    el.customWrap.hidden = !needsCustom;
-
-    let ok = true;
-    let message = "";
-
-    if (totalCount < 1) {
-      ok = false;
-      message = "حداقل سفارش برای این مدل: ۱ عدد.";
-    }
-
-    if (!isAdmin && totalCount > MAX_TOTAL) {
-      ok = false;
-      message = `حداکثر تعداد مجاز برای هر مدل ${nfInt.format(MAX_TOTAL)} عدد است. برای تعداد بیشتر، ابتدا همین مقدار را به سبد اضافه کنید و دوباره وارد همین مدل شوید.`;
-    }
-
-    if (needsCustom) {
-      const note = String(el.customNote.value || "").trim();
-      if (note.length < 5) {
-        ok = false;
-        el.customError.hidden = false;
-        el.customError.textContent = "توضیحات سایز سفارشی الزامی است (حداقل ۵ کاراکتر).";
-      } else {
-        el.customError.hidden = true;
-        el.customError.textContent = "";
-      }
-    } else {
-      el.customError.hidden = true;
-      el.customError.textContent = "";
-    }
-
-    setError(message);
-    el.add.disabled = !ok;
-    return ok;
-  }
-
-  function renderSizeRow(sizeKey, label, unitW, thumbText) {
-    const row = document.createElement("div");
-    row.className = "pd-row";
-    row.dataset.size = String(sizeKey);
-
-    row.innerHTML =
-      `<div class="pd-thumb" aria-hidden="true">${escapeHtml(thumbText)}</div>` +
-      `<div class="pd-info">` +
-      `<div class="pd-size-name">${escapeHtml(label)}</div>` +
-      `<div class="pd-size-meta">میانگین وزن هر عدد: ${nfWeight.format(unitW)} گرم</div>` +
-      `</div>` +
-      `<div class="pd-qty">` +
-      `<div class="pd-qty-group" aria-label="افزایش">` +
-      `<button class="pd-qty-btn" type="button" data-delta="1">+۱</button>` +
-      `<button class="pd-qty-btn" type="button" data-delta="6">+۶</button>` +
-      `</div>` +
-      `<div class="pd-qty-value" id="pd-q-${escapeHtml(String(sizeKey))}">${nfInt.format(0)}</div>` +
-      `<div class="pd-qty-group" aria-label="کاهش">` +
-      `<button class="pd-qty-btn secondary" type="button" data-delta="-1">−۱</button>` +
-      `<button class="pd-qty-btn secondary" type="button" data-delta="-6">−۶</button>` +
-      `</div>` +
-      `</div>`;
-
-    const valueEl = row.querySelector(`#pd-q-${CSS.escape(String(sizeKey))}`);
-    row.querySelectorAll("button[data-delta]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const delta = Number(btn.getAttribute("data-delta") || "0");
-        qty[sizeKey] = clampNonNegInt(qty[sizeKey] + delta);
-        if (valueEl) valueEl.textContent = nfInt.format(qty[sizeKey]);
-        validate();
+      el.add.addEventListener("click", () => {
+        if (!validate()) return;
+        basketAddItem();
+        stopSlide();
+        window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
       });
-    });
-    return row;
-  }
+    })();
+  </script>
+  <script>
+    (() => {
+      const about = document.getElementById("ag-modal-about");
+      const help = document.getElementById("ag-modal-help");
+      const helpBody = document.getElementById("ag-help-body");
 
-  function basketLoad() {
-    const raw = localStorage.getItem(BASKET_KEY);
-    if (!raw) return null;
-    try {
-      const data = JSON.parse(raw);
-      if (!data || typeof data !== "object") return null;
-      if (!Array.isArray(data.items)) return null;
-      return data;
-    } catch {
-      return null;
-    }
-  }
+      function getHelpText() {
+        const page = (location.pathname.split("/").pop() || "").toLowerCase();
+        if (page.includes("user-dashboard")) return "دسته، گروه و مدل را انتخاب کنید. برای ورود، روی کل ردیف بزنید.";
+        if (page.includes("user-orders")) {
+          const params = new URLSearchParams(location.search);
+          const hasDetail = Boolean(params.get("cat") && params.get("model"));
+          return hasDetail
+            ? "مقادیر را وارد کنید. جمع کل را پایین می‌بینید. سپس «افزودن به سبد» را بزنید."
+            : "جمع تعداد و وزن را بررسی کنید و «نهایی کردن سفارش» را بزنید.";
+        }
+        if (page.includes("admin")) return "این بخش مخصوص مدیریت است.";
+        if (page.includes("index")) return "ورود به سیستم از این صفحه انجام می‌شود.";
+        return "راهنمای این صفحه در دسترس نیست.";
+      }
 
-  function basketSave(basket) {
-    localStorage.setItem(BASKET_KEY, JSON.stringify(basket));
-  }
+      function syncHelpContent() {
+        if (helpBody) helpBody.textContent = getHelpText();
+      }
 
-  function basketEnsureValid() {
-    const now = Date.now();
-    const basket = basketLoad();
-    if (!basket) {
-      const t = new Date().toISOString();
-      return { v: 1, createdAt: t, updatedAt: t, items: [] };
-    }
-    const createdAt = Date.parse(basket.createdAt);
-    if (!Number.isFinite(createdAt) || now - createdAt > BASKET_TTL_MS) {
-      const t = new Date().toISOString();
-      return { v: 1, createdAt: t, updatedAt: t, items: [] };
-    }
-    return basket;
-  }
+      function syncBodyLock() {
+        const anyOpen = (about && !about.hidden) || (help && !help.hidden);
+        document.body.classList.toggle("ag-modal-open", Boolean(anyOpen));
+      }
 
-  function basketAddItem() {
-    const basket = basketEnsureValid();
-    const { totalCount, totalWeight } = computeTotals();
-    const t = new Date().toISOString();
-    const item = {
-      itemId: `b_${Date.now().toString(16)}_${Math.random().toString(16).slice(2)}`,
-      categoryId: "cat-bangle",
-      categoryName: "النگو",
-      groupId,
-      groupName: model.groupName,
-      modelId,
-      modelName: model.name,
-      sizes: { 1: qty[1], 2: qty[2], 3: qty[3], 4: qty[4], 5: qty[5] },
-      custom: { qty: qty.custom, note: String(el.customNote.value || "").trim() },
-      unitWeights: { ...model.unitWeights, custom: unitWeightCustom },
-      totalCount,
-      totalWeight: Number(totalWeight.toFixed(2)),
-      createdAt: t,
-    };
-    basket.items.push(item);
-    basket.updatedAt = t;
-    basketSave(basket);
-  }
+      function openModal(which) {
+        if (which === "about" && about) {
+          about.hidden = false;
+          syncBodyLock();
+          const close = about.querySelector("[data-ag-close=\"about\"]");
+          if (close && close.focus) close.focus();
+          return;
+        }
+        if (which === "help" && help) {
+          syncHelpContent();
+          help.hidden = false;
+          syncBodyLock();
+          const close = help.querySelector("[data-ag-close=\"help\"]");
+          if (close && close.focus) close.focus();
+        }
+      }
 
-  // Activate detail mode
-  detail.hidden = false;
-  if (el.notice) el.notice.hidden = true;
-  if (el.basket) el.basket.hidden = true;
-  if (el.confirm) el.confirm.hidden = true;
-  if (el.newOrder) el.newOrder.hidden = true;
-  if (el.filter) el.filter.hidden = true;
-  if (el.orders) el.orders.hidden = true;
+      function closeModal(which) {
+        if (which === "about" && about) about.hidden = true;
+        if (which === "help" && help) help.hidden = true;
+        syncBodyLock();
+      }
 
-  if (titleEl) titleEl.textContent = model.name;
-  if (el.name) el.name.textContent = model.name;
-  if (el.modelBadge) el.modelBadge.textContent = "النگو";
+      document.addEventListener("click", (e) => {
+        const open = e.target.closest("[data-ag-open]");
+        if (open) openModal(open.getAttribute("data-ag-open"));
+        const close = e.target.closest("[data-ag-close]");
+        if (close) closeModal(close.getAttribute("data-ag-close"));
+      });
 
-  if (el.back) {
-    el.back.addEventListener("click", () => {
-      window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
-    });
-  }
-
-  el.sizes.innerHTML = "";
-  el.sizes.appendChild(renderSizeRow(1, "سایز ۱", model.unitWeights[1], "۱"));
-  el.sizes.appendChild(renderSizeRow(2, "سایز ۲", model.unitWeights[2], "۲"));
-  el.sizes.appendChild(renderSizeRow(3, "سایز ۳", model.unitWeights[3], "۳"));
-  el.sizes.appendChild(renderSizeRow(4, "سایز ۴", model.unitWeights[4], "۴"));
-  el.sizes.appendChild(renderSizeRow(5, "سایز ۵", model.unitWeights[5], "۵"));
-  el.sizes.appendChild(renderSizeRow("custom", "سایز سفارشی", unitWeightCustom, "✦"));
-
-  el.customNote.addEventListener("input", () => validate());
-  el.prev.addEventListener("click", () => setImage(imgIdx - 1));
-  el.next.addEventListener("click", () => setImage(imgIdx + 1));
-
-  renderDots();
-  setImage(0);
-  validate();
-
-  el.add.addEventListener("click", () => {
-    if (!validate()) return;
-    basketAddItem();
-    window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
-  });
-})();
-</script>
-<script>
-(() => {
-  const about = document.getElementById("ag-modal-about");
-  const help = document.getElementById("ag-modal-help");
-  const helpBody = document.getElementById("ag-help-body");
-
-  function getHelpText() {
-    const page = (location.pathname.split("/").pop() || "").toLowerCase();
-    if (page.includes("user-dashboard")) return "دسته، گروه و مدل را انتخاب کنید. برای ورود، روی کل ردیف بزنید.";
-    if (page.includes("user-orders")) {
-      const params = new URLSearchParams(location.search);
-      const hasDetail = Boolean(params.get("cat") && params.get("model"));
-      return hasDetail
-        ? "مقادیر را وارد کنید. جمع کل را پایین می‌بینید. سپس «افزودن به سبد» را بزنید."
-        : "جمع تعداد و وزن را بررسی کنید و «نهایی کردن سفارش» را بزنید.";
-    }
-    if (page.includes("admin")) return "این بخش مخصوص مدیریت است.";
-    if (page.includes("index")) return "ورود به سیستم از این صفحه انجام می‌شود.";
-    return "راهنمای این صفحه در دسترس نیست.";
-  }
-
-  function syncHelpContent() {
-    if (helpBody) helpBody.textContent = getHelpText();
-  }
-
-  function syncBodyLock() {
-    const anyOpen = (about && !about.hidden) || (help && !help.hidden);
-    document.body.classList.toggle("ag-modal-open", Boolean(anyOpen));
-  }
-
-  function openModal(which) {
-    if (which === "about" && about) {
-      about.hidden = false;
-      syncBodyLock();
-      const close = about.querySelector("[data-ag-close=\"about\"]");
-      if (close && close.focus) close.focus();
-      return;
-    }
-    if (which === "help" && help) {
-      syncHelpContent();
-      help.hidden = false;
-      syncBodyLock();
-      const close = help.querySelector("[data-ag-close=\"help\"]");
-      if (close && close.focus) close.focus();
-    }
-  }
-
-  function closeModal(which) {
-    if (which === "about" && about) about.hidden = true;
-    if (which === "help" && help) help.hidden = true;
-    syncBodyLock();
-  }
-
-  document.addEventListener("click", (e) => {
-    const open = e.target.closest("[data-ag-open]");
-    if (open) openModal(open.getAttribute("data-ag-open"));
-    const close = e.target.closest("[data-ag-close]");
-    if (close) closeModal(close.getAttribute("data-ag-close"));
-  });
-
-  window.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    if (about && !about.hidden) closeModal("about");
-    if (help && !help.hidden) closeModal("help");
-  });
-})();
-</script>
+      window.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+        if (about && !about.hidden) closeModal("about");
+        if (help && !help.hidden) closeModal("help");
+      });
+    })();
+  </script>
 </body>
+
 </html>
