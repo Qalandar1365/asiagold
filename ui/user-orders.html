@@ -1,4 +1,4 @@
-<!-- ASIAGOLD UI v0.5.0 | Refactored by GOOGLE GRAVITY -->
+<!-- ASIAGOLD UI v0.5.1 | Bangle UI Refactor: Robust Implementation -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -16,6 +16,59 @@
 
     .header {
       margin-bottom: 16px;
+    }
+
+    .pd-totals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .pd-total-box {
+      background: linear-gradient(180deg, var(--panel1) 0%, var(--panel2) 100%);
+      border-radius: 14px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(0, 0, 0, .04);
+    }
+
+    .pd-total-label {
+      font-size: 11px;
+      color: var(--text5);
+    }
+
+    .pd-total-value {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text2);
+      margin-top: 4px;
+      direction: ltr;
+    }
+
+    .pd-custom-confirm {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface3);
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .pd-custom-confirm input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+    }
+
+    .pd-custom-confirm label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text2);
+      margin: 0;
+      cursor: pointer;
     }
 
     .logo {
@@ -888,6 +941,7 @@
       </div>
 
       <div id="bangle-detail" class="pd" hidden>
+        <!-- Bangle Detail Header -->
         <div class="pd-top">
           <button class="pd-back" type="button" id="pd-back" aria-label="بازگشت به لیست گروه‌ها">
             <span aria-hidden="true">
@@ -902,16 +956,19 @@
         </div>
         <div class="pd-name" id="pd-name"></div>
 
+        <!-- Live Totals Section -->
         <div class="pd-totals">
           <div class="pd-total-box">
             <div class="pd-total-label">تعداد کل سفارش</div>
-            <div class="pd-total-value" id="pd-total-count">۰</div>
+            <div class="pd-total-value" id="pd-total-count" aria-live="polite">۰</div>
           </div>
           <div class="pd-total-box">
             <div class="pd-total-label">وزن حدودی سفارش</div>
-            <div class="pd-total-value"><span id="pd-total-weight">۰.۰۰</span> گرم</div>
+            <div class="pd-total-value"><span id="pd-total-weight" aria-live="polite">۰.۰۰</span> گرم</div>
           </div>
         </div>
+
+        <!-- Gallery Section -->
         <div class="pd-gallery" aria-label="گالری تصاویر">
           <button class="pd-nav pd-prev" type="button" id="pd-prev" aria-label="تصویر قبلی">
             <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
@@ -927,19 +984,24 @@
           <div class="pd-dots" id="pd-dots" aria-hidden="true"></div>
         </div>
 
+        <!-- Sizes Section -->
         <div class="pd-section">
           <div class="pd-section-title">سفارش (سایز ۱ تا ۵)</div>
           <div id="pd-sizes"></div>
         </div>
 
-        <label for="pd-custom-note">سایز سفارشی (الزامی)</label>
-        <textarea id="pd-custom-note" rows="3"
-          placeholder="توضیحات سایز سفارشی را وارد کنید (حداقل ۵ کاراکتر)"></textarea>
-        <div class="pd-custom-confirm">
-          <input type="checkbox" id="pd-custom-confirm">
-          <label for="pd-custom-confirm">این سفارش قطعی است</label>
+        <!-- Custom Size Section -->
+        <div id="pd-custom-wrapper">
+          <label for="pd-custom-note" class="pd-section-title" style="display:block;margin-top:16px;">سایز سفارشی
+            (الزامی)</label>
+          <textarea id="pd-custom-note" rows="3"
+            placeholder="توضیحات سایز سفارشی را وارد کنید (حداقل ۵ کاراکتر)"></textarea>
+          <div class="pd-custom-confirm">
+            <input type="checkbox" id="pd-custom-confirm">
+            <label for="pd-custom-confirm">این سفارش قطعی است</label>
+          </div>
+          <div class="pd-error" id="pd-custom-error" hidden></div>
         </div>
-        <div class="pd-error" id="pd-custom-error" hidden></div>
       </div>
 
       <div class="pd-sticky">
@@ -1833,12 +1895,15 @@
         return;
       }
 
+      // --- Bangle Logic Start ---
       const detail = document.getElementById("bangle-detail");
+      // Check if we are in bangle detail mode
       if (!detail || cat !== "cat-bangle" || !modelId) {
-        if (!cat && !modelId) agInitStage3();
+        if (!cat && !modelId && typeof agInitStage3 === 'function') agInitStage3();
         return;
       }
 
+      // Hardcoded models for demo
       const MODELS = {
         "mdl-bangle-asia-120-yellow": {
           name: "النگو آسیا 120 زرد",
@@ -1853,17 +1918,19 @@
       };
 
       const model = MODELS[modelId];
-      if (!model) return;
+      if (!model) return; // Should handle not found
 
+      // Config
       const isAdmin = localStorage.getItem("asiagold_role_v1") === "admin";
       const MAX_TOTAL = 120;
-      const DAY_MS = 24 * 60 * 60 * 1000;
-      const BASKET_TTL_MS = 4 * DAY_MS;
       const BASKET_KEY = "asiagold_basket_v1";
+      const BASKET_TTL_MS = 4 * 24 * 60 * 60 * 1000;
 
+      // Formatters
       const nfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
       const nfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+      // Elements
       const el = {
         notice: document.querySelector(".notice"),
         newOrder: document.getElementById("new-order"),
@@ -1872,6 +1939,7 @@
         basket: document.getElementById("basket-panel"),
         confirm: document.getElementById("confirm-panel"),
 
+        // Bangle UI
         back: document.getElementById("pd-back"),
         name: document.getElementById("pd-name"),
         modelBadge: document.getElementById("pd-model-badge"),
@@ -1882,7 +1950,7 @@
         image: document.getElementById("pd-image"),
         dots: document.getElementById("pd-dots"),
 
-        customWrap: document.getElementById("pd-custom-note-wrap"),
+        customWrap: document.getElementById("pd-custom-wrapper"),
         customNote: document.getElementById("pd-custom-note"),
         customConfirm: document.getElementById("pd-custom-confirm"),
         customError: document.getElementById("pd-custom-error"),
@@ -1895,19 +1963,29 @@
         add: document.getElementById("pd-add"),
       };
 
+      // Helper: escape html
       function escapeHtml(s) {
-        return String(s)
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
+        return String(s).replace(/[&<>"']/g, function (m) {
+          switch (m) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            case "'": return '&#039;';
+            default: return m;
+          }
+        });
       }
 
+      // Helper: SVG placeholder
       function svgDataUri(text, idx) {
         const safe = String(text || "").slice(0, 32);
-        const bgA = ["#f6edc7", "#c9a23a", "#7a6408"][idx % 3];
-        const bgB = ["#2b2500", "#0f0d00", "#2b2500"][(idx + 1) % 3];
+        const colors = [
+          ["#f6edc7", "#2b2500"],
+          ["#c9a23a", "#0f0d00"],
+          ["#7a6408", "#2b2500"]
+        ];
+        const [bgA, bgB] = colors[idx % colors.length];
         const svg =
           `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">` +
           `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
@@ -1922,30 +2000,34 @@
         return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
       }
 
+      // Logic: Average Weight for Custom
       function averageWeight(unitWeights) {
-        const values = Object.values(unitWeights).map((x) => Number(x)).filter((x) => Number.isFinite(x));
+        const values = Object.values(unitWeights).map(x => Number(x)).filter(Number.isFinite);
         if (!values.length) return 0;
         return values.reduce((a, b) => a + b, 0) / values.length;
       }
-
       const unitWeightCustom = averageWeight(model.unitWeights);
 
+      // State
       const qty = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, custom: 0 };
-      const images = [0, 1, 2].map((i) => svgDataUri(model.name, i));
+      const images = [0, 1, 2].map(i => svgDataUri(model.name, i));
       let imgIdx = 0;
+      let slideTimer = null;
 
+      // Logic: Slideshow
       function setImage(index) {
-        const nextIdx = (index + images.length) % images.length;
-        imgIdx = nextIdx;
+        imgIdx = (index + images.length) % images.length;
         el.image.src = images[imgIdx];
-        el.dots.querySelectorAll(".pd-dot").forEach((d, i) => d.classList.toggle("active", i === imgIdx));
+        if (el.dots) {
+          el.dots.querySelectorAll(".pd-dot").forEach((d, i) => d.classList.toggle("active", i === imgIdx));
+        }
       }
 
-      let slideTimer = null;
       function startSlide() {
         stopSlide();
         slideTimer = setInterval(() => setImage(imgIdx + 1), 3000);
       }
+
       function stopSlide() {
         if (slideTimer) clearInterval(slideTimer);
         slideTimer = null;
@@ -1955,87 +2037,83 @@
         el.dots.innerHTML = images.map((_, i) => `<div class="pd-dot${i === imgIdx ? " active" : ""}"></div>`).join("");
       }
 
-      function clampNonNegInt(n) {
-        const x = Number(n);
-        if (!Number.isFinite(x)) return 0;
-        return Math.max(0, Math.trunc(x));
-      }
-
+      // Logic: Validation & Totals
       function computeTotals() {
-        const totalCount = qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty.custom;
-        const totalWeight =
-          qty[1] * model.unitWeights[1] +
-          qty[2] * model.unitWeights[2] +
-          qty[3] * model.unitWeights[3] +
-          qty[4] * model.unitWeights[4] +
-          qty[5] * model.unitWeights[5] +
-          qty.custom * unitWeightCustom;
-        return { totalCount, totalWeight };
-      }
+        let totalCount = qty.custom || 0;
+        let totalWeight = (qty.custom || 0) * unitWeightCustom;
 
-      function setError(message) {
-        if (!message) {
-          el.error.hidden = true;
-          el.error.textContent = "";
-          return;
+        for (let k = 1; k <= 5; k++) {
+          const q = qty[k] || 0;
+          totalCount += q;
+          totalWeight += q * (model.unitWeights[k] || 0);
         }
-        el.error.hidden = false;
-        el.error.textContent = message;
+        return { totalCount, totalWeight };
       }
 
       function validate() {
         const { totalCount, totalWeight } = computeTotals();
         const wStr = nfWeight.format(totalWeight);
+
+        // Update Bottom Sticky Summary
         el.summary.textContent = `${nfInt.format(totalCount)} عدد | حدود ${wStr} گرم`;
 
-        // Top totals
+        // Update Top Live Totals (REQUIRED)
         if (el.totalCountEl) el.totalCountEl.textContent = nfInt.format(totalCount);
         if (el.totalWeightEl) el.totalWeightEl.textContent = wStr;
 
+        // Custom Size Visibility
         const needsCustom = qty.custom > 0;
-        el.customWrap.hidden = !needsCustom;
+        if (el.customWrap) el.customWrap.hidden = !needsCustom;
 
+        // Validation Rules
         let ok = true;
         let message = "";
 
+        // Rule 1: Min 1 item
         if (totalCount < 1) {
           ok = false;
-          message = "حداقل سفارش برای این مدل: ۱ عدد.";
-        } else {
-          // Clamp max logic
-          if (!isAdmin && totalCount > MAX_TOTAL) {
-            ok = false;
-            message = `حداکثر تعداد مجاز برای هر مدل ${nfInt.format(MAX_TOTAL)} عدد است.`;
-          }
+          message = "حداقل سفارش: ۱ عدد.";
+        }
+        // Rule 2: Max 120 items (unless admin)
+        else if (!isAdmin && totalCount > MAX_TOTAL) {
+          ok = false;
+          message = `حداکثر تعداد مجاز: ${nfInt.format(MAX_TOTAL)} عدد.`;
         }
 
+        // Rule 3: Custom Item Requirements
         if (needsCustom) {
           const note = String(el.customNote.value || "").trim();
           const confirmed = el.customConfirm && el.customConfirm.checked;
 
-          if (note.length < 5) {
+          if (note.length < 5) { // Min 5 chars REQUIRED
             ok = false;
             el.customError.hidden = false;
-            el.customError.textContent = "توضیحات سایز سفارشی الزامی است (حداقل ۵ کاراکتر).";
-          } else if (!confirmed) {
+            el.customError.textContent = "توضیحات سایز سفارشی (حداقل ۵ کاراکتر) الزامی است.";
+          } else if (!confirmed) { // Checkbox REQUIRED
             ok = false;
             el.customError.hidden = false;
-            el.customError.textContent = "تیک «این سفارش قطعی است» الزامی می‌باشد.";
+            el.customError.textContent = "تأیید «این سفارش قطعی است» الزامی می‌باشد.";
           } else {
             el.customError.hidden = true;
-            el.customError.textContent = "";
           }
         } else {
           el.customError.hidden = true;
-          el.customError.textContent = "";
-          if (el.customConfirm) el.customConfirm.checked = false; // Reset if hidden
+          if (el.customConfirm) el.customConfirm.checked = false;
         }
 
-        setError(message);
+        // Rule 4: Bottom Error
+        if (message) {
+          el.error.hidden = false;
+          el.error.textContent = message;
+        } else {
+          el.error.hidden = true;
+        }
+
         el.add.disabled = !ok;
         return ok;
       }
 
+      // Logic: Render Rows
       function renderSizeRow(sizeKey, label, unitW, thumbText) {
         const row = document.createElement("div");
         row.className = "pd-row";
@@ -2045,7 +2123,7 @@
           `<div class="pd-thumb" aria-hidden="true">${escapeHtml(thumbText)}</div>` +
           `<div class="pd-info">` +
           `<div class="pd-size-name">${escapeHtml(label)}</div>` +
-          `<div class="pd-size-meta">میانگین وزن هر عدد: ${nfWeight.format(unitW)} گرم</div>` +
+          `<div class="pd-size-meta">میانگین وزن: ${nfWeight.format(unitW)} گرم</div>` +
           `</div>` +
           `<div class="pd-qty">` +
           `<div class="pd-qty-group">` +
@@ -2059,122 +2137,120 @@
           `</div>` +
           `</div>`;
 
+        // Event Listeners for Buttons
         const valueEl = row.querySelector(`#pd-q-${CSS.escape(String(sizeKey))}`);
-        row.querySelectorAll("button[data-delta]").forEach((btn) => {
+        row.querySelectorAll("button[data-delta]").forEach(btn => {
           btn.addEventListener("click", () => {
             const delta = Number(btn.getAttribute("data-delta") || "0");
-            qty[sizeKey] = clampNonNegInt(qty[sizeKey] + delta);
-            if (valueEl) valueEl.textContent = nfInt.format(qty[sizeKey]);
+            const current = qty[sizeKey] || 0;
+            // STRICT: Non-negative clamping
+            const next = Math.max(0, current + delta);
+            qty[sizeKey] = next;
+            if (valueEl) valueEl.textContent = nfInt.format(next);
             validate();
           });
         });
         return row;
       }
 
-      function basketLoad() {
-        const raw = localStorage.getItem(BASKET_KEY);
-        if (!raw) return null;
-        try {
-          const data = JSON.parse(raw);
-          if (!data || typeof data !== "object") return null;
-          if (!Array.isArray(data.items)) return null;
-          return data;
-        } catch {
-          return null;
-        }
-      }
-
-      function basketSave(basket) {
-        localStorage.setItem(BASKET_KEY, JSON.stringify(basket));
-      }
-
+      // Logic: Basket Persistence
       function basketEnsureValid() {
         const now = Date.now();
-        const basket = basketLoad();
-        if (!basket) {
+        const raw = localStorage.getItem(BASKET_KEY);
+        try {
+          if (!raw) throw new Error("empty");
+          const data = JSON.parse(raw);
+          if (!data || !Array.isArray(data.items)) throw new Error("bad");
+          const ca = Date.parse(data.createdAt);
+          if (!Number.isFinite(ca) || now - ca > BASKET_TTL_MS) throw new Error("expired");
+          return data;
+        } catch {
           const t = new Date().toISOString();
           return { v: 1, createdAt: t, updatedAt: t, items: [] };
         }
-        const createdAt = Date.parse(basket.createdAt);
-        if (!Number.isFinite(createdAt) || now - createdAt > BASKET_TTL_MS) {
-          const t = new Date().toISOString();
-          return { v: 1, createdAt: t, updatedAt: t, items: [] };
-        }
-        return basket;
       }
 
       function basketAddItem() {
         const basket = basketEnsureValid();
         const { totalCount, totalWeight } = computeTotals();
         const t = new Date().toISOString();
+
         const item = {
-          itemId: `b_${Date.now().toString(16)}_${Math.random().toString(16).slice(2)}`,
+          itemId: `b_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}`,
           categoryId: "cat-bangle",
           categoryName: "النگو",
           groupId,
           groupName: model.groupName,
           modelId,
           modelName: model.name,
-          sizes: { 1: qty[1], 2: qty[2], 3: qty[3], 4: qty[4], 5: qty[5] },
-          custom: { qty: qty.custom, note: String(el.customNote.value || "").trim(), confirmed: Boolean(el.customConfirm?.checked) },
+          sizes: { ...qty }, // Copy quantities
+          custom: {
+            qty: qty.custom,
+            note: String(el.customNote.value || "").trim(),
+            confirmed: Boolean(el.customConfirm?.checked)
+          },
           unitWeights: { ...model.unitWeights, custom: unitWeightCustom },
           totalCount,
           totalWeight: Number(totalWeight.toFixed(2)),
           createdAt: t,
         };
+
         basket.items.push(item);
         basket.updatedAt = t;
-        basketSave(basket);
+        localStorage.setItem(BASKET_KEY, JSON.stringify(basket));
       }
 
-      // Activate detail mode
+      // Initialization
+      // 1. Hide others
       detail.hidden = false;
-      if (el.notice) el.notice.hidden = true;
-      if (el.basket) el.basket.hidden = true;
-      if (el.confirm) el.confirm.hidden = true;
-      if (el.newOrder) el.newOrder.hidden = true;
-      if (el.filter) el.filter.hidden = true;
-      if (el.orders) el.orders.hidden = true;
+      [el.notice, el.basket, el.confirm, el.newOrder, el.filter, el.orders].forEach(x => { if (x) x.hidden = true; });
 
+      // 2. Set Info
+      // const titleEl is already defined in outer scope
       if (titleEl) titleEl.textContent = model.name;
       if (el.name) el.name.textContent = model.name;
       if (el.modelBadge) el.modelBadge.textContent = "النگو";
 
+      // 3. Render Sizes
+      el.sizes.innerHTML = "";
+      [1, 2, 3, 4, 5].forEach(k => {
+        el.sizes.appendChild(renderSizeRow(k, `سایز ${k}`, model.unitWeights[k], String(k)));
+      });
+      el.sizes.appendChild(renderSizeRow("custom", "سایز سفارشی", unitWeightCustom, "✦"));
+
+      // 4. Setup Events
+      el.customNote.addEventListener("input", validate);
+      if (el.customConfirm) el.customConfirm.addEventListener("change", validate);
+      el.prev.addEventListener("click", () => { stopSlide(); setImage(imgIdx - 1); });
+      el.next.addEventListener("click", () => { stopSlide(); setImage(imgIdx + 1); });
+
+      // 5. Unsaved Changes Protection (Back Navigation)
       if (el.back) {
         el.back.addEventListener("click", () => {
           const { totalCount } = computeTotals();
           if (totalCount > 0) {
+            // REQUIRED: Confirm dialog
             if (!window.confirm("آیا از ثبت سفارش انصراف می‌دهید؟")) return;
           }
-          stopSlide(); // Ensure we stop the timer
+          stopSlide();
           window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
         });
       }
 
-      el.sizes.innerHTML = "";
-      el.sizes.appendChild(renderSizeRow(1, "سایز ۱", model.unitWeights[1], "۱"));
-      el.sizes.appendChild(renderSizeRow(2, "سایز ۲", model.unitWeights[2], "۲"));
-      el.sizes.appendChild(renderSizeRow(3, "سایز ۳", model.unitWeights[3], "۳"));
-      el.sizes.appendChild(renderSizeRow(4, "سایز ۴", model.unitWeights[4], "۴"));
-      el.sizes.appendChild(renderSizeRow(5, "سایز ۵", model.unitWeights[5], "۵"));
-      el.sizes.appendChild(renderSizeRow("custom", "سایز سفارشی", unitWeightCustom, "✦"));
-
-      el.customNote.addEventListener("input", () => validate());
-      if (el.customConfirm) el.customConfirm.addEventListener("change", () => validate());
-      el.prev.addEventListener("click", () => { stopSlide(); setImage(imgIdx - 1); });
-      el.next.addEventListener("click", () => { stopSlide(); setImage(imgIdx + 1); });
-
-      renderDots();
-      setImage(0);
-      startSlide();
-      validate();
-
+      // 6. Add to Basket
       el.add.addEventListener("click", () => {
         if (!validate()) return;
         basketAddItem();
         stopSlide();
         window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
       });
+
+      // 7. Start
+      renderDots();
+      setImage(0);
+      startSlide();
+      validate();
+
     })();
   </script>
   <script>
