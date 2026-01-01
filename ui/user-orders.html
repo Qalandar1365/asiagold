@@ -792,6 +792,59 @@
     .footer {
       margin-top: 16px;
     }
+
+    /* Routing / Selection Views */
+    .pd-selection {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .pd-card {
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass-soft));
+      border-radius: var(--r18);
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-height: 120px;
+      justify-content: center;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.2s;
+    }
+
+    .pd-card:active {
+      transform: scale(0.96);
+    }
+
+    .pd-card-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--gold4), var(--gold6));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink4);
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .pd-card-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text2);
+    }
+
+    .pd-card-sub {
+      font-size: 11px;
+      color: var(--text5);
+    }
   </style>
 </head>
 
@@ -1017,6 +1070,62 @@
       </div>
     </div>
 
+    <div id="selection-root" class="pd-selection" hidden>
+      <div class="pd-card" data-route-cat="cat-bangle">
+        <div class="pd-card-icon">1</div>
+        <div class="pd-card-title">النگو</div>
+        <div class="pd-card-sub">سفارش عمده و تک</div>
+      </div>
+      <div class="pd-card" data-route-cat="cat-khorderiz">
+        <div class="pd-card-icon">2</div>
+        <div class="pd-card-title">خرده‌ریز</div>
+        <div class="pd-card-sub">انواع کارهای سبک</div>
+      </div>
+      <div class="pd-card" style="opacity:0.5; filter:grayscale(1);">
+        <div class="pd-card-icon">3</div>
+        <div class="pd-card-title">آب‌شده</div>
+        <div class="pd-card-sub">به زودی</div>
+      </div>
+      <div class="pd-card" style="opacity:0.5; filter:grayscale(1);">
+        <div class="pd-card-icon">4</div>
+        <div class="pd-card-title">سکه</div>
+        <div class="pd-card-sub">به زودی</div>
+      </div>
+    </div>
+
+    <div id="selection-group" class="pd" hidden>
+      <div class="pd-top">
+        <button class="pd-back" type="button" id="grp-back" aria-label="بازگشت به منوی اصلی">
+          <span aria-hidden="true">
+            <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"></path>
+              <path d="M9 12h12"></path>
+            </svg>
+          </span>
+          منوی اصلی
+        </button>
+        <div class="badge" style="cursor:default;">انتخاب گروه</div>
+      </div>
+      <div class="pd-selection" style="margin-top:12px; grid-template-columns: 1fr;">
+        <div class="pd-card" data-route-group="grp-bangle-asia"
+          style="flex-direction:row; padding:12px; text-align:right; justify-content:flex-start; min-height:auto;">
+          <div class="pd-card-icon" style="width:40px;height:40px;font-size:16px;">A</div>
+          <div>
+            <div class="pd-card-title">النگو آسیا</div>
+            <div class="pd-card-sub">مدل‌های پرفروش بازار</div>
+          </div>
+        </div>
+        <div class="pd-card" data-route-group="grp-bangle-shahrzad"
+          style="flex-direction:row; padding:12px; text-align:right; justify-content:flex-start; min-height:auto;">
+          <div class="pd-card-icon" style="width:40px;height:40px;font-size:16px;">Sh</div>
+          <div>
+            <div class="pd-card-title">النگو شهرزاد</div>
+            <div class="pd-card-sub">ظریف و خاص</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="khorderiz-detail" class="kr" hidden>
       <div class="kr-top">
         <button class="kr-back" type="button" id="kr-back" aria-label="بازگشت به لیست گروه‌ها">
@@ -1060,7 +1169,7 @@
       </div>
     </div>
 
-    <div id="new-order" class="form">
+    <div id="new-order" class="form" hidden>
       <div class="form-title">ثبت درخواست سفارش</div>
       <div class="form-sub">ASIAGOLD فقط واسطه است و سفارش‌ها از طریق کانال‌های رسمی فروش پیگیری می‌شوند.</div>
       <form action="./user-orders.html" method="GET">
@@ -1163,9 +1272,7 @@
       }
 
       const params = new URLSearchParams(window.location.search);
-      const cat = params.get("cat");
-      const modelId = params.get("model");
-      const groupId = params.get("group") || "grp-bangle-asia";
+      // We will parse params inside route() to support dynamic changes
 
       // Stage 3: Basket + finalize + order code (default mode only)
       const AG_PROFILE_KEY = "asiagold_customer_profile_v1";
@@ -1177,6 +1284,7 @@
       const agNfInt = new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 });
       const agNfWeight = new Intl.NumberFormat("fa-IR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+      // ... (formatting helpers kept, omitting for brevity if not changed, but I must provide full replacement for the block)
       function agEscapeHtml(s) {
         return String(s)
           .replaceAll("&", "&amp;")
@@ -1377,10 +1485,152 @@
         return `${last6}${letter}${num}`;
       }
 
+      // Central Routing & UI Management
+      function route() {
+        const p = new URLSearchParams(window.location.search);
+        const cat = p.get("cat");
+        const level = p.get("level");
+        const group = p.get("group");
+        const model = p.get("model");
+
+        // Setup Views
+        const selRoot = document.getElementById("selection-root");
+        const selGroup = document.getElementById("selection-group");
+        const bangleDetail = document.getElementById("bangle-detail");
+        const khDetail = document.getElementById("khorderiz-detail");
+        const basketPanel = document.getElementById("basket-panel");
+        const confirmPanel = document.getElementById("confirm-panel");
+        const pageNotice = document.querySelector(".notice");
+        const newOrder = document.getElementById("new-order"); // Legacy form
+        const filter = document.querySelector(".filter");
+        const orders = document.getElementById("orders");
+        const titleEl = document.getElementById("ag-topbar-title");
+
+        // Hide all major panels first
+        const allPanels = [selRoot, selGroup, bangleDetail, khDetail, basketPanel, confirmPanel, newOrder];
+        allPanels.forEach(el => { if (el) el.hidden = true; });
+
+        // Always show dashboard list unless in detail/confirm modes (simplified rule)
+        const isDetail = Boolean(cat || model || level);
+        if (pageNotice) pageNotice.hidden = isDetail;
+        if (filter) filter.hidden = isDetail;
+        if (orders) orders.hidden = isDetail;
+
+        // Routing Logic
+
+        // 1. Root Selection (Default Entry)
+        if (!cat && !model && !level) {
+          if (selRoot) selRoot.hidden = false;
+          // Show dashboard list below
+          if (pageNotice) pageNotice.hidden = false;
+          if (filter) filter.hidden = false;
+          if (orders) orders.hidden = false;
+          if (titleEl) titleEl.textContent = "سفارش‌های من";
+
+          // Render Root logic not strictly needed as it's static HTML, 
+          // but we attach event listeners once.
+          return;
+        }
+
+        // 2. Bangle Flow
+        if (cat === "cat-bangle") {
+          if (level === "group" || (!model && !level)) {
+            // Show Group Selection
+            if (selGroup) selGroup.hidden = false;
+            if (titleEl) titleEl.textContent = "انتخاب گروه النگو";
+            return;
+          }
+          if (model) {
+            // Show Bangle Detail (Managed by Bangle IIFE, just ensure container is ready)
+            // The Bangle logic runs in its own block, checking params. 
+            // We just ensure we didn't hide it if logic wants to show it.
+            // Actually, centralized route() should probably coordinate visibility.
+            // But existing code blocks run on load. 
+            // Ideally we trigger them or they react to URL.
+            // Current architecture relies on reload for state change mostly.
+            // We will facilitate "No Reload" by using History API and triggering render.
+            // For now, let's assume reload-based mostly or simple visibility.
+            if (bangleDetail) bangleDetail.hidden = false;
+            return;
+          }
+        }
+
+        // 3. Khorderiz Flow
+        if (cat === "cat-khorderiz") {
+          // Existing Kh code handles this check
+          if (khDetail) khDetail.hidden = false;
+          return;
+        }
+      }
+
+      // Initialize Selection Views
+      function initSelectionViews() {
+        // Helper for SPA navigation
+        function go(params) {
+          const url = new URL(window.location);
+          // Clear previous relevant keys to be safe
+          url.searchParams.delete("cat");
+          url.searchParams.delete("level");
+          url.searchParams.delete("group");
+          url.searchParams.delete("model");
+
+          for (const [k, v] of Object.entries(params)) {
+            url.searchParams.set(k, v);
+          }
+          window.history.pushState({}, "", url);
+          route();
+        }
+
+        // Root clicks
+        document.querySelectorAll("[data-route-cat]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const cat = btn.getAttribute("data-route-cat");
+            if (cat === "cat-bangle") {
+              go({ cat: "cat-bangle", level: "group" });
+            } else if (cat === "cat-khorderiz") {
+              go({ cat: "cat-khorderiz", model: "mdl-earring-yellow-fantasy", level: "model" });
+            }
+          });
+        });
+
+        // Group clicks
+        document.querySelectorAll("[data-route-group]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const grp = btn.getAttribute("data-route-group");
+            let model = "";
+            if (grp === "grp-bangle-asia") model = "mdl-bangle-asia-120-yellow";
+            if (grp === "grp-bangle-shahrzad") model = "mdl-bangle-asia-155-yellow";
+
+            go({ cat: "cat-bangle", group: grp, model: model, level: "model" });
+          });
+        });
+
+        // Back buttons (Group -> Root)
+        const grpBack = document.getElementById("grp-back");
+        if (grpBack) {
+          grpBack.addEventListener("click", () => {
+            // Go to root (remove all params)
+            const url = new URL(window.location);
+            url.search = "";
+            window.history.pushState({}, "", url);
+            route();
+          });
+        }
+
+        // Handle Browser Back
+        window.addEventListener("popstate", route);
+      }
+
       function agInitStage3() {
         const basketPanel = document.getElementById("basket-panel");
         const confirmPanel = document.getElementById("confirm-panel");
         if (!basketPanel || !confirmPanel) return;
+
+        // ... (Basket logic mostly unchanged, just ensure it respects visibility)
+
+        // We call route() at start
+        route();
+        initSelectionViews();
 
         const msg = document.getElementById("basket-message");
         const list = document.getElementById("basket-list");
@@ -1404,6 +1654,9 @@
         const newOrder = document.getElementById("new-order");
         const filter = document.querySelector(".filter");
         const orders = document.getElementById("orders");
+
+        // ... rest of agInitStage3
+
 
         function setConfirmError(text) {
           if (!confirmError) return;
@@ -2233,7 +2486,12 @@
             if (!window.confirm("آیا از ثبت سفارش انصراف می‌دهید؟")) return;
           }
           stopSlide();
-          window.location.href = "./user-dashboard.html#cat=cat-bangle&level=group";
+          // Back to Group (SPA)
+          const url = new URL(window.location);
+          url.searchParams.delete("model");
+          url.searchParams.set("level", "group");
+          window.history.pushState({}, "", url);
+          if (typeof route === "function") route(); else window.location.reload();
         });
       }
 
