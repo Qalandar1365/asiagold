@@ -1,464 +1,366 @@
-<!-- ASIAGOLD UI v0.4.9 | Design Pass 3: luxury polish -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asia Gold | داشبورد کاربر</title>
-<link rel="stylesheet" href="./theme.css">
-<style>
-.wrapper{align-items:center;}
-.card{
-  max-width:430px;
-  padding:22px;
-}
-.header{margin-bottom:16px;}
-.logo{
-  width:92px;height:92px;margin:0 auto 10px;
-  font-size:16px;
-}
-.title{font-size:16px;font-weight:bold;color:var(--text2);}
-.sub{font-size:13px;color:var(--text3);margin-top:4px;}
-.status{
-  margin-top:14px;border-radius:var(--r18);padding:12px;text-align:center;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  color:var(--success);font-size:13px;
-}
-.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:18px;}
-.item{
-  border-radius:var(--r18);padding:14px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  display:flex;justify-content:space-between;align-items:center;
-}
-.item span{color:var(--accent-light);font-weight:600;font-size:14px;}
-.item button,
-.item a{
-  border:none;border-radius:14px;padding:10px 14px;
-  background:linear-gradient(135deg,var(--gold4),var(--gold6));
-  color:var(--ink4);font-weight:bold;font-size:13px;cursor:pointer;
-  text-decoration:none;display:inline-block;text-align:center;
-}
-.item a.cart-action{display:inline-flex;align-items:center;gap:6px;}
-.catalog{
-  margin-top:16px;
-  border-radius:var(--r18);
-  padding:14px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-}
-.catalog-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
-.catalog-title{color:var(--accent-light);font-weight:700;font-size:14px;}
-.catalog-breadcrumb{margin-top:6px;color:var(--text5);font-size:12px;line-height:1.7;}
-.catalog-back{
-  border:none;border-radius:14px;padding:10px 14px;
-  background:linear-gradient(135deg,var(--gold4),var(--gold6));
-  color:var(--ink4);font-weight:bold;font-size:13px;cursor:pointer;
-  white-space:nowrap;
-}
-.catalog-list{
-  margin-top:12px;
-  display:flex;flex-direction:column;gap:10px;
-  max-height:320px;overflow:auto;padding:2px;
-}
-.catalog-item{
-  width:100%;
-  border:none;
-  border-radius:var(--r18);
-  padding:12px;
-  background:linear-gradient(180deg,var(--glass-strong),var(--glass-soft));
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  direction:ltr;
-  text-align:right;
-}
-.catalog-thumb{
-  width:52px;height:52px;border-radius:14px;
-  background:radial-gradient(circle at top,var(--gold1),var(--gold2),var(--gold3));
-  display:flex;align-items:center;justify-content:center;
-  color:var(--ink1);font-weight:800;flex-shrink:0;
-}
-.catalog-text{flex:1;direction:rtl;text-align:right;}
-.catalog-name{color:var(--text2);font-weight:800;font-size:14px;line-height:1.5;}
-.catalog-desc{margin-top:4px;color:var(--text5);font-size:12px;line-height:1.7;}
-.footer{margin-top:18px;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ASIAGOLD | داشبورد</title>
+  <link rel="stylesheet" href="./theme.css">
+  <style>
+    /* Base & Theme Overrides */
+    body {
+      background-color: var(--color-background, #f8f9fa);
+      padding-bottom: 80px;
+      /* Space for scrolling */
+      margin: 0;
+      font-family: var(--font-family, sans-serif);
+    }
+
+    /* 1) Fixed Header */
+    .dashboard-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .header-back {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      color: var(--color-text-primary, #333);
+    }
+
+    .header-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--color-text-primary, #333);
+      white-space: nowrap;
+    }
+
+    /* Content Wrapper */
+    .dashboard-content {
+      padding: 20px;
+      max-width: 600px;
+      /* Mobile focused */
+      margin: 0 auto;
+    }
+
+    /* Section 1: Summary Card */
+    .summary-card {
+      background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+      color: #D4AF37;
+      /* Gold */
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .summary-item {
+      text-align: center;
+    }
+
+    .summary-value {
+      font-size: 24px;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .summary-label {
+      font-size: 13px;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+
+    .divider-vertical {
+      width: 1px;
+      height: 40px;
+      background: rgba(212, 175, 55, 0.2);
+    }
+
+    /* Section 2: New Order Action */
+    .action-section {
+      margin-bottom: 32px;
+    }
+
+    .btn-new-order {
+      width: 100%;
+      background: var(--color-primary, #d4af37);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+      cursor: pointer;
+      transition: transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-new-order:active {
+      transform: scale(0.98);
+    }
+
+    /* Section 3: Orders List */
+    .orders-section {
+      margin-top: 20px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--color-text-secondary, #666);
+      padding-right: 4px;
+    }
+
+    .order-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .order-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .order-code {
+      font-weight: 700;
+      font-size: 15px;
+      color: #333;
+    }
+
+    .order-date {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .order-status {
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #fff8e1;
+      color: #f57f17;
+      font-weight: 500;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #999;
+      font-size: 13px;
+      padding: 30px;
+      border: 2px dashed #eee;
+      border-radius: 12px;
+    }
+  </style>
 </head>
+
 <body>
-<header class="ag-topbar" role="banner">
-  <button class="ag-back" type="button" data-fallback="./user-dashboard.html" aria-label="بازگشت">
-    <span class="ag-back-icon" aria-hidden="true">
-      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M15 18l-6-6 6-6"></path>
-        <path d="M9 12h12"></path>
-      </svg>
-    </span>
-  </button>
-  <div class="ag-topbar-title" id="ag-topbar-title"></div>
-  <div class="ag-topbar-actions" aria-label="ابزارها">
-    <button class="ag-icon ag-help" type="button" data-ag-open="help" aria-label="راهنما">
-      <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="9"></circle>
-        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"></path>
-        <circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"></circle>
-      </svg>
-    </button>
-    <button class="ag-icon ag-logo" type="button" data-ag-open="about" aria-label="درباره ASIAGOLD">AG</button>
-  </div>
-</header>
-<div class="ag-modal" id="ag-modal-about" hidden>
-  <div class="ag-modal-backdrop" data-ag-close="about" aria-hidden="true"></div>
-  <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-about-title">
-    <div class="ag-modal-header">
-      <div class="ag-modal-title" id="ag-about-title">درباره ASIAGOLD</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="about" aria-label="بستن">
-        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18 6L6 18"></path>
-          <path d="M6 6l12 12"></path>
+
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-right">
+      <button class="header-back" id="btn-back">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6" />
         </svg>
       </button>
+      <!-- Logo (Small, Right) -->
+      <img src="./assets/logo.svg" alt="" class="header-logo">
     </div>
-    <div class="ag-modal-body">
-      <div>ASIAGOLD واسطه ثبت و ارسال سفارش به کارخانه است.</div>
-      <div class="ag-modal-section" aria-label="تماس با ما">
-        <div class="ag-modal-title" style="font-size:13px;">تماس با ما</div>
-        <div class="ag-kv"><span>تلگرام</span><strong>—</strong></div>
-        <div class="ag-kv"><span>تلفن</span><strong>—</strong></div>
-        <div class="ag-kv"><span>ایمیل</span><strong>—</strong></div>
+
+    <!-- User Name (Center) -->
+    <div class="header-title" id="user-name-display">کاربر</div>
+
+    <!-- Placeholder for left balance -->
+    <div style="width: 60px;"></div>
+  </header>
+
+  <div class="dashboard-content">
+
+    <!-- 1. Summary Stats -->
+    <div class="summary-card">
+      <div class="summary-item">
+        <span class="summary-value" id="sum-count">0</span>
+        <span class="summary-label">تعداد سفارش</span>
+      </div>
+      <div class="divider-vertical"></div>
+      <div class="summary-item">
+        <span class="summary-value" id="sum-weight">0</span>
+        <span class="summary-label">وزن کل (گرم)</span>
       </div>
     </div>
-  </div>
-</div>
-<div class="ag-modal" id="ag-modal-help" hidden>
-  <div class="ag-modal-backdrop" data-ag-close="help" aria-hidden="true"></div>
-  <div class="ag-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ag-help-title">
-    <div class="ag-modal-header">
-      <div class="ag-modal-title" id="ag-help-title">راهنما</div>
-      <button class="ag-icon ag-modal-close" type="button" data-ag-close="help" aria-label="بستن">
-        <svg class="ag-ico" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18 6L6 18"></path>
-          <path d="M6 6l12 12"></path>
-        </svg>
+
+    <!-- 2. New Order Action -->
+    <div class="action-section">
+      <button class="btn-new-order" id="btn-new-order">
+        <span>+</span>
+        <span>ثبت سفارش جدید</span>
       </button>
     </div>
-    <div class="ag-modal-body" id="ag-help-body"></div>
+
+    <!-- 3. Active Orders List -->
+    <div class="orders-section">
+      <div class="section-title">سفارش‌های فعال</div>
+      <div id="orders-list">
+        <!-- Populated by JS -->
+        <div class="empty-state">سفارشی یافت نشد</div>
+      </div>
+    </div>
+
   </div>
-</div>
-<div class="wrapper">
-  <div class="card">
-    <div class="header">
-      <div class="logo-ring">
-        <div class="logo">Asia<br>Gold</div>
-      </div>
-      <div class="title">داشبورد مشتری</div>
-      <div class="sub">بدون پرداخت • فقط ثبت درخواست و پیگیری وضعیت</div>
-    </div>
 
-    <div class="status">پرداختی لازم نیست؛ این پلتفرم فقط واسطه بین کارخانه و مشتری است</div>
+  <script>
+    (function () {
+      // Data Keys
+      const STORAGE_KEY_USER = "asiagold_app_user";
+      const STORAGE_KEY_ORDERS = "asiagold_orders_v1";
 
-    <div class="catalog" id="catalog">
-      <div class="catalog-head">
-        <div>
-          <div class="catalog-title">کاتالوگ محصولات</div>
-          <div class="catalog-breadcrumb" id="catalog-breadcrumb">برای شروع، یک «دسته‌بندی» را انتخاب کنید.</div>
-        </div>
-        <button class="catalog-back" type="button" id="catalog-back" hidden>بازگشت</button>
-      </div>
-      <div class="catalog-list" id="catalog-list" aria-live="polite"></div>
-    </div>
+      // Elements
+      const elName = document.getElementById("user-name-display");
+      const elSumCount = document.getElementById("sum-count");
+      const elSumWeight = document.getElementById("sum-weight");
+      const elOrdersList = document.getElementById("orders-list");
+      const btnNewOrder = document.getElementById("btn-new-order");
+      const btnBack = document.getElementById("btn-back");
 
-    <div class="grid">
-      <div class="item"><span>ثبت درخواست سفارش</span><a href="./user-orders.html#new-order">شروع</a></div>
-      <div class="item"><span>پیگیری سفارش‌ها</span><a href="./user-orders.html" class="cart-action">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-             xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 6H22L20 14H8L6 6Z" stroke="url(#gold)" stroke-width="1.8" fill="none"/>
-          <circle cx="9" cy="20" r="1.5" fill="url(#gold)"/>
-          <circle cx="18" cy="20" r="1.5" fill="url(#gold)"/>
-          <defs>
-            <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#f6edc7"/>
-              <stop offset="50%" stop-color="#c9a23a"/>
-              <stop offset="100%" stop-color="#7a6408"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        مشاهده
-      </a></div>
-      <div class="item"><span>اطلاعات حساب</span><button>ویرایش</button></div>
-      <div class="item"><span>پشتیبانی رسمی</span><button>تماس</button></div>
-    </div>
-
-
-    <div class="footer">ASIAGOLD فروشنده نیست و در این پلتفرم هیچ پرداختی دریافت نمی‌شود</div>
-</div>
-</div>
-<script>
-(() => {
-  const titleEl = document.getElementById("ag-topbar-title");
-  const source = document.querySelector(".title");
-  if (titleEl) titleEl.textContent = (source?.textContent || "").trim() || document.title.split("|").pop().trim();
-
-  const backBtn = document.querySelector(".ag-back");
-  if (backBtn) {
-    const fallback = backBtn.getAttribute("data-fallback") || "./user-dashboard.html";
-    backBtn.addEventListener("click", () => {
-      if (window.history.length >= 2) window.history.back();
-      else window.location.href = fallback;
-    });
-  }
-
-  const catalogList = document.getElementById("catalog-list");
-  const catalogBreadcrumb = document.getElementById("catalog-breadcrumb");
-  const catalogBack = document.getElementById("catalog-back");
-  if (!catalogList || !catalogBreadcrumb || !catalogBack) return;
-
-  const CATALOG = [
-    {
-      id: "cat-bangle",
-      name: "النگو",
-      desc: "مشاهده گروه‌های این دسته‌بندی",
-      groups: [
-        {
-          id: "grp-bangle-asia",
-          name: "النگو آسیا",
-          desc: "مشاهده مدل‌های این گروه",
-          models: [
-            { id: "mdl-bangle-asia-120-yellow", name: "النگو آسیا 120 زرد", desc: "جزئیات در مرحله بعد فعال می‌شود" },
-            { id: "mdl-bangle-asia-155-yellow", name: "النگو آسیا 155 زرد", desc: "جزئیات در مرحله بعد فعال می‌شود" },
-          ],
-        },
-      ],
-    },
-    {
-      id: "cat-khorderiz",
-      name: "خرده ریز",
-      desc: "مشاهده گروه‌های این دسته‌بندی",
-      groups: [
-        {
-          id: "grp-khorderiz-earring",
-          name: "گوشواره",
-          desc: "مشاهده مدل‌های این گروه",
-          models: [
-            { id: "mdl-earring-yellow-fantasy", name: "گوشواره زرد فانتزی", desc: "جزئیات در مرحله بعد فعال می‌شود" },
-            { id: "mdl-earring-white-simple", name: "گوشواره سفید ساده", desc: "جزئیات در مرحله بعد فعال می‌شود" },
-          ],
-        },
-      ],
-    },
-  ];
-
-  const state = {
-    level: "category", // category | group | model
-    categoryId: null,
-    groupId: null,
-  };
-
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  function thumbFor(name) {
-    const t = String(name || "").trim();
-    return t ? t.slice(0, 1) : "•";
-  }
-
-  function renderList(items, onClick) {
-    catalogList.innerHTML = "";
-    for (const it of items) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "catalog-item";
-      btn.innerHTML =
-        `<div class="catalog-thumb" aria-hidden="true">${escapeHtml(thumbFor(it.name))}</div>` +
-        `<div class="catalog-text">` +
-        `<div class="catalog-name">${escapeHtml(it.name)}</div>` +
-        `<div class="catalog-desc">${escapeHtml(it.desc || "")}</div>` +
-        `</div>`;
-      btn.addEventListener("click", () => onClick(it));
-      catalogList.appendChild(btn);
-    }
-  }
-
-  function findCategory(id) {
-    return CATALOG.find((c) => c.id === id) || null;
-  }
-
-  function findGroup(category, id) {
-    if (!category) return null;
-    return (category.groups || []).find((g) => g.id === id) || null;
-  }
-
-  function renderBreadcrumb() {
-    if (state.level === "category") {
-      catalogBreadcrumb.textContent = "برای شروع، یک «دسته‌بندی» را انتخاب کنید.";
-      catalogBack.hidden = true;
-      return;
-    }
-
-    const cat = state.categoryId ? findCategory(state.categoryId) : null;
-    if (state.level === "group") {
-      catalogBreadcrumb.textContent = `دسته‌بندی: ${cat?.name || "—"} / انتخاب «گروه»`;
-      catalogBack.hidden = false;
-      return;
-    }
-
-    const grp = state.groupId ? findGroup(cat, state.groupId) : null;
-    catalogBreadcrumb.textContent = `دسته‌بندی: ${cat?.name || "—"} / گروه: ${grp?.name || "—"} / انتخاب «مدل»`;
-    catalogBack.hidden = false;
-  }
-
-  function renderCatalog() {
-    renderBreadcrumb();
-    if (state.level === "category") {
-      renderList(
-        CATALOG.map((c) => ({ id: c.id, name: c.name, desc: c.desc })),
-        (cat) => {
-          state.level = "group";
-          state.categoryId = cat.id;
-          state.groupId = null;
-          renderCatalog();
-        }
-      );
-      return;
-    }
-
-    if (state.level === "group") {
-      const category = state.categoryId ? findCategory(state.categoryId) : null;
-      const groups = (category?.groups || []).map((g) => ({ id: g.id, name: g.name, desc: g.desc }));
-      renderList(groups, (grp) => {
-        state.level = "model";
-        state.groupId = grp.id;
-        renderCatalog();
-      });
-      return;
-    }
-
-    const category = state.categoryId ? findCategory(state.categoryId) : null;
-    const group = state.groupId ? findGroup(category, state.groupId) : null;
-    const models = (group?.models || []).map((m) => ({ id: m.id, name: m.name, desc: m.desc }));
-    renderList(models, (model) => {
-      if (state.categoryId === "cat-bangle" || state.categoryId === "cat-khorderiz") {
-        try {
-          history.replaceState(null, "", `#cat=${state.categoryId}&level=group`);
-        } catch (e) {}
-        const params = new URLSearchParams();
-        params.set("cat", state.categoryId);
-        if (state.groupId) params.set("group", state.groupId);
-        params.set("model", model.id);
-        window.location.href = `./user-orders.html?${params.toString()}`;
-        return;
+      function init() {
+        loadUser();
+        loadOrders();
+        setupEvents();
       }
-      window.alert("جزئیات محصول در مرحله بعد فعال می‌شود");
-    });
-  }
 
-  catalogBack.addEventListener("click", () => {
-    if (state.level === "model") {
-      state.level = "group";
-      state.groupId = null;
-      renderCatalog();
-      return;
-    }
-    state.level = "category";
-    state.categoryId = null;
-    state.groupId = null;
-    renderCatalog();
-  });
+      function loadUser() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY_USER);
+          if (raw) {
+            const user = JSON.parse(raw);
+            // Display Name + Family
+            const fullName = (user.name + " " + user.family).trim();
+            elName.textContent = fullName || "کاربر مهمان";
+          }
+        } catch (e) {
+          console.error("User load error", e);
+        }
+      }
 
-  (() => {
-    const raw = (window.location.hash || "").replace(/^#/, "");
-    if (!raw) return;
-    const params = new URLSearchParams(raw);
-    const cat = params.get("cat");
-    const level = params.get("level");
-    const grp = params.get("group");
-    const catObj = cat ? findCategory(cat) : null;
-    if (!catObj) return;
+      function loadOrders() {
+        let orders = [];
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY_ORDERS);
+          if (raw) orders = JSON.parse(raw);
+        } catch (e) { }
 
-    if (level === "model") {
-      const grpObj = grp ? findGroup(catObj, grp) : null;
-      state.level = grpObj ? "model" : "group";
-      state.categoryId = cat;
-      state.groupId = grpObj ? grp : null;
-      return;
-    }
+        // Filter Active Orders Only (Mock logic: all mock orders are 'active' for now)
+        // In real app, filter by status !== 'delivered'
 
-    if (level === "group") {
-      state.level = "group";
-      state.categoryId = cat;
-      state.groupId = null;
-    }
-  })();
+        renderSummary(orders);
+        renderList(orders);
+      }
 
-  renderCatalog();
-})();
-</script>
-<script>
-(() => {
-  const about = document.getElementById("ag-modal-about");
-  const help = document.getElementById("ag-modal-help");
-  const helpBody = document.getElementById("ag-help-body");
+      function renderSummary(orders) {
+        const count = orders.length;
+        let weight = 0;
+        orders.forEach(o => {
+          if (o.summary && o.summary.totalWeight) {
+            weight += Number(o.summary.totalWeight);
+          }
+        });
 
-  function getHelpText() {
-    const page = (location.pathname.split("/").pop() || "").toLowerCase();
-    if (page.includes("user-dashboard")) return "دسته، گروه و مدل را انتخاب کنید. برای ورود، روی کل ردیف بزنید.";
-    if (page.includes("user-orders")) return "جمع تعداد و وزن را بررسی کنید و «نهایی کردن سفارش» را بزنید.";
-    if (page.includes("admin")) return "این بخش مخصوص مدیریت است.";
-    if (page.includes("index")) return "ورود به سیستم از این صفحه انجام می‌شود.";
-    return "راهنمای این صفحه در دسترس نیست.";
-  }
+        elSumCount.textContent = count;
+        elSumWeight.textContent = weight.toLocaleString("fa-IR");
+      }
 
-  function syncHelpContent() {
-    if (helpBody) helpBody.textContent = getHelpText();
-  }
+      function renderList(orders) {
+        if (!orders || orders.length === 0) {
+          elOrdersList.innerHTML = '<div class="empty-state">سفارشی یافت نشد</div>';
+          return;
+        }
 
-  function syncBodyLock() {
-    const anyOpen = (about && !about.hidden) || (help && !help.hidden);
-    document.body.classList.toggle("ag-modal-open", Boolean(anyOpen));
-  }
+        elOrdersList.innerHTML = orders.map(o => {
+          const code = o.code || "---";
+          const date = o.dateFa || "---";
+          const w = o.summary?.totalWeight ? Number(o.summary.totalWeight).toFixed(2) : "0";
+          const statusText = "در حال بررسی"; // Mock status text
 
-  function openModal(which) {
-    if (which === "about" && about) {
-      about.hidden = false;
-      syncBodyLock();
-      const close = about.querySelector("[data-ag-close=\"about\"]");
-      if (close && close.focus) close.focus();
-      return;
-    }
-    if (which === "help" && help) {
-      syncHelpContent();
-      help.hidden = false;
-      syncBodyLock();
-      const close = help.querySelector("[data-ag-close=\"help\"]");
-      if (close && close.focus) close.focus();
-    }
-  }
+          return `
+                        <div class="order-card">
+                            <div class="order-info">
+                                <span class="order-code">سفارش ${code}</span>
+                                <span class="order-date">${date} • ${w} گرم</span>
+                            </div>
+                            <div class="order-status">${statusText}</div>
+                        </div>
+                    `;
+        }).join("");
+      }
 
-  function closeModal(which) {
-    if (which === "about" && about) about.hidden = true;
-    if (which === "help" && help) help.hidden = true;
-    syncBodyLock();
-  }
+      function setupEvents() {
+        // New Order Flow -> Go to user-orders.html (Catalog Entry)
+        btnNewOrder.addEventListener("click", () => {
+          // We must ensure we land on the 'Root' of catalog
+          window.location.href = "./user-orders.html";
+        });
 
-  document.addEventListener("click", (e) => {
-    const open = e.target.closest("[data-ag-open]");
-    if (open) openModal(open.getAttribute("data-ag-open"));
-    const close = e.target.closest("[data-ag-close]");
-    if (close) closeModal(close.getAttribute("data-ag-close"));
-  });
+        // Back Button
+        btnBack.addEventListener("click", () => {
+          // In Dashboard, Back usually means exit app or go to Gate?
+          // Gate checks 'approved', so it might loop. 
+          // Ideally: Close WebApp or do nothing.
+          // Ref: "One button, back to prev"
+          if (window.history.length > 1) {
+            window.history.back();
+          }
+        });
+      }
 
-  window.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    if (about && !about.hidden) closeModal("about");
-    if (help && !help.hidden) closeModal("help");
-  });
-})();
-</script>
+      init();
+
+    })();
+  </script>
 </body>
+
 </html>
