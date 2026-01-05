@@ -1,0 +1,1 @@
+ASIAGOLD — clean initialization
