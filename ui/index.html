@@ -187,6 +187,9 @@
     </button>
 
     <div class="hint" id="form-status"></div>
+    <button class="btn btn-outline" id="go-dashboard" type="button" hidden>
+      ورود به داشبورد
+    </button>
 
     <div class="footer">
       ثبت‌نام پس از بررسی مدیریت فعال می‌شود
@@ -199,6 +202,7 @@
     tg?.ready();
 
     let phoneNumber = null;
+    document.getElementById("signup").disabled = true;
 
     document.getElementById("get-phone").onclick = () => {
       if (!tg || !tg.initDataUnsafe?.user?.phone_number) {
@@ -206,9 +210,12 @@
           "شماره تلفن فقط از طریق دکمه اشتراک‌گذاری تلگرام قابل دریافت است";
         return;
       }
-      phoneNumber = tg.initDataUnsafe.user.phone_number;
+      phoneNumber = true;
+      document.getElementById("signup").disabled = false;
       document.getElementById("phone-status").innerText =
         "شماره موبایل دریافت شد";
+      const maskedNumber = "****" + String(tg.initDataUnsafe.user.phone_number).slice(-4);
+      document.getElementById("phone-status").innerText += ` ${maskedNumber}`;
     };
 
     document.getElementById("signup").onclick = () => {
@@ -219,6 +226,11 @@
       }
       document.getElementById("form-status").innerText =
         "درخواست ثبت‌نام ارسال شد";
+      document.getElementById("go-dashboard").hidden = false;
+    };
+
+    document.getElementById("go-dashboard").onclick = () => {
+      window.location.href = "user-dashboard.html";
     };
   </script>
 
