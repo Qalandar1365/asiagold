@@ -198,11 +198,20 @@
   </main>
 
   <script>
+    const DEV_BYPASS_SIGNUP = true;
     const tg = window.Telegram?.WebApp;
     tg?.ready();
 
     let phoneNumber = null;
-    document.getElementById("signup").disabled = true;
+    const signupButton = document.getElementById("signup");
+    const goDashboardButton = document.getElementById("go-dashboard");
+    signupButton.disabled = true;
+
+    if (DEV_BYPASS_SIGNUP) {
+      phoneNumber = true;
+      signupButton.disabled = false;
+      goDashboardButton.hidden = false;
+    }
 
     document.getElementById("get-phone").onclick = () => {
       if (!tg || !tg.initDataUnsafe?.user?.phone_number) {

@@ -104,6 +104,11 @@
     </section>
 
     <div class="message" id="message" role="status"></div>
+    <label id="order-qty-label" for="order-qty" hidden>تعداد</label>
+    <input id="order-qty" type="number" min="1" hidden />
+    <label id="order-weight-label" for="order-weight" hidden>وزن (گرم)</label>
+    <input id="order-weight" type="number" min="0" step="0.01" hidden />
+    <button id="submit-order" type="button" disabled hidden>ثبت سفارش</button>
   </main>
 
   <script>
@@ -130,6 +135,11 @@
       const parentNameEl = document.getElementById("parent-name");
       const childNameEl = document.getElementById("child-name");
       const messageEl = document.getElementById("message");
+      const qtyLabelEl = document.getElementById("order-qty-label");
+      const qtyInput = document.getElementById("order-qty");
+      const weightLabelEl = document.getElementById("order-weight-label");
+      const weightInput = document.getElementById("order-weight");
+      const submitBtn = document.getElementById("submit-order");
 
       function parseHashParams() {
         const raw = (location.hash || "").startsWith("#") ? location.hash.slice(1) : (location.hash || "");
@@ -144,6 +154,13 @@
         const { parent, child } = parseHashParams();
         let messageText = "";
 
+        const isBangle = parent === "bangle";
+        qtyLabelEl.hidden = !isBangle;
+        qtyInput.hidden = !isBangle;
+        weightLabelEl.hidden = !isBangle;
+        weightInput.hidden = !isBangle;
+        submitBtn.hidden = !isBangle;
+
         if (!parent || !(parent in PARENTS)) {
           parentNameEl.textContent = "—";
           childNameEl.textContent = "—";
@@ -151,9 +168,10 @@
         } else {
           parentNameEl.textContent = PARENTS[parent];
 
-          if (parent === "bangle") {
+          if (isBangle) {
             const childLabel = CHILDREN.bangle[child];
             childNameEl.textContent = childLabel || child || "—";
+            submitBtn.disabled = !updateSubmitState();
           } else {
             childNameEl.textContent = child || "—";
             messageText = "این گروه در مرحله بعد پیاده‌سازی می‌شود";
@@ -163,6 +181,64 @@
         messageEl.textContent = messageText;
         messageEl.style.display = messageText ? "" : "none";
       }
+
+      function updateSubmitState() {
+        const qty = Number(qtyInput.value);
+        const weight = Number(weightInput.value);
+        const isValid = qty > 0 && weight > 0;
+        submitBtn.disabled = !isValid;
+        return isValid;
+      }
+
+      qtyInput.addEventListener("input", updateSubmitState);
+      weightInput.addEventListener("input", updateSubmitState);
+
+      submitBtn.addEventListener("click", () => {
+        if (!updateSubmitState()) return;
+        const qty = Number(qtyInput.value);
+        const weight = Number(weightInput.value);
+
+        let cart = null;
+        const cartRaw = sessionStorage.getItem("cart");
+        if (cartRaw) {
+          try {
+            cart = JSON.parse(cartRaw);
+          } catch (_) {
+            cart = null;
+          }
+        }
+        if (!cart || !Array.isArray(cart.items)) {
+          cart = { items: [], status: "draft" };
+        } else {
+          cart.status = "draft";
+        }
+
+        let bangleItem = null;
+        const nextItems = [];
+        for (const item of cart.items) {
+          if (item && item.type === "bangle") {
+            if (!bangleItem) {
+              bangleItem = item;
+              nextItems.push(item);
+            }
+            continue;
+          }
+          nextItems.push(item);
+        }
+        cart.items = nextItems;
+
+        if (bangleItem) {
+          const prevQty = Number(bangleItem.qty);
+          const prevWeight = Number(bangleItem.weight);
+          bangleItem.qty = (Number.isFinite(prevQty) ? prevQty : 0) + qty;
+          bangleItem.weight = (Number.isFinite(prevWeight) ? prevWeight : 0) + weight;
+        } else {
+          cart.items.push({ type: "bangle", qty, weight });
+        }
+
+        sessionStorage.setItem("cart", JSON.stringify(cart));
+        window.location.href = "user-dashboard.html?from=order";
+      });
 
       render();
       window.addEventListener("hashchange", render);
