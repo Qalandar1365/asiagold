@@ -134,6 +134,57 @@
       font-size: 13px;
       background: rgba(0, 0, 0, 0.02);
     }
+
+    .feedback-message {
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .cart-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .cart-actions__btn {
+      flex: 1;
+      appearance: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--card);
+      color: var(--text);
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .cart-actions__btn:focus-visible {
+      outline: 2px solid rgba(212, 175, 55, 0.55);
+      outline-offset: 2px;
+    }
+
+    .cart-actions__btn--primary {
+      background: linear-gradient(135deg, var(--accent), #f3e7b3);
+      color: var(--accentText);
+      border: 0;
+    }
+
+    .cart-actions__btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
   </style>
 </head>
 
@@ -141,6 +192,15 @@
   <main class="container" aria-label="داشبورد کاربر">
     <h1 class="title">داشبورد</h1>
     <p class="subtitle">برای ثبت سفارش، روی «ثبت سفارش» هر گروه بزنید تا زیرگروه‌ها نمایش داده شوند.</p>
+
+    <!-- Feedback Message (shown only when from=order) -->
+    <div id="feedback-message" class="feedback-message" role="status" hidden></div>
+
+    <!-- Cart Actions -->
+    <div class="cart-actions" id="cart-actions" hidden>
+      <button type="button" class="cart-actions__btn cart-actions__btn--primary" id="new-order-btn">سفارش جدید</button>
+      <button type="button" class="cart-actions__btn" id="cart-btn" disabled>سبد خرید</button>
+    </div>
 
     <!-- Parent: Product Groups -->
     <details class="group" data-group>
@@ -225,6 +285,63 @@
       const tg = window.Telegram?.WebApp;
       tg?.ready?.();
 
+      // 1️⃣ Detect post-order return
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromOrder = urlParams.get("from") === "order";
+
+      // 2️⃣ Read cart state
+      let cart = null;
+      const cartRaw = sessionStorage.getItem("cart");
+      if (cartRaw) {
+        try {
+          cart = JSON.parse(cartRaw);
+        } catch (_) {
+          cart = null;
+        }
+      }
+
+      const feedbackEl = document.getElementById("feedback-message");
+      const cartActionsEl = document.getElementById("cart-actions");
+      const newOrderBtn = document.getElementById("new-order-btn");
+      const cartBtn = document.getElementById("cart-btn");
+
+      // 3️⃣ Show feedback message (ONLY when from=order)
+      if (fromOrder && cart && Array.isArray(cart.items) && cart.items.length > 0) {
+        const bangleItem = cart.items.find(item => item && item.type === "bangle");
+        if (bangleItem && bangleItem.qty && bangleItem.weight) {
+          const qty = Number(bangleItem.qty);
+          const weight = Number(bangleItem.weight);
+          if (qty > 0 && weight > 0) {
+            feedbackEl.textContent = `تعداد ${qty} و وزن ${weight} به سبد شما اضافه شد`;
+            feedbackEl.hidden = false;
+          }
+        }
+      }
+
+      // 4️⃣ Expose cart-related actions
+      if (cart && Array.isArray(cart.items) && cart.items.length > 0) {
+        cartActionsEl.hidden = false;
+
+        // New order button - navigate to order entry (using existing pattern)
+        newOrderBtn.addEventListener("click", () => {
+          // Navigate to the order entry flow - using the existing pattern from dashboard
+          // Since we don't know which group, we'll redirect to a default or let user choose
+          // For now, redirecting to the first available group (bangle)
+          window.location.href = "user-orders.html#parent=bangle&child=simple";
+        });
+
+        // Cart button - check if cart page exists
+        // Since no cart page exists yet, keep it disabled
+        cartBtn.disabled = true;
+      }
+
+      // Clean URL after processing (remove from=order to prevent duplicate messages on refresh)
+      if (fromOrder) {
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, "", cleanUrl);
+      }
+
+      // Existing group toggle functionality
       const groups = Array.from(document.querySelectorAll("[data-group]"));
       for (const group of groups) {
         const button = group.querySelector('button[data-action="toggle"]');
